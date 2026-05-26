@@ -18,11 +18,15 @@ set -euo pipefail
 
 # ───────────────────────────────────────────────────────────────────────────────
 # Resolve DOTFILES_DIR from script location
-# ───────────────────────────────────────────────────────────────────────────────
-declare SCRIPT_DIR
+# Resolve DOTFILES_DIR from script location (always trust the script's own path)
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 readonly SCRIPT_DIR
-export DOTFILES_DIR="${DOTFILES_DIR:-${SCRIPT_DIR}}"
+# Only use env var if it points to an existing directory; otherwise use script location
+if [[ -n "${DOTFILES_DIR:-}" ]] && [[ -d "${DOTFILES_DIR}/lib/core" ]]; then
+    export DOTFILES_DIR="${DOTFILES_DIR}"
+else
+    export DOTFILES_DIR="${SCRIPT_DIR}"
+fi
 
 # ───────────────────────────────────────────────────────────────────────────────
 # Source core libraries
