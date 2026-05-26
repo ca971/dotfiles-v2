@@ -30,7 +30,6 @@ neovim = "nightly"   # Hyperextensible Vim-based text editor
 atuin = "latest"     # Magical shell history powered by SQLite
 fzf = "latest"       # A command-line fuzzy finder
 duf = "latest"       # Disk Usage/Free Utility — a better 'df' alternative
-dfc = "latest"       # Display file system space usage with colors
 btop = "latest"      # Yet another cross-platform graphical process/system monitor
 
 # ─── Rust-powered alternatives ───
