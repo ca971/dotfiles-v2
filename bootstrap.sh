@@ -303,10 +303,20 @@ install_tools() {
         return 0
     fi
 
+    # Determine profile: --minimal → minimal, otherwise read from state or default to dev
+    local profile="dev"
+    if [[ "${OPT_MINIMAL}" -eq 1 ]]; then
+        profile="minimal"
+    elif [[ -f "${DOTFILES_DIR}/local/state.json" ]]; then
+        profile="$(jq -r '.profile // "dev"' "${DOTFILES_DIR}/local/state.json" 2>/dev/null || echo "dev")"
+    fi
+
     if [[ "${OPT_DRY_RUN}" -eq 0 ]]; then
         # shellcheck source=/dev/null
         source "${engine}"
-        HotLoadEngine::install_all
+        HotLoadEngine::install_profile "${profile}"
+    else
+        Logger::info "[dry-run] Would install profile: ${profile}"
     fi
 
     Logger::success "Tools installed"
