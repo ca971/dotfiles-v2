@@ -1,0 +1,58 @@
+# ═══════════════════════════════════════════════════════════════════════════════
+# @file tests/e2e/Dockerfile.fedora
+# @description E2E test environment — Fedora
+# @since 1.0.0
+# @version 1.0.0
+# ═══════════════════════════════════════════════════════════════════════════════
+
+FROM fedora:latest
+
+ENV DOTFILES_DIR=/home/testuser/.dotfiles
+ENV HOME=/home/testuser
+ENV LOG_COLOR=0
+
+# Install base dependencies
+RUN dnf install -y \
+        bash \
+        curl \
+        git \
+        jq \
+        sudo \
+        zsh \
+        fish \
+        python3 \
+        ShellCheck \
+    && dnf clean all
+
+# Install bats
+RUN git clone https://github.com/bats-core/bats-core.git /tmp/bats && \
+    cd /tmp/bats && ./install.sh /usr/local && rm -rf /tmp/bats
+
+# Install taplo
+RUN curl -fsSL https://github.com/tamasfe/taplo/releases/latest/download/taplo-full-linux-x86_64.gz \
+    | gunzip > /usr/local/bin/taplo && chmod +x /usr/local/bin/taplo
+
+# Create test user
+RUN useradd -m -s /bin/bash testuser && \
+    echo "testuser ALL=(ALL) NOPASSWD:ALL" >> /etc/sudoers
+
+# Copy dotfiles
+COPY --chown=testuser:testuser . ${DOTFILES_DIR}
+
+# Switch to test user
+USER testuser
+WORKDIR ${DOTFILES_DIR}
+
+# Install uv
+RUN curl -LsSf https://astral.sh/uv/install.sh | sh
+ENV PATH="/home/testuser/.local/bin:${PATH}"
+
+# Setup generators and generate configs
+RUN cd generators && uv sync && uv run python -m src.cli generate --all
+
+# Initialize state
+RUN mkdir -p local && \
+    echo '{"version":1,"tools":{},"nix_envs":{},"theme":"minimal"}' > local/state.json && \
+    chmod 700 local/secrets local/ssh local/ssh/keys
+
+CMD ["bash"]

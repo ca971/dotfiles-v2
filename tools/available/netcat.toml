@@ -1,0 +1,39 @@
+# ═══════════════════════════════════════════════════════════════════════════════
+# @file tools/available/netcat.toml
+# @description Tool descriptor for netcat (Network utility for reading/writing TCP/UDP)
+# @since 1.0.0
+# @version 1.0.0
+# ═══════════════════════════════════════════════════════════════════════════════
+
+[meta]
+name = "netcat"
+description = "Network utility for reading/writing TCP/UDP"
+homepage = "https://nmap.org/ncat"
+category = "net"
+version = "latest"
+verify = "nc -h 2>&1 | head -1"
+
+
+[[install]]
+method = "system"
+platforms = ["linux.debian"]
+package = "ncat"
+
+[[install]]
+method = "system"
+platforms = ["linux.arch"]
+package = "nmap-ncat"
+
+[[install]]
+method = "system"
+platforms = ["linux.fedora"]
+package = "nmap-ncat"
+
+
+[[install]]
+method = "system"
+platforms = ["bsd"]
+package = "netcat"
+[config]
+symlinks = []
+dependencies = []

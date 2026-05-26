@@ -1,0 +1,39 @@
+# ═══════════════════════════════════════════════════════════════════════════════
+# @file tools/available/zlib.toml
+# @description Tool descriptor for zlib (Compression library)
+# @since 1.0.0
+# @version 1.0.0
+# ═══════════════════════════════════════════════════════════════════════════════
+
+[meta]
+name = "zlib"
+description = "Compression library"
+homepage = "https://zlib.net"
+category = "core"
+version = "latest"
+verify = "dpkg -l zlib1g-dev 2>/dev/null | tail -1"
+
+
+[[install]]
+method = "system"
+platforms = ["linux.debian"]
+package = "zlib1g-dev"
+
+[[install]]
+method = "system"
+platforms = ["linux.arch"]
+package = "zlib"
+
+[[install]]
+method = "system"
+platforms = ["linux.fedora"]
+package = "zlib-devel"
+
+
+[[install]]
+method = "system"
+platforms = ["bsd"]
+package = "zlib-ng"
+[config]
+symlinks = []
+dependencies = []

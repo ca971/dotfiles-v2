@@ -1,0 +1,33 @@
+# ═══════════════════════════════════════════════════════════════════════════════
+# @file tools/available/rubocop.toml
+# @description Tool descriptor for rubocop (Ruby static code analyzer and formatter)
+# @since 1.0.0
+# @version 1.0.0
+# ═══════════════════════════════════════════════════════════════════════════════
+
+[meta]
+name = "rubocop"
+description = "Ruby static code analyzer and formatter"
+homepage = "https://rubocop.org"
+category = "ruby"
+version = "latest"
+verify = "rubocop --version"
+
+[[install]]
+method = "brew"
+platforms = ["darwin"]
+package = "rubocop"
+
+
+[[install]]
+method = "system"
+platforms = ["linux.debian"]
+package = "rubocop"
+
+[[install]]
+method = "system"
+platforms = ["linux.arch"]
+package = "rubocop"
+[config]
+symlinks = []
+dependencies = []

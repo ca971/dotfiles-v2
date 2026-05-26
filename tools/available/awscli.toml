@@ -1,0 +1,44 @@
+# ═══════════════════════════════════════════════════════════════════════════════
+# @file tools/available/awscli.toml
+# @description Tool descriptor for awscli (Official AWS command-line interface)
+# @since 1.0.0
+# @version 1.0.0
+# ═══════════════════════════════════════════════════════════════════════════════
+
+[meta]
+name = "awscli"
+description = "Official AWS command-line interface"
+homepage = "https://github.com/aws/aws-cli"
+category = "cloud"
+version = "latest"
+verify = "aws --version"
+
+[[install]]
+method = "mise"
+platforms = ["darwin", "linux", "wsl", "bsd"]
+plugin = "awscli"
+version = "latest"
+
+[[install]]
+method = "brew"
+platforms = ["darwin"]
+package = "awscli"
+
+[[install]]
+method = "system"
+platforms = ["linux.debian"]
+package = "awscli"
+
+[[install]]
+method = "system"
+platforms = ["linux.arch"]
+package = "awscli"
+
+[[install]]
+method = "system"
+platforms = ["linux.fedora"]
+package = "awscli"
+
+[config]
+symlinks = []
+dependencies = []

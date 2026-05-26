@@ -1,0 +1,44 @@
+# ═══════════════════════════════════════════════════════════════════════════════
+# @file tools/available/imagemagick.toml
+# @description Tool descriptor for imagemagick (Image manipulation tools and library)
+# @since 1.0.0
+# @version 1.0.0
+# ═══════════════════════════════════════════════════════════════════════════════
+
+[meta]
+name = "imagemagick"
+description = "Image manipulation tools and library"
+homepage = "https://imagemagick.org"
+category = "media"
+version = "latest"
+verify = "magick --version"
+
+[[install]]
+method = "mise"
+platforms = ["darwin", "linux", "wsl", "bsd"]
+plugin = "imagemagick"
+version = "latest"
+
+[[install]]
+method = "brew"
+platforms = ["darwin"]
+package = "imagemagick"
+
+[[install]]
+method = "system"
+platforms = ["linux.debian"]
+package = "imagemagick"
+
+[[install]]
+method = "system"
+platforms = ["linux.arch"]
+package = "imagemagick"
+
+[[install]]
+method = "system"
+platforms = ["linux.fedora"]
+package = "ImageMagick"
+
+[config]
+symlinks = []
+dependencies = []

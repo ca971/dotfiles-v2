@@ -1,0 +1,29 @@
+# ═══════════════════════════════════════════════════════════════════════════════
+# @file tools/available/visidata.toml
+# @description Tool descriptor for visidata (Terminal spreadsheet multitool for data)
+# @since 1.0.0
+# @version 1.0.0
+# ═══════════════════════════════════════════════════════════════════════════════
+
+[meta]
+name = "visidata"
+description = "Terminal spreadsheet multitool for data"
+homepage = "https://visidata.org"
+category = "data"
+version = "latest"
+verify = "vd --version"
+
+[[install]]
+method = "uv"
+platforms = ["darwin", "linux", "wsl", "bsd"]
+package = "visidata"
+version = "latest"
+
+[[install]]
+method = "brew"
+platforms = ["darwin"]
+package = "visidata"
+
+[config]
+symlinks = []
+dependencies = []

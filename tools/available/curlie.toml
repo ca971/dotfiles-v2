@@ -1,0 +1,29 @@
+# ═══════════════════════════════════════════════════════════════════════════════
+# @file tools/available/curlie.toml
+# @description Tool descriptor for curlie (Power of curl with the ease of httpie)
+# @since 1.0.0
+# @version 1.0.0
+# ═══════════════════════════════════════════════════════════════════════════════
+
+[meta]
+name = "curlie"
+description = "Power of curl with the ease of httpie"
+homepage = "https://github.com/rs/curlie"
+category = "net"
+version = "latest"
+verify = "curlie --version"
+
+[[install]]
+method = "mise"
+platforms = ["darwin", "linux", "wsl", "bsd"]
+plugin = "curlie"
+version = "latest"
+
+[[install]]
+method = "brew"
+platforms = ["darwin"]
+package = "curlie"
+
+[config]
+symlinks = []
+dependencies = []

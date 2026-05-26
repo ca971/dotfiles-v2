@@ -1,0 +1,72 @@
+# ═══════════════════════════════════════════════════════════════════════════════
+# @file .github/workflows/e2e.yml
+# @description E2E tests on multiple Linux distributions via Docker
+# @since 1.0.0
+# @version 1.0.0
+#
+# Runs weekly and on release tags. Tests full bootstrap on each distro.
+# ═══════════════════════════════════════════════════════════════════════════════
+
+name: E2E Tests
+
+on:
+  schedule:
+    - cron: '0 6 * * 0'  # Every Sunday at 06:00 UTC
+  push:
+    tags:
+      - 'v*'
+  workflow_dispatch:
+
+jobs:
+  e2e:
+    name: E2E (${{ matrix.distro }})
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        distro: [debian, arch, fedora, alpine]
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+
+      - name: Build and test (${{ matrix.distro }})
+        run: |
+          docker build \
+            -f tests/e2e/Dockerfile.${{ matrix.distro }} \
+            -t dotfiles-e2e-${{ matrix.distro }} \
+            .
+
+      - name: Run E2E tests (${{ matrix.distro }})
+        run: |
+          docker run --rm \
+            dotfiles-e2e-${{ matrix.distro }} \
+            bash -c "cd /home/testuser/.dotfiles && bats tests/unit/ tests/integration/"
+
+  e2e-macos:
+    name: E2E (macOS)
+    runs-on: macos-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Install dependencies
+        run: |
+          brew install bash jq bats-core taplo
+
+      - name: Install uv
+        uses: astral-sh/setup-uv@v4
+
+      - name: Setup
+        run: |
+          cd generators && uv sync && uv run python -m src.cli generate --all
+          mkdir -p local
+          echo '{"version":1,"tools":{},"nix_envs":{},"theme":"minimal"}' > local/state.json
+          chmod 700 local/secrets local/ssh local/ssh/keys 2>/dev/null || true
+
+      - name: Run tests
+        run: bats tests/unit/ tests/integration/
+        env:
+          DOTFILES_DIR: ${{ github.workspace }}
+          LOG_COLOR: "0"

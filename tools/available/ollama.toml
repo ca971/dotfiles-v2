@@ -1,0 +1,29 @@
+# ═══════════════════════════════════════════════════════════════════════════════
+# @file tools/available/ollama.toml
+# @description Tool descriptor for ollama (Run large language models locally)
+# @since 1.0.0
+# @version 1.0.0
+# ═══════════════════════════════════════════════════════════════════════════════
+
+[meta]
+name = "ollama"
+description = "Run large language models locally"
+homepage = "https://ollama.com"
+category = "ai"
+version = "latest"
+verify = "ollama --version"
+
+[[install]]
+method = "mise"
+platforms = ["darwin", "linux", "wsl", "bsd"]
+plugin = "ollama"
+version = "latest"
+
+[[install]]
+method = "brew"
+platforms = ["darwin"]
+package = "ollama"
+
+[config]
+symlinks = []
+dependencies = []

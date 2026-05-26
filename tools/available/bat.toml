@@ -1,0 +1,51 @@
+# ═══════════════════════════════════════════════════════════════════════════════
+# @file tools/available/bat.toml
+# @description Tool descriptor for bat (cat clone with syntax highlighting)
+# @since 1.0.0
+# @version 1.0.0
+# ═══════════════════════════════════════════════════════════════════════════════
+
+[meta]
+name = "bat"
+description = "Cat clone with syntax highlighting and git integration"
+homepage = "https://github.com/sharkdp/bat"
+category = "core"
+version = "latest"
+verify = "bat --version"
+
+[[install]]
+method = "mise"
+platforms = ["darwin", "linux", "wsl", "bsd"]
+plugin = "bat"
+version = "latest"
+
+[[install]]
+method = "cargo"
+platforms = ["darwin", "linux", "wsl", "bsd"]
+crate = "bat"
+
+[[install]]
+method = "brew"
+platforms = ["darwin"]
+package = "bat"
+
+[[install]]
+method = "system"
+platforms = ["linux.debian"]
+package = "bat"
+
+[[install]]
+method = "system"
+platforms = ["linux.arch"]
+package = "bat"
+
+[[install]]
+method = "system"
+platforms = ["linux.fedora"]
+package = "bat"
+
+[config]
+symlinks = [
+    { src = "config/bat", dst = "~/.config/bat" }
+]
+dependencies = []

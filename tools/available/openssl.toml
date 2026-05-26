@@ -1,0 +1,39 @@
+# ═══════════════════════════════════════════════════════════════════════════════
+# @file tools/available/openssl.toml
+# @description Tool descriptor for openssl (Toolkit for SSL/TLS and cryptography)
+# @since 1.0.0
+# @version 1.0.0
+# ═══════════════════════════════════════════════════════════════════════════════
+
+[meta]
+name = "openssl"
+description = "Toolkit for SSL/TLS and cryptography"
+homepage = "https://www.openssl.org"
+category = "security"
+version = "latest"
+verify = "openssl version"
+
+
+[[install]]
+method = "system"
+platforms = ["linux.debian"]
+package = "openssl"
+
+[[install]]
+method = "system"
+platforms = ["linux.arch"]
+package = "openssl"
+
+[[install]]
+method = "system"
+platforms = ["linux.fedora"]
+package = "openssl"
+
+
+[[install]]
+method = "system"
+platforms = ["bsd"]
+package = "openssl"
+[config]
+symlinks = []
+dependencies = []

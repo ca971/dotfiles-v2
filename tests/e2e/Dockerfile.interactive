@@ -1,0 +1,97 @@
+# ═══════════════════════════════════════════════════════════════════════════════
+# Interactive test container for dotfiles
+# Simulates a fresh Linux install with all hard dependencies
+#
+# Usage:
+#   docker build -f tests/e2e/Dockerfile.interactive -t dotfiles-test .
+#   docker run -it --rm dotfiles-test
+# ═══════════════════════════════════════════════════════════════════════════════
+
+FROM debian:bookworm-slim
+
+ENV DEBIAN_FRONTEND=noninteractive
+ENV HOME=/home/testuser
+ENV DOTFILES_DIR=/home/testuser/.dotfiles
+ENV TERM=xterm-256color
+ENV LANG=en_US.UTF-8
+ENV LOG_COLOR=1
+
+# Install base system
+RUN apt-get update -qq && \
+    apt-get install -y --no-install-recommends \
+        bash \
+        curl \
+        git \
+        jq \
+        ca-certificates \
+        sudo \
+        zsh \
+        fish \
+        locales \
+        unzip \
+        build-essential \
+        pkg-config \
+        libssl-dev \
+    && rm -rf /var/lib/apt/lists/* \
+    && locale-gen en_US.UTF-8
+
+# Install bats-core
+RUN git clone https://github.com/bats-core/bats-core.git /tmp/bats && \
+    cd /tmp/bats && ./install.sh /usr/local && rm -rf /tmp/bats
+
+# taplo will be installed via mise after user setup
+
+# Create test user with sudo
+RUN useradd -m -s /bin/bash testuser && \
+    echo "testuser ALL=(ALL) NOPASSWD:ALL" >> /etc/sudoers
+
+USER testuser
+WORKDIR ${HOME}
+
+# Install mise
+RUN curl -fsSL https://mise.run | sh
+ENV PATH="${HOME}/.local/bin:${PATH}"
+
+# Install uv
+RUN curl -LsSf https://astral.sh/uv/install.sh | sh
+
+# Install taplo via mise
+RUN mise install taplo@latest && mise use --global taplo@latest
+
+# Copy dotfiles
+COPY --chown=testuser:testuser . ${DOTFILES_DIR}
+
+WORKDIR ${DOTFILES_DIR}
+
+# Setup generators
+RUN cd generators && uv sync --quiet
+
+# Generate shell configs
+RUN cd generators && uv run python -m src.cli generate --all
+
+# Initialize state
+RUN mkdir -p local && \
+    echo '{"version":1,"tools":{},"nix_envs":{},"theme":"minimal"}' > local/state.json && \
+    chmod 700 local/secrets local/ssh local/ssh/keys
+
+# Run tests to verify everything works
+RUN bats tests/unit/ tests/integration/ 2>&1 | tail -5
+
+# Set ZDOTDIR so zsh finds our config and sources .zshenv (XDG vars)
+RUN printf 'export ZDOTDIR="${HOME}/.dotfiles/shells/zsh"\nsource "${ZDOTDIR}/.zshenv"\n' > "${HOME}/.zshenv"
+
+# Symlink fish config so fish finds it at ~/.config/fish/config.fish
+RUN mkdir -p "${HOME}/.config" && \
+    ln -sf "${DOTFILES_DIR}/shells/fish" "${HOME}/.config/fish"
+
+# Install nushell via mise (aqua backend)
+RUN mise install aqua:nushell/nushell@latest && mise use --global aqua:nushell/nushell@latest
+
+# Add mise shims to PATH for non-interactive access
+ENV PATH="${HOME}/.local/share/mise/shims:${PATH}"
+
+# Set shell to zsh for interactive testing
+RUN sudo chsh -s /usr/bin/zsh testuser
+
+ENTRYPOINT ["/bin/bash", "-c"]
+CMD ["echo '═══ Dotfiles Test Container ═══' && echo '' && echo 'Commands:' && echo '  bats tests/unit/              # Run unit tests' && echo '  bats tests/integration/       # Run integration tests' && echo '  ./bootstrap.sh --dry-run      # Preview bootstrap' && echo '  dotfiles doctor               # Health check' && echo '  dotfiles-gen validate         # Validate SSOT' && echo '  dotfiles-theme full           # Switch theme' && echo '  zsh                           # Launch zsh with config' && echo '' && exec bash"]

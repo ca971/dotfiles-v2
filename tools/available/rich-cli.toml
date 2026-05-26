@@ -1,0 +1,24 @@
+# ═══════════════════════════════════════════════════════════════════════════════
+# @file tools/available/rich-cli.toml
+# @description Tool descriptor for rich-cli (Fancy output for the terminal using Rich)
+# @since 1.0.0
+# @version 1.0.0
+# ═══════════════════════════════════════════════════════════════════════════════
+
+[meta]
+name = "rich-cli"
+description = "Fancy output for the terminal using Rich"
+homepage = "https://github.com/Textualize/rich-cli"
+category = "shell"
+version = "latest"
+verify = "rich --version"
+
+[[install]]
+method = "uv"
+platforms = ["darwin", "linux", "wsl", "bsd"]
+package = "rich-cli"
+version = "latest"
+
+[config]
+symlinks = []
+dependencies = []

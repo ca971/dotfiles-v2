@@ -1,0 +1,29 @@
+# ═══════════════════════════════════════════════════════════════════════════════
+# @file tools/available/ruff.toml
+# @description Tool descriptor for ruff (Extremely fast Python linter and formatter)
+# @since 1.0.0
+# @version 1.0.0
+# ═══════════════════════════════════════════════════════════════════════════════
+
+[meta]
+name = "ruff"
+description = "Extremely fast Python linter and formatter"
+homepage = "https://github.com/astral-sh/ruff"
+category = "python"
+version = "latest"
+verify = "ruff --version"
+
+[[install]]
+method = "mise"
+platforms = ["darwin", "linux", "wsl", "bsd"]
+plugin = "ruff"
+version = "latest"
+
+[[install]]
+method = "brew"
+platforms = ["darwin"]
+package = "ruff"
+
+[config]
+symlinks = []
+dependencies = []

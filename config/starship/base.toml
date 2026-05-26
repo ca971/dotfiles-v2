@@ -1,0 +1,109 @@
+# ═══════════════════════════════════════════════════════════════════════════════
+# @file config/starship/base.toml
+# @description Starship prompt — base configuration (shared across all themes)
+# @since 1.0.0
+# @version 1.0.0
+# @see config/starship/themes/
+#
+# This file is the STARSHIP_CONFIG entry point.
+# Theme-specific overrides are merged at runtime by the theme switcher.
+# ═══════════════════════════════════════════════════════════════════════════════
+
+# Timeout for commands (ms)
+command_timeout = 1000
+scan_timeout = 30
+
+# Add a blank line between prompts
+add_newline = true
+
+# ───────────────────────────────────────────────────────────────────────────────
+# Prompt format (overridden by themes)
+# ───────────────────────────────────────────────────────────────────────────────
+format = """
+$username\
+$hostname\
+$directory\
+$git_branch\
+$git_status\
+$cmd_duration\
+$line_break\
+$character"""
+
+right_format = """
+$status\
+$jobs"""
+
+# ───────────────────────────────────────────────────────────────────────────────
+# Character (prompt symbol)
+# ───────────────────────────────────────────────────────────────────────────────
+[character]
+success_symbol = "[❯](bold green)"
+error_symbol = "[❯](bold red)"
+vimcmd_symbol = "[❮](bold purple)"
+
+# ───────────────────────────────────────────────────────────────────────────────
+# Directory
+# ───────────────────────────────────────────────────────────────────────────────
+[directory]
+truncation_length = 4
+truncation_symbol = "…/"
+home_symbol = "~"
+read_only = " 󰌾"
+style = "bold cyan"
+
+# ───────────────────────────────────────────────────────────────────────────────
+# Git
+# ───────────────────────────────────────────────────────────────────────────────
+[git_branch]
+symbol = " "
+style = "bold purple"
+format = "[$symbol$branch(:$remote_branch)]($style) "
+
+[git_status]
+format = '([$all_status$ahead_behind]($style) )'
+style = "bold red"
+conflicted = "="
+ahead = "⇡${count}"
+behind = "⇣${count}"
+diverged = "⇕⇡${ahead_count}⇣${behind_count}"
+untracked = "?${count}"
+stashed = "\\$"
+modified = "!${count}"
+staged = "+${count}"
+deleted = "✘${count}"
+
+# ───────────────────────────────────────────────────────────────────────────────
+# Command duration
+# ───────────────────────────────────────────────────────────────────────────────
+[cmd_duration]
+min_time = 2000
+format = "[$duration]($style) "
+style = "bold yellow"
+show_milliseconds = false
+
+# ───────────────────────────────────────────────────────────────────────────────
+# Username & Hostname (shown in SSH/container only)
+# ───────────────────────────────────────────────────────────────────────────────
+[username]
+show_always = false
+format = "[$user]($style)@"
+style_user = "bold blue"
+style_root = "bold red"
+
+[hostname]
+ssh_only = true
+format = "[$hostname]($style) "
+style = "bold green"
+
+# ───────────────────────────────────────────────────────────────────────────────
+# Status & Jobs
+# ───────────────────────────────────────────────────────────────────────────────
+[status]
+disabled = false
+format = "[$status]($style) "
+style = "bold red"
+
+[jobs]
+threshold = 1
+symbol = "✦"
+style = "bold blue"

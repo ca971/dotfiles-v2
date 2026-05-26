@@ -1,0 +1,246 @@
+#!/usr/bin/env bash
+# ═══════════════════════════════════════════════════════════════════════════════
+# @file bin/dotfiles-nix
+# @description Nix environment manager CLI
+# @since 1.0.0
+# @version 1.0.0
+# @see tools/nix/envs/
+#
+# Usage:
+#   dotfiles-nix list              # List all environments and their status
+#   dotfiles-nix enter <env>       # Enter a Nix dev shell
+#   dotfiles-nix enable <env>      # Enable an environment
+#   dotfiles-nix disable <env>     # Disable an environment
+#   dotfiles-nix create <env>      # Create new environment from template
+#   dotfiles-nix update [env]      # Update flake.lock (all or specific)
+#   dotfiles-nix status            # Show active environments
+# ═══════════════════════════════════════════════════════════════════════════════
+
+set -euo pipefail
+
+export DOTFILES_DIR="${DOTFILES_DIR:-${HOME}/.dotfiles}"
+
+source "${DOTFILES_DIR}/lib/core/logger.sh"
+source "${DOTFILES_DIR}/lib/core/validator.sh"
+source "${DOTFILES_DIR}/lib/hotload/state.sh"
+
+readonly ENVS_DIR="${DOTFILES_DIR}/tools/nix/envs"
+
+# ═══════════════════════════════════════════════════════════════════════════════
+# @description List all available Nix environments
+# ═══════════════════════════════════════════════════════════════════════════════
+cmd_list() {
+    printf "%-12s %-8s %s\n" "ENV" "STATUS" "DESCRIPTION"
+    printf "%-12s %-8s %s\n" "───" "──────" "───────────"
+
+    local env_dir
+    for env_dir in "${ENVS_DIR}"/*/; do
+        [[ -d "${env_dir}" ]] || continue
+        local env_name
+        env_name="$(basename "${env_dir}")"
+        [[ "${env_name}" == "_template" ]] && continue
+
+        local manifest="${env_dir}/manifest.toml"
+        if [[ ! -f "${manifest}" ]]; then
+            continue
+        fi
+
+        local description="(no description)"
+        local enabled="false"
+        if command -v taplo >/dev/null 2>&1; then
+            description="$(taplo get -f "${manifest}" -o json 2>/dev/null | jq -r '.meta.description // "(no description)"')"
+            enabled="$(taplo get -f "${manifest}" -o json 2>/dev/null | jq -r '.meta.enabled // false')"
+        else
+            if grep -q 'enabled = true' "${manifest}" 2>/dev/null; then
+                enabled="true"
+            fi
+            description="$(grep 'description' "${manifest}" 2>/dev/null | head -1 | sed 's/.*= *"//' | sed 's/"//')"
+        fi
+
+        local status_icon
+        if [[ "${enabled}" == "true" ]]; then
+            status_icon="active"
+        else
+            status_icon="off"
+        fi
+
+        printf "%-12s %-8s %s\n" "${env_name}" "${status_icon}" "${description}"
+    done
+}
+
+# ═══════════════════════════════════════════════════════════════════════════════
+# @description Enter a Nix dev shell for a given environment
+# @param $1 {string} Environment name
+# ═══════════════════════════════════════════════════════════════════════════════
+cmd_enter() {
+    local env_name="${1:?Environment name required}"
+    local env_dir="${ENVS_DIR}/${env_name}"
+
+    if [[ ! -d "${env_dir}" ]]; then
+        Logger::error "Environment not found: ${env_name}"
+        Logger::info "Available: $(find "${ENVS_DIR}" -mindepth 1 -maxdepth 1 -type d -not -name '_template' -exec basename {} \; | tr '\n' ' ')"
+        exit 1
+    fi
+
+    if [[ ! -f "${env_dir}/flake.nix" ]]; then
+        Logger::error "No flake.nix in ${env_dir}"
+        exit 1
+    fi
+
+    if ! Validator::command_exists "nix"; then
+        Logger::error "Nix is not installed. Run: dotfiles install nix"
+        exit 1
+    fi
+
+    Logger::info "Entering '${env_name}' Nix environment..."
+    nix develop "${env_dir}" --command "${SHELL:-bash}"
+}
+
+# ═══════════════════════════════════════════════════════════════════════════════
+# @description Enable an environment (set enabled = true in manifest)
+# @param $1 {string} Environment name
+# ═══════════════════════════════════════════════════════════════════════════════
+cmd_enable() {
+    local env_name="${1:?Environment name required}"
+    local manifest="${ENVS_DIR}/${env_name}/manifest.toml"
+
+    if [[ ! -f "${manifest}" ]]; then
+        Logger::error "Environment not found: ${env_name}"
+        exit 1
+    fi
+
+    sed -i.bak 's/enabled = false/enabled = true/' "${manifest}"
+    rm -f "${manifest}.bak"
+    Logger::success "Enabled environment: ${env_name}"
+}
+
+# ═══════════════════════════════════════════════════════════════════════════════
+# @description Disable an environment
+# @param $1 {string} Environment name
+# ═══════════════════════════════════════════════════════════════════════════════
+cmd_disable() {
+    local env_name="${1:?Environment name required}"
+    local manifest="${ENVS_DIR}/${env_name}/manifest.toml"
+
+    if [[ ! -f "${manifest}" ]]; then
+        Logger::error "Environment not found: ${env_name}"
+        exit 1
+    fi
+
+    sed -i.bak 's/enabled = true/enabled = false/' "${manifest}"
+    rm -f "${manifest}.bak"
+    Logger::success "Disabled environment: ${env_name}"
+}
+
+# ═══════════════════════════════════════════════════════════════════════════════
+# @description Create a new environment from template
+# @param $1 {string} New environment name
+# ═══════════════════════════════════════════════════════════════════════════════
+cmd_create() {
+    local env_name="${1:?Environment name required}"
+    local new_dir="${ENVS_DIR}/${env_name}"
+    local template_dir="${ENVS_DIR}/_template"
+
+    if [[ -d "${new_dir}" ]]; then
+        Logger::error "Environment already exists: ${env_name}"
+        exit 1
+    fi
+
+    cp -r "${template_dir}" "${new_dir}"
+
+    # Update manifest name
+    sed -i.bak "s/name = \"template\"/name = \"${env_name}\"/" "${new_dir}/manifest.toml"
+    sed -i.bak "s/Template environment/Custom ${env_name} environment/" "${new_dir}/manifest.toml"
+    sed -i.bak 's/enabled = false/enabled = true/' "${new_dir}/manifest.toml"
+    rm -f "${new_dir}/manifest.toml.bak"
+
+    # Update flake description
+    sed -i.bak "s/Template development environment/${env_name} development environment/" "${new_dir}/flake.nix"
+    sed -i.bak "s/name = \"template\"/name = \"${env_name}\"/" "${new_dir}/flake.nix"
+    sed -i.bak "s/Entering template/Entering ${env_name}/" "${new_dir}/flake.nix"
+    rm -f "${new_dir}/flake.nix.bak"
+
+    Logger::success "Created environment: ${env_name}"
+    Logger::info "Edit: ${new_dir}/flake.nix"
+}
+
+# ═══════════════════════════════════════════════════════════════════════════════
+# @description Update flake.lock for environments
+# @param $1 {string} [optional] Specific environment (default: all enabled)
+# ═══════════════════════════════════════════════════════════════════════════════
+cmd_update() {
+    local target="${1:-}"
+
+    if ! Validator::command_exists "nix"; then
+        Logger::error "Nix is not installed"
+        exit 1
+    fi
+
+    if [[ -n "${target}" ]]; then
+        local env_dir="${ENVS_DIR}/${target}"
+        if [[ ! -d "${env_dir}" ]]; then
+            Logger::error "Environment not found: ${target}"
+            exit 1
+        fi
+        Logger::info "Updating flake.lock for ${target}..."
+        nix flake update "${env_dir}"
+        Logger::success "Updated: ${target}"
+    else
+        Logger::info "Updating all enabled environments..."
+        local env_dir
+        for env_dir in "${ENVS_DIR}"/*/; do
+            local env_name
+            env_name="$(basename "${env_dir}")"
+            [[ "${env_name}" == "_template" ]] && continue
+
+            if grep -q 'enabled = true' "${env_dir}/manifest.toml" 2>/dev/null; then
+                Logger::info "  Updating ${env_name}..."
+                nix flake update "${env_dir}" 2>/dev/null || Logger::warn "  Failed: ${env_name}"
+            fi
+        done
+        Logger::success "All environments updated"
+    fi
+}
+
+# ═══════════════════════════════════════════════════════════════════════════════
+# @description Show help
+# ═══════════════════════════════════════════════════════════════════════════════
+show_help() {
+    cat <<-EOF
+	Usage: dotfiles-nix <command> [args]
+
+	Commands:
+	  list              List all environments and status
+	  enter <env>       Enter a Nix dev shell
+	  enable <env>      Enable an environment
+	  disable <env>     Disable an environment
+	  create <env>      Create new environment from template
+	  update [env]      Update flake.lock (all enabled or specific)
+
+	Environments:
+	  default, devops, go, node, python, rust, data, security
+
+	Examples:
+	  dotfiles-nix enter python
+	  dotfiles-nix create elixir
+	  dotfiles-nix disable data
+	EOF
+}
+
+# ═══════════════════════════════════════════════════════════════════════════════
+# @description Main entry point
+# ═══════════════════════════════════════════════════════════════════════════════
+main() {
+    case "${1:-}" in
+        list|ls)     cmd_list ;;
+        enter)       cmd_enter "${2:-}" ;;
+        enable)      cmd_enable "${2:-}" ;;
+        disable)     cmd_disable "${2:-}" ;;
+        create)      cmd_create "${2:-}" ;;
+        update)      cmd_update "${2:-}" ;;
+        --help|-h|"") show_help ;;
+        *)           Logger::error "Unknown command: ${1}"; show_help; exit 1 ;;
+    esac
+}
+
+main "$@"

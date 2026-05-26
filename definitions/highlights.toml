@@ -1,0 +1,48 @@
+# ═══════════════════════════════════════════════════════════════════════════════
+# @file definitions/highlights.toml
+# @description Single Source of Truth for syntax highlighting styles
+# @since 1.0.0
+# @version 1.0.0
+# @see docs/SSOT.md
+#
+# Used by: zsh-syntax-highlighting, fish syntax, nushell theming
+# Colors reference the semantic palette from colors.toml
+# ═══════════════════════════════════════════════════════════════════════════════
+
+# ───────────────────────────────────────────────────────────────────────────────
+# Command categories
+# ───────────────────────────────────────────────────────────────────────────────
+
+[highlights.commands]
+builtin = { fg = "#89b4fa", bold = true, description = "Shell builtins (cd, echo, export)" }
+command = { fg = "#a6e3a1", bold = false, description = "External commands" }
+alias = { fg = "#94e2d5", bold = false, description = "Aliases" }
+function = { fg = "#89dceb", bold = false, description = "Functions" }
+unknown = { fg = "#f38ba8", underline = true, description = "Unknown/not found commands" }
+precommand = { fg = "#f5c2e7", bold = true, description = "Precommands (sudo, nohup)" }
+
+# ───────────────────────────────────────────────────────────────────────────────
+# Arguments & operators
+# ───────────────────────────────────────────────────────────────────────────────
+
+[highlights.syntax]
+single_quoted = { fg = "#f9e2af", description = "Single-quoted strings" }
+double_quoted = { fg = "#f9e2af", description = "Double-quoted strings" }
+dollar_quoted = { fg = "#fab387", description = "Dollar-quoted strings" }
+path = { fg = "#cba6f7", underline = true, description = "File paths" }
+globbing = { fg = "#f5c2e7", description = "Glob patterns" }
+option = { fg = "#bac2de", description = "Command options (--flag)" }
+argument = { fg = "#cdd6f4", description = "Regular arguments" }
+redirection = { fg = "#fab387", bold = true, description = "Redirections (>, >>, |)" }
+comment = { fg = "#6c7086", italic = true, description = "Comments" }
+
+# ───────────────────────────────────────────────────────────────────────────────
+# Special
+# ───────────────────────────────────────────────────────────────────────────────
+
+[highlights.special]
+variable = { fg = "#fab387", description = "Variable references ($VAR)" }
+assignment = { fg = "#74c7ec", description = "Variable assignments" }
+number = { fg = "#fab387", description = "Numeric values" }
+bracket = { fg = "#b4befe", description = "Brackets and parentheses" }
+error = { fg = "#f38ba8", bold = true, description = "Syntax errors" }

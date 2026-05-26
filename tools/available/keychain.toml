@@ -1,0 +1,39 @@
+# ═══════════════════════════════════════════════════════════════════════════════
+# @file tools/available/keychain.toml
+# @description Tool descriptor for keychain (SSH and GPG agent manager for shell sessions)
+# @since 1.0.0
+# @version 1.0.0
+# ═══════════════════════════════════════════════════════════════════════════════
+
+[meta]
+name = "keychain"
+description = "SSH and GPG agent manager for shell sessions"
+homepage = "https://www.funtoo.org/Funtoo:Keychain"
+category = "security"
+version = "latest"
+verify = "keychain --version"
+
+
+[[install]]
+method = "system"
+platforms = ["linux.debian"]
+package = "keychain"
+
+[[install]]
+method = "system"
+platforms = ["linux.arch"]
+package = "keychain"
+
+[[install]]
+method = "system"
+platforms = ["linux.fedora"]
+package = "keychain"
+
+
+[[install]]
+method = "system"
+platforms = ["bsd"]
+package = "keychain"
+[config]
+symlinks = []
+dependencies = []

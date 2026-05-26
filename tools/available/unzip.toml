@@ -1,0 +1,39 @@
+# ═══════════════════════════════════════════════════════════════════════════════
+# @file tools/available/unzip.toml
+# @description Tool descriptor for unzip (Extraction utility for zip archives)
+# @since 1.0.0
+# @version 1.0.0
+# ═══════════════════════════════════════════════════════════════════════════════
+
+[meta]
+name = "unzip"
+description = "Extraction utility for zip archives"
+homepage = "https://infozip.sourceforge.net"
+category = "core"
+version = "latest"
+verify = "unzip -v | head -1"
+
+
+[[install]]
+method = "system"
+platforms = ["linux.debian"]
+package = "unzip"
+
+[[install]]
+method = "system"
+platforms = ["linux.arch"]
+package = "unzip"
+
+[[install]]
+method = "system"
+platforms = ["linux.fedora"]
+package = "unzip"
+
+
+[[install]]
+method = "system"
+platforms = ["bsd"]
+package = "unzip"
+[config]
+symlinks = []
+dependencies = []

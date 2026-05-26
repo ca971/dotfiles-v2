@@ -1,0 +1,46 @@
+# ═══════════════════════════════════════════════════════════════════════════════
+# @file tests/e2e/docker-compose.yml
+# @description Run E2E tests on all distributions simultaneously
+# @since 1.0.0
+# @version 1.0.0
+#
+# Usage:
+#   cd tests/e2e && docker compose up --build --abort-on-container-exit
+# ═══════════════════════════════════════════════════════════════════════════════
+
+services:
+  debian:
+    build:
+      context: ../..
+      dockerfile: tests/e2e/Dockerfile.debian
+    command: bash -c "bats tests/unit/ tests/integration/"
+    environment:
+      - DOTFILES_DIR=/home/testuser/.dotfiles
+      - LOG_COLOR=0
+
+  arch:
+    build:
+      context: ../..
+      dockerfile: tests/e2e/Dockerfile.arch
+    command: bash -c "bats tests/unit/ tests/integration/"
+    environment:
+      - DOTFILES_DIR=/home/testuser/.dotfiles
+      - LOG_COLOR=0
+
+  fedora:
+    build:
+      context: ../..
+      dockerfile: tests/e2e/Dockerfile.fedora
+    command: bash -c "bats tests/unit/ tests/integration/"
+    environment:
+      - DOTFILES_DIR=/home/testuser/.dotfiles
+      - LOG_COLOR=0
+
+  alpine:
+    build:
+      context: ../..
+      dockerfile: tests/e2e/Dockerfile.alpine
+    command: bash -c "bats tests/unit/ tests/integration/"
+    environment:
+      - DOTFILES_DIR=/home/testuser/.dotfiles
+      - LOG_COLOR=0

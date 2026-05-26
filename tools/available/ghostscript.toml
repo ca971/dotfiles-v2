@@ -1,0 +1,43 @@
+# ═══════════════════════════════════════════════════════════════════════════════
+# @file tools/available/ghostscript.toml
+# @description Tool descriptor for ghostscript (Interpreter for PostScript and PDF)
+# @since 1.0.0
+# @version 1.0.0
+# ═══════════════════════════════════════════════════════════════════════════════
+
+[meta]
+name = "ghostscript"
+description = "Interpreter for PostScript and PDF"
+homepage = "https://ghostscript.com"
+category = "media"
+version = "latest"
+verify = "gs --version"
+
+[[install]]
+method = "brew"
+platforms = ["darwin"]
+package = "ghostscript"
+
+[[install]]
+method = "system"
+platforms = ["linux.debian"]
+package = "ghostscript"
+
+[[install]]
+method = "system"
+platforms = ["linux.arch"]
+package = "ghostscript"
+
+[[install]]
+method = "system"
+platforms = ["linux.fedora"]
+package = "ghostscript"
+
+
+[[install]]
+method = "system"
+platforms = ["bsd"]
+package = "ghostscript10"
+[config]
+symlinks = []
+dependencies = []

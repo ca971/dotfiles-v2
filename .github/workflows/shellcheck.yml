@@ -1,0 +1,42 @@
+# ═══════════════════════════════════════════════════════════════════════════════
+# @file .github/workflows/shellcheck.yml
+# @description Dedicated shellcheck workflow for all shell scripts
+# @since 1.0.0
+# @version 1.0.0
+# ═══════════════════════════════════════════════════════════════════════════════
+
+name: ShellCheck
+
+on:
+  push:
+    paths:
+      - '**.sh'
+      - 'bin/**'
+      - 'shells/**'
+  pull_request:
+    paths:
+      - '**.sh'
+      - 'bin/**'
+      - 'shells/**'
+
+jobs:
+  shellcheck:
+    name: Lint Shell Scripts
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: ShellCheck lib/
+        run: find lib/ -name '*.sh' -exec shellcheck -x --severity=warning {} +
+
+      - name: ShellCheck bin/
+        run: shellcheck -x --severity=warning bin/dotfiles bin/dotfiles-theme bin/dotfiles-nix
+
+      - name: ShellCheck platform/
+        run: find platform/ -name '*.sh' -exec shellcheck -x --severity=warning {} +
+
+      - name: ShellCheck install/bootstrap
+        run: shellcheck -x --severity=warning install.sh bootstrap.sh
+
+      - name: ShellCheck tools/nix
+        run: shellcheck -x --severity=warning tools/nix/install.sh tools/nix/uninstall.sh

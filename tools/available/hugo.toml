@@ -1,0 +1,44 @@
+# ═══════════════════════════════════════════════════════════════════════════════
+# @file tools/available/hugo.toml
+# @description Tool descriptor for hugo (Fast and flexible static site generator)
+# @since 1.0.0
+# @version 1.0.0
+# ═══════════════════════════════════════════════════════════════════════════════
+
+[meta]
+name = "hugo"
+description = "Fast and flexible static site generator"
+homepage = "https://gohugo.io"
+category = "dev"
+version = "latest"
+verify = "hugo version"
+
+[[install]]
+method = "mise"
+platforms = ["darwin", "linux", "wsl", "bsd"]
+plugin = "hugo"
+version = "latest"
+
+[[install]]
+method = "brew"
+platforms = ["darwin"]
+package = "hugo"
+
+[[install]]
+method = "system"
+platforms = ["linux.debian"]
+package = "hugo"
+
+[[install]]
+method = "system"
+platforms = ["linux.arch"]
+package = "hugo"
+
+[[install]]
+method = "system"
+platforms = ["linux.fedora"]
+package = "hugo"
+
+[config]
+symlinks = []
+dependencies = []

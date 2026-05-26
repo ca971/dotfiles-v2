@@ -1,0 +1,39 @@
+# ═══════════════════════════════════════════════════════════════════════════════
+# @file tools/available/nmap.toml
+# @description Tool descriptor for nmap (Network exploration and security auditing tool)
+# @since 1.0.0
+# @version 1.0.0
+# ═══════════════════════════════════════════════════════════════════════════════
+
+[meta]
+name = "nmap"
+description = "Network exploration and security auditing tool"
+homepage = "https://nmap.org"
+category = "security"
+version = "latest"
+verify = "nmap --version"
+
+
+[[install]]
+method = "system"
+platforms = ["linux.debian"]
+package = "nmap"
+
+[[install]]
+method = "system"
+platforms = ["linux.arch"]
+package = "nmap"
+
+[[install]]
+method = "system"
+platforms = ["linux.fedora"]
+package = "nmap"
+
+
+[[install]]
+method = "system"
+platforms = ["bsd"]
+package = "nmap"
+[config]
+symlinks = []
+dependencies = []

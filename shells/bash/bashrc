@@ -1,0 +1,83 @@
+#!/usr/bin/env bash
+# ═══════════════════════════════════════════════════════════════════════════════
+# @file shells/bash/bashrc
+# @description Bash interactive shell configuration
+# @since 1.0.0
+# @version 1.0.0
+# @see docs/ARCHITECTURE.md
+#
+# Loading order:
+#   1. Environment (PATH, XDG, exports)
+#   2. Shell options & history
+#   3. Generated configs (from SSOT definitions)
+#   4. Completions
+#   5. Tool integrations (mise, atuin, starship, etc.)
+#   6. Local overrides
+# ═══════════════════════════════════════════════════════════════════════════════
+
+# Exit early for non-interactive shells
+[[ $- != *i* ]] && return
+
+# ───────────────────────────────────────────────────────────────────────────────
+# Core variables
+# ───────────────────────────────────────────────────────────────────────────────
+export DOTFILES_DIR="${DOTFILES_DIR:-${HOME}/.dotfiles}"
+readonly BASH_GEN_DIR="${DOTFILES_DIR}/shells/bash/generated"
+
+# ───────────────────────────────────────────────────────────────────────────────
+# Shell options
+# ───────────────────────────────────────────────────────────────────────────────
+shopt -s checkwinsize
+shopt -s histappend
+shopt -s cmdhist
+shopt -s autocd
+shopt -s cdspell
+shopt -s dirspell
+shopt -s globstar
+shopt -s nocaseglob
+shopt -s no_empty_cmd_completion
+
+# ───────────────────────────────────────────────────────────────────────────────
+# History
+# ───────────────────────────────────────────────────────────────────────────────
+export HISTSIZE=50000
+export HISTFILESIZE=100000
+export HISTCONTROL=ignoreboth:erasedups
+export HISTIGNORE="ls:cd:cd -:pwd:exit:clear:history"
+export HISTTIMEFORMAT="%F %T "
+
+# ───────────────────────────────────────────────────────────────────────────────
+# Source generated configs (SSOT → bash)
+# ORDER MATTERS: env/path first, then aliases/functions, then init (tool hooks)
+# ───────────────────────────────────────────────────────────────────────────────
+_source_if_exists() { [[ -f "$1" ]] && source "$1"; }
+
+_source_if_exists "${BASH_GEN_DIR}/env.gen.sh"
+_source_if_exists "${BASH_GEN_DIR}/path.gen.sh"
+_source_if_exists "${BASH_GEN_DIR}/aliases.gen.sh"
+_source_if_exists "${BASH_GEN_DIR}/functions.gen.sh"
+_source_if_exists "${BASH_GEN_DIR}/keybindings.gen.sh"
+_source_if_exists "${BASH_GEN_DIR}/init.gen.sh"
+
+# ───────────────────────────────────────────────────────────────────────────────
+# Completions
+# ───────────────────────────────────────────────────────────────────────────────
+if [[ -d "${DOTFILES_DIR}/shells/bash/completions" ]]; then
+    for f in "${DOTFILES_DIR}/shells/bash/completions"/*.bash; do
+        [[ -f "${f}" ]] && source "${f}"
+    done
+fi
+
+# Bash-completion package
+if [[ -f /usr/share/bash-completion/bash_completion ]]; then
+    source /usr/share/bash-completion/bash_completion
+elif [[ -f /opt/homebrew/etc/profile.d/bash_completion.sh ]]; then
+    source /opt/homebrew/etc/profile.d/bash_completion.sh
+fi
+
+# ───────────────────────────────────────────────────────────────────────────────
+# Local overrides (machine-specific, gitignored)
+# ───────────────────────────────────────────────────────────────────────────────
+if [[ -f "${DOTFILES_DIR}/local/shell/bash.local" ]]; then
+    source "${DOTFILES_DIR}/local/shell/bash.local"
+fi

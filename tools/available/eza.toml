@@ -1,0 +1,39 @@
+# ═══════════════════════════════════════════════════════════════════════════════
+# @file tools/available/eza.toml
+# @description Tool descriptor for eza (modern ls replacement)
+# @since 1.0.0
+# @version 1.0.0
+# ═══════════════════════════════════════════════════════════════════════════════
+
+[meta]
+name = "eza"
+description = "Modern replacement for ls with icons, git integration, and tree view"
+homepage = "https://eza.rocks"
+category = "core"
+version = "latest"
+verify = "eza --version"
+
+[[install]]
+method = "mise"
+platforms = ["darwin", "linux", "wsl", "bsd"]
+plugin = "eza"
+version = "latest"
+
+[[install]]
+method = "cargo"
+platforms = ["darwin", "linux", "wsl", "bsd"]
+crate = "eza"
+
+[[install]]
+method = "brew"
+platforms = ["darwin"]
+package = "eza"
+
+[[install]]
+method = "system"
+platforms = ["linux.arch"]
+package = "eza"
+
+[config]
+symlinks = []
+dependencies = []

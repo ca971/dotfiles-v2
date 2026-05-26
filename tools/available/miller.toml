@@ -1,0 +1,34 @@
+# ═══════════════════════════════════════════════════════════════════════════════
+# @file tools/available/miller.toml
+# @description Tool descriptor for miller (Awk/sed/cut for structured data (CSV/JSON/TOML))
+# @since 1.0.0
+# @version 1.0.0
+# ═══════════════════════════════════════════════════════════════════════════════
+
+[meta]
+name = "miller"
+description = "Awk/sed/cut for structured data (CSV/JSON/TOML)"
+homepage = "https://miller.readthedocs.io"
+category = "data"
+version = "latest"
+verify = "mlr --version"
+
+[[install]]
+method = "mise"
+platforms = ["darwin", "linux", "wsl", "bsd"]
+plugin = "miller"
+version = "latest"
+
+[[install]]
+method = "brew"
+platforms = ["darwin"]
+package = "miller"
+
+[[install]]
+method = "system"
+platforms = ["linux.arch"]
+package = "miller"
+
+[config]
+symlinks = []
+dependencies = []

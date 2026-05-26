@@ -1,0 +1,44 @@
+# ═══════════════════════════════════════════════════════════════════════════════
+# @file tools/available/duf.toml
+# @description Tool descriptor for duf (Disk usage utility with a prettier interface)
+# @since 1.0.0
+# @version 1.0.0
+# ═══════════════════════════════════════════════════════════════════════════════
+
+[meta]
+name = "duf"
+description = "Disk usage utility with a prettier interface"
+homepage = "https://github.com/muesli/duf"
+category = "system"
+version = "latest"
+verify = "duf --version"
+
+[[install]]
+method = "mise"
+platforms = ["darwin", "linux", "wsl", "bsd"]
+plugin = "duf"
+version = "latest"
+
+[[install]]
+method = "brew"
+platforms = ["darwin"]
+package = "duf"
+
+[[install]]
+method = "system"
+platforms = ["linux.debian"]
+package = "duf"
+
+[[install]]
+method = "system"
+platforms = ["linux.arch"]
+package = "duf"
+
+[[install]]
+method = "system"
+platforms = ["linux.fedora"]
+package = "duf"
+
+[config]
+symlinks = []
+dependencies = []

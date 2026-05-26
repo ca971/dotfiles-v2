@@ -1,0 +1,23 @@
+# ═══════════════════════════════════════════════════════════════════════════════
+# @file tools/available/mise.toml
+# @description Tool descriptor for mise (Polyglot runtime and tool version manager)
+# @since 1.0.0
+# @version 1.0.0
+# ═══════════════════════════════════════════════════════════════════════════════
+
+[meta]
+name = "mise"
+description = "Polyglot runtime and tool version manager"
+homepage = "https://mise.jdx.dev"
+category = "core"
+version = "latest"
+verify = "mise --version"
+
+[[install]]
+method = "curl"
+platforms = ["darwin", "linux", "wsl", "bsd"]
+command = "curl -fsSL https://mise.run | sh"
+
+[config]
+symlinks = []
+dependencies = []

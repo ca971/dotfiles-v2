@@ -1,0 +1,39 @@
+# ═══════════════════════════════════════════════════════════════════════════════
+# @file tools/available/mtr.toml
+# @description Tool descriptor for mtr (Network diagnostic tool combining ping and traceroute)
+# @since 1.0.0
+# @version 1.0.0
+# ═══════════════════════════════════════════════════════════════════════════════
+
+[meta]
+name = "mtr"
+description = "Network diagnostic tool combining ping and traceroute"
+homepage = "https://www.bitwizard.nl/mtr"
+category = "net"
+version = "latest"
+verify = "mtr --version"
+
+
+[[install]]
+method = "system"
+platforms = ["linux.debian"]
+package = "mtr"
+
+[[install]]
+method = "system"
+platforms = ["linux.arch"]
+package = "mtr"
+
+[[install]]
+method = "system"
+platforms = ["linux.fedora"]
+package = "mtr"
+
+
+[[install]]
+method = "system"
+platforms = ["bsd"]
+package = "mtr-nox11"
+[config]
+symlinks = []
+dependencies = []

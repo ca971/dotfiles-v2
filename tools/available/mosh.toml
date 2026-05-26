@@ -1,0 +1,39 @@
+# ═══════════════════════════════════════════════════════════════════════════════
+# @file tools/available/mosh.toml
+# @description Tool descriptor for mosh (Mobile shell for roaming and intermittent connectivity)
+# @since 1.0.0
+# @version 1.0.0
+# ═══════════════════════════════════════════════════════════════════════════════
+
+[meta]
+name = "mosh"
+description = "Mobile shell for roaming and intermittent connectivity"
+homepage = "https://mosh.org"
+category = "net"
+version = "latest"
+verify = "mosh --version"
+
+
+[[install]]
+method = "system"
+platforms = ["linux.debian"]
+package = "mosh"
+
+[[install]]
+method = "system"
+platforms = ["linux.arch"]
+package = "mosh"
+
+[[install]]
+method = "system"
+platforms = ["linux.fedora"]
+package = "mosh"
+
+
+[[install]]
+method = "system"
+platforms = ["bsd"]
+package = "mosh"
+[config]
+symlinks = []
+dependencies = []

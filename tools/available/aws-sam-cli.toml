@@ -1,0 +1,29 @@
+# ═══════════════════════════════════════════════════════════════════════════════
+# @file tools/available/aws-sam-cli.toml
+# @description Tool descriptor for aws-sam-cli (AWS Serverless Application Model CLI)
+# @since 1.0.0
+# @version 1.0.0
+# ═══════════════════════════════════════════════════════════════════════════════
+
+[meta]
+name = "aws-sam-cli"
+description = "AWS Serverless Application Model CLI"
+homepage = "https://github.com/aws/aws-sam-cli"
+category = "cloud"
+version = "latest"
+verify = "sam --version"
+
+[[install]]
+method = "mise"
+platforms = ["darwin", "linux", "wsl", "bsd"]
+plugin = "aws-sam-cli"
+version = "latest"
+
+[[install]]
+method = "brew"
+platforms = ["darwin"]
+package = "aws-sam-cli"
+
+[config]
+symlinks = []
+dependencies = []

@@ -1,0 +1,29 @@
+# ═══════════════════════════════════════════════════════════════════════════════
+# @file tools/available/deno.toml
+# @description Tool descriptor for deno (Secure JavaScript and TypeScript runtime)
+# @since 1.0.0
+# @version 1.0.0
+# ═══════════════════════════════════════════════════════════════════════════════
+
+[meta]
+name = "deno"
+description = "Secure JavaScript and TypeScript runtime"
+homepage = "https://deno.land"
+category = "dev"
+version = "latest"
+verify = "deno --version"
+
+[[install]]
+method = "mise"
+platforms = ["darwin", "linux", "wsl", "bsd"]
+plugin = "deno"
+version = "latest"
+
+[[install]]
+method = "brew"
+platforms = ["darwin"]
+package = "deno"
+
+[config]
+symlinks = []
+dependencies = []

@@ -1,0 +1,29 @@
+# ═══════════════════════════════════════════════════════════════════════════════
+# @file tools/nix/manifest.toml
+# @description Nix tool metadata and environment registry
+# @since 1.0.0
+# @version 1.0.0
+# @see docs/NIX_ENVS.md
+# ═══════════════════════════════════════════════════════════════════════════════
+
+[meta]
+name = "nix"
+description = "Purely functional package manager with reproducible dev environments"
+homepage = "https://nixos.org"
+version = "latest"
+verify = "nix --version"
+
+[install]
+method = "curl"
+platforms = ["darwin", "linux", "wsl"]
+command = "curl --proto '=https' --tlsv1.2 -sSf -L https://install.determinate.systems/nix | sh -s -- install"
+
+[environments]
+default = { enabled = true, description = "Base utilities (coreutils, ripgrep, fd)" }
+devops = { enabled = true, description = "Terraform, kubectl, helm, awscli" }
+go = { enabled = true, description = "Go toolchain + gopls, delve" }
+node = { enabled = true, description = "Node.js, pnpm, typescript" }
+python = { enabled = true, description = "Python, uv, ruff, mypy" }
+rust = { enabled = true, description = "Rust, cargo, clippy, rustfmt" }
+data = { enabled = false, description = "Datasette, sqlite-utils, visidata" }
+security = { enabled = false, description = "Sops, age, gpg tools" }

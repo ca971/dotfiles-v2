@@ -1,0 +1,29 @@
+# ═══════════════════════════════════════════════════════════════════════════════
+# @file tools/available/httpie.toml
+# @description Tool descriptor for httpie (Human-friendly HTTP client for the CLI)
+# @since 1.0.0
+# @version 1.0.0
+# ═══════════════════════════════════════════════════════════════════════════════
+
+[meta]
+name = "httpie"
+description = "Human-friendly HTTP client for the CLI"
+homepage = "https://httpie.io"
+category = "net"
+version = "latest"
+verify = "http --version"
+
+[[install]]
+method = "uv"
+platforms = ["darwin", "linux", "wsl", "bsd"]
+package = "httpie"
+version = "latest"
+
+[[install]]
+method = "brew"
+platforms = ["darwin"]
+package = "httpie"
+
+[config]
+symlinks = []
+dependencies = []

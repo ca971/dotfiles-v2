@@ -1,0 +1,44 @@
+# ═══════════════════════════════════════════════════════════════════════════════
+# @file tools/available/podman.toml
+# @description Tool descriptor for podman (Daemonless container engine)
+# @since 1.0.0
+# @version 1.0.0
+# ═══════════════════════════════════════════════════════════════════════════════
+
+[meta]
+name = "podman"
+description = "Daemonless container engine"
+homepage = "https://podman.io"
+category = "containers"
+version = "latest"
+verify = "podman --version"
+
+[[install]]
+method = "mise"
+platforms = ["darwin", "linux", "wsl", "bsd"]
+plugin = "podman"
+version = "latest"
+
+[[install]]
+method = "brew"
+platforms = ["darwin"]
+package = "podman"
+
+[[install]]
+method = "system"
+platforms = ["linux.debian"]
+package = "podman"
+
+[[install]]
+method = "system"
+platforms = ["linux.arch"]
+package = "podman"
+
+[[install]]
+method = "system"
+platforms = ["linux.fedora"]
+package = "podman"
+
+[config]
+symlinks = []
+dependencies = []

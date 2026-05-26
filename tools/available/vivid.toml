@@ -1,0 +1,34 @@
+# ═══════════════════════════════════════════════════════════════════════════════
+# @file tools/available/vivid.toml
+# @description Tool descriptor for vivid (LS_COLORS theme generator and manager)
+# @since 1.0.0
+# @version 1.0.0
+# ═══════════════════════════════════════════════════════════════════════════════
+
+[meta]
+name = "vivid"
+description = "LS_COLORS theme generator and manager"
+homepage = "https://github.com/sharkdp/vivid"
+category = "shell"
+version = "latest"
+verify = "vivid --version"
+
+[[install]]
+method = "mise"
+platforms = ["darwin", "linux", "wsl", "bsd"]
+plugin = "vivid"
+version = "latest"
+
+[[install]]
+method = "cargo"
+platforms = ["darwin", "linux", "wsl", "bsd"]
+crate = "vivid"
+
+[[install]]
+method = "brew"
+platforms = ["darwin"]
+package = "vivid"
+
+[config]
+symlinks = []
+dependencies = []

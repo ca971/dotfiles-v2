@@ -1,0 +1,28 @@
+# ═══════════════════════════════════════════════════════════════════════════════
+# @file tools/available/neovide.toml
+# @description Tool descriptor for neovide (Neovim GUI with smooth scrolling and animations)
+# @since 1.0.0
+# @version 1.0.0
+# ═══════════════════════════════════════════════════════════════════════════════
+
+[meta]
+name = "neovide"
+description = "Neovim GUI with smooth scrolling and animations"
+homepage = "https://neovide.dev"
+category = "editor"
+version = "latest"
+verify = "neovide --version"
+
+[[install]]
+method = "brew"
+platforms = ["darwin"]
+package = "neovide"
+
+
+[[install]]
+method = "cargo"
+platforms = ["linux", "wsl", "bsd"]
+crate = "neovide"
+[config]
+symlinks = []
+dependencies = []

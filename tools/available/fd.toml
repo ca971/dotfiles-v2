@@ -1,0 +1,49 @@
+# ═══════════════════════════════════════════════════════════════════════════════
+# @file tools/available/fd.toml
+# @description Tool descriptor for fd (modern find alternative)
+# @since 1.0.0
+# @version 1.0.0
+# ═══════════════════════════════════════════════════════════════════════════════
+
+[meta]
+name = "fd"
+description = "Simple, fast, and user-friendly alternative to find"
+homepage = "https://github.com/sharkdp/fd"
+category = "core"
+version = "latest"
+verify = "fd --version"
+
+[[install]]
+method = "mise"
+platforms = ["darwin", "linux", "wsl", "bsd"]
+plugin = "fd"
+version = "latest"
+
+[[install]]
+method = "cargo"
+platforms = ["darwin", "linux", "wsl", "bsd"]
+crate = "fd-find"
+
+[[install]]
+method = "brew"
+platforms = ["darwin"]
+package = "fd"
+
+[[install]]
+method = "system"
+platforms = ["linux.debian"]
+package = "fd-find"
+
+[[install]]
+method = "system"
+platforms = ["linux.arch"]
+package = "fd"
+
+[[install]]
+method = "system"
+platforms = ["linux.fedora"]
+package = "fd-find"
+
+[config]
+symlinks = []
+dependencies = []

@@ -1,0 +1,29 @@
+# ═══════════════════════════════════════════════════════════════════════════════
+# @file tools/available/yt-dlp.toml
+# @description Tool descriptor for yt-dlp (Feature-rich YouTube and media downloader)
+# @since 1.0.0
+# @version 1.0.0
+# ═══════════════════════════════════════════════════════════════════════════════
+
+[meta]
+name = "yt-dlp"
+description = "Feature-rich YouTube and media downloader"
+homepage = "https://github.com/yt-dlp/yt-dlp"
+category = "media"
+version = "latest"
+verify = "yt-dlp --version"
+
+[[install]]
+method = "mise"
+platforms = ["darwin", "linux", "wsl", "bsd"]
+plugin = "yt-dlp"
+version = "latest"
+
+[[install]]
+method = "brew"
+platforms = ["darwin"]
+package = "yt-dlp"
+
+[config]
+symlinks = []
+dependencies = []

@@ -1,0 +1,24 @@
+# ═══════════════════════════════════════════════════════════════════════════════
+# @file tools/available/doggo.toml
+# @description Tool descriptor for doggo (Modern DNS client with multiple protocol support)
+# @since 1.0.0
+# @version 1.0.0
+# ═══════════════════════════════════════════════════════════════════════════════
+
+[meta]
+name = "doggo"
+description = "Modern DNS client with multiple protocol support"
+homepage = "https://github.com/mr-karan/doggo"
+category = "net"
+version = "latest"
+verify = "doggo --version"
+
+[[install]]
+method = "mise"
+platforms = ["darwin", "linux", "wsl", "bsd"]
+plugin = "doggo"
+version = "latest"
+
+[config]
+symlinks = []
+dependencies = []

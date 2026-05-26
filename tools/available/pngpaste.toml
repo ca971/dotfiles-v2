@@ -1,0 +1,23 @@
+# ═══════════════════════════════════════════════════════════════════════════════
+# @file tools/available/pngpaste.toml
+# @description Tool descriptor for pngpaste (Paste PNG images from clipboard to file)
+# @since 1.0.0
+# @version 1.0.0
+# ═══════════════════════════════════════════════════════════════════════════════
+
+[meta]
+name = "pngpaste"
+description = "Paste PNG images from clipboard to file"
+homepage = "https://github.com/jcsalterego/pngpaste"
+category = "media"
+version = "latest"
+verify = "pngpaste --version"
+
+[[install]]
+method = "brew"
+platforms = ["darwin"]
+package = "pngpaste"
+
+[config]
+symlinks = []
+dependencies = []

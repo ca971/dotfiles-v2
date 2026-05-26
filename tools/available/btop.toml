@@ -1,0 +1,44 @@
+# ═══════════════════════════════════════════════════════════════════════════════
+# @file tools/available/btop.toml
+# @description Tool descriptor for btop (Resource monitor with a modern interface)
+# @since 1.0.0
+# @version 1.0.0
+# ═══════════════════════════════════════════════════════════════════════════════
+
+[meta]
+name = "btop"
+description = "Resource monitor with a modern interface"
+homepage = "https://github.com/aristocratos/btop"
+category = "system"
+version = "latest"
+verify = "btop --version"
+
+[[install]]
+method = "mise"
+platforms = ["darwin", "linux", "wsl", "bsd"]
+plugin = "btop"
+version = "latest"
+
+[[install]]
+method = "brew"
+platforms = ["darwin"]
+package = "btop"
+
+[[install]]
+method = "system"
+platforms = ["linux.debian"]
+package = "btop"
+
+[[install]]
+method = "system"
+platforms = ["linux.arch"]
+package = "btop"
+
+[[install]]
+method = "system"
+platforms = ["linux.fedora"]
+package = "btop"
+
+[config]
+symlinks = []
+dependencies = []

@@ -1,0 +1,29 @@
+# ═══════════════════════════════════════════════════════════════════════════════
+# @file tools/available/black.toml
+# @description Tool descriptor for black (Uncompromising Python code formatter)
+# @since 1.0.0
+# @version 1.0.0
+# ═══════════════════════════════════════════════════════════════════════════════
+
+[meta]
+name = "black"
+description = "Uncompromising Python code formatter"
+homepage = "https://github.com/psf/black"
+category = "python"
+version = "latest"
+verify = "black --version"
+
+[[install]]
+method = "mise"
+platforms = ["darwin", "linux", "wsl", "bsd"]
+plugin = "black"
+version = "latest"
+
+[[install]]
+method = "brew"
+platforms = ["darwin"]
+package = "black"
+
+[config]
+symlinks = []
+dependencies = []

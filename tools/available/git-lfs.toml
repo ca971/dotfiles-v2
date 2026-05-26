@@ -1,0 +1,44 @@
+# ═══════════════════════════════════════════════════════════════════════════════
+# @file tools/available/git-lfs.toml
+# @description Tool descriptor for git-lfs (Git extension for large file storage)
+# @since 1.0.0
+# @version 1.0.0
+# ═══════════════════════════════════════════════════════════════════════════════
+
+[meta]
+name = "git-lfs"
+description = "Git extension for large file storage"
+homepage = "https://git-lfs.com"
+category = "dev"
+version = "latest"
+verify = "git-lfs --version"
+
+[[install]]
+method = "mise"
+platforms = ["darwin", "linux", "wsl", "bsd"]
+plugin = "git-lfs"
+version = "latest"
+
+[[install]]
+method = "brew"
+platforms = ["darwin"]
+package = "git-lfs"
+
+[[install]]
+method = "system"
+platforms = ["linux.debian"]
+package = "git-lfs"
+
+[[install]]
+method = "system"
+platforms = ["linux.arch"]
+package = "git-lfs"
+
+[[install]]
+method = "system"
+platforms = ["linux.fedora"]
+package = "git-lfs"
+
+[config]
+symlinks = []
+dependencies = []

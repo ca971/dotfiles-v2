@@ -1,0 +1,44 @@
+# ═══════════════════════════════════════════════════════════════════════════════
+# @file tools/available/cmake.toml
+# @description Tool descriptor for cmake (Cross-platform build system generator)
+# @since 1.0.0
+# @version 1.0.0
+# ═══════════════════════════════════════════════════════════════════════════════
+
+[meta]
+name = "cmake"
+description = "Cross-platform build system generator"
+homepage = "https://cmake.org"
+category = "dev"
+version = "latest"
+verify = "cmake --version"
+
+[[install]]
+method = "mise"
+platforms = ["darwin", "linux", "wsl", "bsd"]
+plugin = "cmake"
+version = "latest"
+
+[[install]]
+method = "brew"
+platforms = ["darwin"]
+package = "cmake"
+
+[[install]]
+method = "system"
+platforms = ["linux.debian"]
+package = "cmake"
+
+[[install]]
+method = "system"
+platforms = ["linux.arch"]
+package = "cmake"
+
+[[install]]
+method = "system"
+platforms = ["linux.fedora"]
+package = "cmake"
+
+[config]
+symlinks = []
+dependencies = []

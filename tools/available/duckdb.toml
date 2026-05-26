@@ -1,0 +1,29 @@
+# ═══════════════════════════════════════════════════════════════════════════════
+# @file tools/available/duckdb.toml
+# @description Tool descriptor for duckdb (In-process analytical SQL database engine)
+# @since 1.0.0
+# @version 1.0.0
+# ═══════════════════════════════════════════════════════════════════════════════
+
+[meta]
+name = "duckdb"
+description = "In-process analytical SQL database engine"
+homepage = "https://duckdb.org"
+category = "data"
+version = "latest"
+verify = "duckdb --version"
+
+[[install]]
+method = "mise"
+platforms = ["darwin", "linux", "wsl", "bsd"]
+plugin = "duckdb"
+version = "latest"
+
+[[install]]
+method = "brew"
+platforms = ["darwin"]
+package = "duckdb"
+
+[config]
+symlinks = []
+dependencies = []

@@ -1,0 +1,29 @@
+# ═══════════════════════════════════════════════════════════════════════════════
+# @file tools/available/pre-commit.toml
+# @description Tool descriptor for pre-commit (Framework for managing git pre-commit hooks)
+# @since 1.0.0
+# @version 1.0.0
+# ═══════════════════════════════════════════════════════════════════════════════
+
+[meta]
+name = "pre-commit"
+description = "Framework for managing git pre-commit hooks"
+homepage = "https://pre-commit.com"
+category = "dev"
+version = "latest"
+verify = "pre-commit --version"
+
+[[install]]
+method = "mise"
+platforms = ["darwin", "linux", "wsl", "bsd"]
+plugin = "pre-commit"
+version = "latest"
+
+[[install]]
+method = "brew"
+platforms = ["darwin"]
+package = "pre-commit"
+
+[config]
+symlinks = []
+dependencies = []

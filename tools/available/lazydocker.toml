@@ -1,0 +1,29 @@
+# ═══════════════════════════════════════════════════════════════════════════════
+# @file tools/available/lazydocker.toml
+# @description Tool descriptor for lazydocker (Terminal UI for Docker and Docker Compose)
+# @since 1.0.0
+# @version 1.0.0
+# ═══════════════════════════════════════════════════════════════════════════════
+
+[meta]
+name = "lazydocker"
+description = "Terminal UI for Docker and Docker Compose"
+homepage = "https://github.com/jesseduffield/lazydocker"
+category = "containers"
+version = "latest"
+verify = "lazydocker --version"
+
+[[install]]
+method = "mise"
+platforms = ["darwin", "linux", "wsl", "bsd"]
+plugin = "lazydocker"
+version = "latest"
+
+[[install]]
+method = "brew"
+platforms = ["darwin"]
+package = "lazydocker"
+
+[config]
+symlinks = []
+dependencies = []

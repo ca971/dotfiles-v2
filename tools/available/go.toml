@@ -1,0 +1,44 @@
+# ═══════════════════════════════════════════════════════════════════════════════
+# @file tools/available/go.toml
+# @description Tool descriptor for go (The Go programming language)
+# @since 1.0.0
+# @version 1.0.0
+# ═══════════════════════════════════════════════════════════════════════════════
+
+[meta]
+name = "go"
+description = "The Go programming language"
+homepage = "https://go.dev"
+category = "lang"
+version = "latest"
+verify = "go version"
+
+[[install]]
+method = "mise"
+platforms = ["darwin", "linux", "wsl", "bsd"]
+plugin = "go"
+version = "latest"
+
+[[install]]
+method = "brew"
+platforms = ["darwin"]
+package = "go"
+
+[[install]]
+method = "system"
+platforms = ["linux.debian"]
+package = "golang"
+
+[[install]]
+method = "system"
+platforms = ["linux.arch"]
+package = "go"
+
+[[install]]
+method = "system"
+platforms = ["linux.fedora"]
+package = "golang"
+
+[config]
+symlinks = []
+dependencies = []

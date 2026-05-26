@@ -1,0 +1,14 @@
+#!/usr/bin/env bash
+# ═══════════════════════════════════════════════════════════════════════════════
+# @file shells/bash/bash_profile
+# @description Login shell entry point — sources bashrc for unified config
+# @since 1.0.0
+# @version 1.0.0
+# @see shells/bash/bashrc
+# ═══════════════════════════════════════════════════════════════════════════════
+
+# Source bashrc for login shells (ensures consistent environment)
+if [[ -f "${HOME}/.bashrc" ]]; then
+    # shellcheck source=/dev/null
+    source "${HOME}/.bashrc"
+fi

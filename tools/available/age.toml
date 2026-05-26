@@ -1,0 +1,44 @@
+# ═══════════════════════════════════════════════════════════════════════════════
+# @file tools/available/age.toml
+# @description Tool descriptor for age (Simple, modern file encryption tool)
+# @since 1.0.0
+# @version 1.0.0
+# ═══════════════════════════════════════════════════════════════════════════════
+
+[meta]
+name = "age"
+description = "Simple, modern file encryption tool"
+homepage = "https://github.com/FiloSottile/age"
+category = "security"
+version = "latest"
+verify = "age --version"
+
+[[install]]
+method = "mise"
+platforms = ["darwin", "linux", "wsl", "bsd"]
+plugin = "age"
+version = "latest"
+
+[[install]]
+method = "brew"
+platforms = ["darwin"]
+package = "age"
+
+[[install]]
+method = "system"
+platforms = ["linux.debian"]
+package = "age"
+
+[[install]]
+method = "system"
+platforms = ["linux.arch"]
+package = "age"
+
+[[install]]
+method = "system"
+platforms = ["linux.fedora"]
+package = "age"
+
+[config]
+symlinks = []
+dependencies = []

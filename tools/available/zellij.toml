@@ -1,0 +1,34 @@
+# ═══════════════════════════════════════════════════════════════════════════════
+# @file tools/available/zellij.toml
+# @description Tool descriptor for zellij (Terminal workspace and multiplexer)
+# @since 1.0.0
+# @version 1.0.0
+# ═══════════════════════════════════════════════════════════════════════════════
+
+[meta]
+name = "zellij"
+description = "Terminal workspace and multiplexer"
+homepage = "https://zellij.dev"
+category = "core"
+version = "latest"
+verify = "zellij --version"
+
+[[install]]
+method = "mise"
+platforms = ["darwin", "linux", "wsl", "bsd"]
+plugin = "zellij"
+version = "latest"
+
+[[install]]
+method = "cargo"
+platforms = ["darwin", "linux", "wsl", "bsd"]
+crate = "zellij"
+
+[[install]]
+method = "brew"
+platforms = ["darwin"]
+package = "zellij"
+
+[config]
+symlinks = []
+dependencies = []

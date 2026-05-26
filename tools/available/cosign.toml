@@ -1,0 +1,29 @@
+# ═══════════════════════════════════════════════════════════════════════════════
+# @file tools/available/cosign.toml
+# @description Tool descriptor for cosign (Container image signing and verification)
+# @since 1.0.0
+# @version 1.0.0
+# ═══════════════════════════════════════════════════════════════════════════════
+
+[meta]
+name = "cosign"
+description = "Container image signing and verification"
+homepage = "https://github.com/sigstore/cosign"
+category = "security"
+version = "latest"
+verify = "cosign version"
+
+[[install]]
+method = "mise"
+platforms = ["darwin", "linux", "wsl", "bsd"]
+plugin = "cosign"
+version = "latest"
+
+[[install]]
+method = "brew"
+platforms = ["darwin"]
+package = "cosign"
+
+[config]
+symlinks = []
+dependencies = []

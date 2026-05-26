@@ -1,0 +1,47 @@
+# ═══════════════════════════════════════════════════════════════════════════════
+# @file definitions/keybindings.toml
+# @description Single Source of Truth for shell keybindings
+# @since 1.0.0
+# @version 1.0.0
+# @see docs/SSOT.md
+#
+# Compiled to native keybinding syntax per shell.
+# Fields:
+#   key         - Key sequence (uses canonical names)
+#   action      - Command or widget to execute
+#   description - Human-readable description
+#   mode        - [optional] vi mode (insert, normal, visual)
+# ═══════════════════════════════════════════════════════════════════════════════
+
+# ───────────────────────────────────────────────────────────────────────────────
+# Navigation
+# ───────────────────────────────────────────────────────────────────────────────
+
+[keybindings.navigation]
+ctrl_r = { key = "ctrl-r", action = "history-search", description = "Reverse history search (atuin/fzf)" }
+ctrl_t = { key = "ctrl-t", action = "file-search", description = "Fuzzy file search" }
+alt_c = { key = "alt-c", action = "cd-search", description = "Fuzzy directory search and cd" }
+ctrl_f = { key = "ctrl-f", action = "accept-autosuggestion", description = "Accept autosuggestion" }
+ctrl_space = { key = "ctrl-space", action = "expand-or-complete", description = "Expand or complete" }
+
+# ───────────────────────────────────────────────────────────────────────────────
+# Editing
+# ───────────────────────────────────────────────────────────────────────────────
+
+[keybindings.editing]
+ctrl_a = { key = "ctrl-a", action = "beginning-of-line", description = "Move to beginning of line" }
+ctrl_e = { key = "ctrl-e", action = "end-of-line", description = "Move to end of line" }
+ctrl_w = { key = "ctrl-w", action = "backward-kill-word", description = "Delete word backward" }
+alt_d = { key = "alt-d", action = "kill-word", description = "Delete word forward" }
+ctrl_u = { key = "ctrl-u", action = "kill-whole-line", description = "Delete entire line" }
+ctrl_k = { key = "ctrl-k", action = "kill-line", description = "Delete to end of line" }
+alt_b = { key = "alt-b", action = "backward-word", description = "Move backward one word" }
+alt_f = { key = "alt-f", action = "forward-word", description = "Move forward one word" }
+
+# ───────────────────────────────────────────────────────────────────────────────
+# Custom
+# ───────────────────────────────────────────────────────────────────────────────
+
+[keybindings.custom]
+ctrl_g = { key = "ctrl-g", action = "lazygit", description = "Open lazygit" }
+ctrl_n = { key = "ctrl-n", action = "nvim .", description = "Open neovim in current dir" }

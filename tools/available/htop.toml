@@ -1,0 +1,39 @@
+# ═══════════════════════════════════════════════════════════════════════════════
+# @file tools/available/htop.toml
+# @description Tool descriptor for htop (Interactive process viewer)
+# @since 1.0.0
+# @version 1.0.0
+# ═══════════════════════════════════════════════════════════════════════════════
+
+[meta]
+name = "htop"
+description = "Interactive process viewer"
+homepage = "https://htop.dev"
+category = "system"
+version = "latest"
+verify = "htop --version"
+
+
+[[install]]
+method = "system"
+platforms = ["linux.debian"]
+package = "htop"
+
+[[install]]
+method = "system"
+platforms = ["linux.arch"]
+package = "htop"
+
+[[install]]
+method = "system"
+platforms = ["linux.fedora"]
+package = "htop"
+
+
+[[install]]
+method = "system"
+platforms = ["bsd"]
+package = "htop"
+[config]
+symlinks = []
+dependencies = []

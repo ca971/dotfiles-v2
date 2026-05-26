@@ -1,0 +1,34 @@
+# ═══════════════════════════════════════════════════════════════════════════════
+# @file tools/available/dust.toml
+# @description Tool descriptor for dust (Intuitive alternative to du written in Rust)
+# @since 1.0.0
+# @version 1.0.0
+# ═══════════════════════════════════════════════════════════════════════════════
+
+[meta]
+name = "dust"
+description = "Intuitive alternative to du written in Rust"
+homepage = "https://github.com/bootandy/dust"
+category = "system"
+version = "latest"
+verify = "dust --version"
+
+[[install]]
+method = "mise"
+platforms = ["darwin", "linux", "wsl", "bsd"]
+plugin = "dust"
+version = "latest"
+
+[[install]]
+method = "cargo"
+platforms = ["darwin", "linux", "wsl", "bsd"]
+crate = "du-dust"
+
+[[install]]
+method = "brew"
+platforms = ["darwin"]
+package = "dust"
+
+[config]
+symlinks = []
+dependencies = []

@@ -1,0 +1,152 @@
+# ═══════════════════════════════════════════════════════════════════════════════
+# @file .github/workflows/ci.yml
+# @description CI pipeline — lint, unit tests, generator tests on every push/PR
+# @since 1.0.0
+# @version 1.0.0
+# ═══════════════════════════════════════════════════════════════════════════════
+
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  shellcheck:
+    name: ShellCheck
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Run ShellCheck
+        uses: ludeeus/action-shellcheck@master
+        with:
+          severity: warning
+          scandir: .
+          additional_files: install.sh bootstrap.sh
+        env:
+          SHELLCHECK_OPTS: -x
+
+  unit-tests:
+    name: Unit Tests (bats)
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Install bats-core
+        run: |
+          sudo apt-get update -qq
+          sudo apt-get install -y bats
+
+      - name: Install jq
+        run: sudo apt-get install -y jq
+
+      - name: Install taplo
+        run: |
+          curl -fsSL https://github.com/tamasfe/taplo/releases/latest/download/taplo-full-linux-x86_64.gz \
+            | gunzip > /usr/local/bin/taplo
+          chmod +x /usr/local/bin/taplo
+
+      - name: Run unit tests
+        run: bats tests/unit/
+        env:
+          DOTFILES_DIR: ${{ github.workspace }}
+
+  generator-tests:
+    name: Generator Tests (pytest)
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Install uv
+        uses: astral-sh/setup-uv@v4
+
+      - name: Install dependencies
+        run: cd generators && uv sync --all-extras
+
+      - name: Run ruff
+        run: cd generators && uv run ruff check src/ tests/
+
+      - name: Run pytest
+        run: cd generators && uv run pytest tests/ -v
+
+  validate-definitions:
+    name: Validate SSOT Definitions
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Install uv
+        uses: astral-sh/setup-uv@v4
+
+      - name: Install dependencies
+        run: cd generators && uv sync
+
+      - name: Validate all definitions
+        run: cd generators && uv run python -m src.cli validate
+
+  generate-check:
+    name: Generation Produces Output
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Install uv
+        uses: astral-sh/setup-uv@v4
+
+      - name: Install dependencies
+        run: cd generators && uv sync
+
+      - name: Generate all shells
+        run: cd generators && uv run python -m src.cli generate --all
+
+      - name: Verify output exists
+        run: |
+          test -s shells/bash/generated/aliases.gen.sh
+          test -s shells/zsh/generated/aliases.gen.sh
+          test -s shells/fish/generated/aliases.gen.fish
+          test -s shells/nushell/generated/aliases.gen.sh
+          test -s shells/bash/generated/init.gen.sh
+          test -s shells/zsh/generated/plugins.gen.sh
+          echo "All generated files present"
+
+  integration-tests:
+    name: Integration Tests
+    runs-on: ubuntu-latest
+    needs: [shellcheck, unit-tests, generator-tests]
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Install dependencies
+        run: |
+          sudo apt-get update -qq
+          sudo apt-get install -y bats jq zsh fish
+
+      - name: Install uv
+        uses: astral-sh/setup-uv@v4
+
+      - name: Install taplo
+        run: |
+          curl -fsSL https://github.com/tamasfe/taplo/releases/latest/download/taplo-full-linux-x86_64.gz \
+            | gunzip > /usr/local/bin/taplo
+          chmod +x /usr/local/bin/taplo
+
+      - name: Generate configs
+        run: cd generators && uv sync && uv run python -m src.cli generate --all
+
+      - name: Initialize state
+        run: |
+          mkdir -p local
+          echo '{"version":1,"tools":{},"nix_envs":{},"theme":"minimal"}' > local/state.json
+
+      - name: Run integration tests
+        run: bats tests/integration/
+        env:
+          DOTFILES_DIR: ${{ github.workspace }}
+          LOG_COLOR: "0"

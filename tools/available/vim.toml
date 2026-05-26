@@ -1,0 +1,44 @@
+# ═══════════════════════════════════════════════════════════════════════════════
+# @file tools/available/vim.toml
+# @description Tool descriptor for vim (Ubiquitous terminal text editor)
+# @since 1.0.0
+# @version 1.0.0
+# ═══════════════════════════════════════════════════════════════════════════════
+
+[meta]
+name = "vim"
+description = "Ubiquitous terminal text editor"
+homepage = "https://www.vim.org"
+category = "editor"
+version = "latest"
+verify = "vim --version"
+
+[[install]]
+method = "mise"
+platforms = ["darwin", "linux", "wsl", "bsd"]
+plugin = "vim"
+version = "latest"
+
+[[install]]
+method = "brew"
+platforms = ["darwin"]
+package = "vim"
+
+[[install]]
+method = "system"
+platforms = ["linux.debian"]
+package = "vim"
+
+[[install]]
+method = "system"
+platforms = ["linux.arch"]
+package = "vim"
+
+[[install]]
+method = "system"
+platforms = ["linux.fedora"]
+package = "vim"
+
+[config]
+symlinks = []
+dependencies = []

@@ -1,0 +1,195 @@
+# ═══════════════════════════════════════════════════════════════════════════════
+# @file definitions/init.toml
+# @description Single Source of Truth for tool shell initializations
+# @since 1.0.0
+# @version 1.0.0
+# @see docs/SSOT.md
+#
+# Each tool that requires shell initialization is declared here with:
+#   description - What the tool does
+#   priority    - Loading order (lower = loaded first, higher = loaded later)
+#                 Tools loaded later override keybindings of earlier ones.
+#   verify      - Command to check if tool is available
+#   init.bash   - Bash init command
+#   init.zsh    - Zsh init command
+#   init.fish   - Fish init command
+#   init.nushell - Nushell init command (if supported)
+#
+# ORDERING STRATEGY:
+#   10-19  : Core environment (mise, direnv)
+#   20-29  : Path/navigation (zoxide)
+#   30-39  : Completion engines (carapace, fzf)
+#   40-49  : History (atuin — MUST override fzf ctrl+r)
+#   50-59  : UI/Prompt (starship)
+#   60-69  : Correction/helpers (thefuck)
+#   70-79  : File managers (broot, yazi)
+#   80-89  : Security (keychain)
+#   90-99  : Misc
+# ═══════════════════════════════════════════════════════════════════════════════
+
+# ───────────────────────────────────────────────────────────────────────────────
+# NOTE: zinit is NOT here — it is bootstrapped by plugins.gen.sh (zsh-only)
+# which must be sourced BEFORE init.gen.sh in .zshrc
+# ───────────────────────────────────────────────────────────────────────────────
+
+# ───────────────────────────────────────────────────────────────────────────────
+# Core environment (priority 10-19)
+# ───────────────────────────────────────────────────────────────────────────────
+
+[init.mise]
+description = "Polyglot runtime manager — activates shims and hooks"
+priority = 10
+verify = "mise"
+bash = 'eval "$(mise activate bash)"'
+zsh = 'eval "$(mise activate zsh)"'
+fish = "mise activate fish | source"
+nushell = ""
+
+[init.direnv]
+description = "Per-directory environment loader"
+priority = 15
+verify = "direnv"
+bash = 'eval "$(direnv hook bash)"'
+zsh = 'eval "$(direnv hook zsh)"'
+fish = "direnv hook fish | source"
+nushell = ""
+
+# ───────────────────────────────────────────────────────────────────────────────
+# Path/Navigation (priority 20-29)
+# ───────────────────────────────────────────────────────────────────────────────
+
+[init.zoxide]
+description = "Smart cd that learns your habits"
+priority = 20
+verify = "zoxide"
+lazy = true
+lazy_triggers = ["z"]
+bash = 'eval "$(zoxide init bash)"'
+zsh = 'eval "$(zoxide init zsh)"'
+fish = "zoxide init fish | source"
+nushell = ""
+
+# ───────────────────────────────────────────────────────────────────────────────
+# Completion engines (priority 30-39)
+# fzf loaded here so atuin can override ctrl+r later
+# ───────────────────────────────────────────────────────────────────────────────
+
+[init.carapace]
+description = "Multi-shell completion engine"
+priority = 30
+verify = "carapace"
+lazy = true
+lazy_triggers = ["carapace"]
+bash = 'source <(carapace _carapace bash)'
+zsh = 'source <(carapace _carapace zsh)'
+fish = "carapace _carapace fish | source"
+nushell = ""
+
+[init.fzf]
+description = "Fuzzy finder — keybindings and completions"
+priority = 35
+verify = "fzf"
+lazy = true
+lazy_triggers = ["fzf"]
+bash = 'eval "$(fzf --bash)"'
+zsh = "source <(fzf --zsh)"
+fish = "fzf --fish | source"
+nushell = ""
+
+# ───────────────────────────────────────────────────────────────────────────────
+# History (priority 40-49)
+# atuin MUST load after fzf to take priority on ctrl+r
+# ───────────────────────────────────────────────────────────────────────────────
+
+[init.atuin]
+description = "Magical shell history — overrides ctrl+r from fzf"
+priority = 40
+verify = "atuin"
+lazy = true
+lazy_triggers = ["atuin"]
+bash = 'eval "$(atuin init bash)"'
+zsh = 'eval "$(atuin init zsh)"'
+fish = "atuin init fish | source"
+nushell = ""
+
+# ───────────────────────────────────────────────────────────────────────────────
+# UI/Prompt (priority 50-59)
+# ───────────────────────────────────────────────────────────────────────────────
+
+[init.starship]
+description = "Cross-shell prompt"
+priority = 50
+verify = "starship"
+bash = 'eval "$(starship init bash)"'
+zsh = 'eval "$(starship init zsh)"'
+fish = "starship init fish | source"
+nushell = ""
+
+# ───────────────────────────────────────────────────────────────────────────────
+# Correction/helpers (priority 60-69)
+# ───────────────────────────────────────────────────────────────────────────────
+
+[init.thefuck]
+description = "Command correction on typo"
+priority = 60
+verify = "thefuck"
+lazy = true
+lazy_triggers = ["fuck"]
+bash = 'eval "$(thefuck --alias)"'
+zsh = 'eval "$(thefuck --alias)"'
+fish = "thefuck --alias | source"
+nushell = ""
+
+# ───────────────────────────────────────────────────────────────────────────────
+# File managers (priority 70-79)
+# ───────────────────────────────────────────────────────────────────────────────
+
+[init.broot]
+description = "Tree file manager with fuzzy search"
+priority = 70
+verify = "broot"
+lazy = true
+lazy_triggers = ["br", "broot"]
+bash = 'source "${XDG_CONFIG_HOME}/broot/launcher/bash/br" 2>/dev/null'
+zsh = 'source "${XDG_CONFIG_HOME}/broot/launcher/bash/br" 2>/dev/null'
+fish = "source $XDG_CONFIG_HOME/broot/launcher/fish/br.fish 2>/dev/null"
+nushell = ""
+
+[init.navi]
+description = "Interactive cheatsheet tool"
+priority = 75
+verify = "navi"
+lazy = true
+lazy_triggers = ["navi"]
+bash = 'eval "$(navi widget bash)"'
+zsh = 'eval "$(navi widget zsh)"'
+fish = "navi widget fish | source"
+nushell = ""
+
+# ───────────────────────────────────────────────────────────────────────────────
+# Security (priority 80-89)
+# ───────────────────────────────────────────────────────────────────────────────
+
+[init.keychain]
+description = "SSH/GPG agent manager"
+priority = 80
+verify = "keychain"
+bash = 'eval "$(keychain --eval --quiet id_ed25519 2>/dev/null)"'
+zsh = 'eval "$(keychain --eval --quiet id_ed25519 2>/dev/null)"'
+fish = ""
+nushell = ""
+
+# ───────────────────────────────────────────────────────────────────────────────
+# Misc (priority 90-99)
+# ───────────────────────────────────────────────────────────────────────────────
+
+[init.vivid]
+description = "LS_COLORS generator"
+priority = 90
+verify = "vivid"
+lazy = true
+lazy_triggers = ["ls", "eza", "lsd", "tree"]
+bash = 'export LS_COLORS="$(vivid generate catppuccin-mocha)"'
+zsh = 'export LS_COLORS="$(vivid generate catppuccin-mocha)"'
+fish = "set -gx LS_COLORS (vivid generate catppuccin-mocha)"
+nushell = ""

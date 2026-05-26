@@ -1,0 +1,29 @@
+# ═══════════════════════════════════════════════════════════════════════════════
+# @file tools/available/k9s.toml
+# @description Tool descriptor for k9s (Kubernetes CLI to manage clusters in style)
+# @since 1.0.0
+# @version 1.0.0
+# ═══════════════════════════════════════════════════════════════════════════════
+
+[meta]
+name = "k9s"
+description = "Kubernetes CLI to manage clusters in style"
+homepage = "https://k9scli.io"
+category = "cloud"
+version = "latest"
+verify = "k9s version"
+
+[[install]]
+method = "mise"
+platforms = ["darwin", "linux", "wsl", "bsd"]
+plugin = "k9s"
+version = "latest"
+
+[[install]]
+method = "brew"
+platforms = ["darwin"]
+package = "k9s"
+
+[config]
+symlinks = []
+dependencies = []

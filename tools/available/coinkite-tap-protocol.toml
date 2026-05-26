@@ -1,0 +1,24 @@
+# ═══════════════════════════════════════════════════════════════════════════════
+# @file tools/available/coinkite-tap-protocol.toml
+# @description Tool descriptor for coinkite-tap-protocol (Satscard and Tapsigner protocol library)
+# @since 1.0.0
+# @version 1.0.0
+# ═══════════════════════════════════════════════════════════════════════════════
+
+[meta]
+name = "coinkite-tap-protocol"
+description = "Satscard and Tapsigner protocol library"
+homepage = "https://github.com/coinkite/coinkite-tap-protocol"
+category = "crypto"
+version = "latest"
+verify = "cktap --version"
+
+[[install]]
+method = "uv"
+platforms = ["darwin", "linux", "wsl", "bsd"]
+package = "coinkite-tap-protocol"
+version = "latest"
+
+[config]
+symlinks = []
+dependencies = []

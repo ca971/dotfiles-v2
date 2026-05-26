@@ -1,0 +1,356 @@
+#!/usr/bin/env bash
+# ═══════════════════════════════════════════════════════════════════════════════
+# @file bin/dotfiles
+# @description Main CLI for dotfiles management
+# @since 1.0.0
+# @version 1.0.0
+#
+# Usage:
+#   dotfiles setup             # Interactive first-time setup wizard
+#   dotfiles install <tool>    # Install a tool
+#   dotfiles uninstall <tool>  # Uninstall a tool
+#   dotfiles update            # Update dotfiles (pull + regenerate)
+#   dotfiles status            # Show tool installation status
+#   dotfiles doctor            # Run health check
+#   dotfiles generate          # Regenerate shell configs
+#   dotfiles sync [--dry-run] [--force]  # Full idempotent sync
+#   dotfiles bench             # Benchmark shell startup time
+# ═══════════════════════════════════════════════════════════════════════════════
+
+set -euo pipefail
+
+export DOTFILES_DIR="${DOTFILES_DIR:-${HOME}/.dotfiles}"
+
+source "${DOTFILES_DIR}/lib/core/logger.sh"
+source "${DOTFILES_DIR}/lib/core/platform.sh"
+source "${DOTFILES_DIR}/lib/core/validator.sh"
+source "${DOTFILES_DIR}/lib/core/fs.sh"
+
+cmd_setup() {
+    source "${DOTFILES_DIR}/lib/modules/onboarding.sh"
+    Onboarding::run
+}
+
+cmd_install() {
+    local tool="${1:?Tool name required. Usage: dotfiles install <tool>}"
+    source "${DOTFILES_DIR}/lib/hotload/engine.sh"
+    HotLoadEngine::install "${tool}"
+}
+
+cmd_uninstall() {
+    local tool="${1:?Tool name required. Usage: dotfiles uninstall <tool>}"
+    source "${DOTFILES_DIR}/lib/hotload/engine.sh"
+    HotLoadEngine::uninstall "${tool}"
+}
+
+cmd_status() {
+    source "${DOTFILES_DIR}/lib/hotload/engine.sh"
+    HotLoadEngine::status
+}
+
+cmd_doctor() {
+    source "${DOTFILES_DIR}/lib/modules/doctor.sh"
+    Doctor::run
+}
+
+cmd_generate() {
+    Logger::info "Regenerating shell configs..."
+    (cd "${DOTFILES_DIR}/generators" && uv run python -m src.cli generate --all)
+}
+
+cmd_update() {
+    Logger::info "Updating dotfiles..."
+    git -C "${DOTFILES_DIR}" pull --rebase --quiet
+    cmd_generate
+    Logger::success "Dotfiles updated"
+}
+
+cmd_verify() {
+    source "${DOTFILES_DIR}/lib/hotload/engine.sh"
+    HotLoadEngine::verify
+}
+
+cmd_sync() {
+    local dry_run=false
+    local force=false
+    local start_time
+    local tools_installed=0
+    local warnings=0
+
+    # Parse flags
+    while [[ $# -gt 0 ]]; do
+        case "${1}" in
+            --dry-run)  dry_run=true; shift ;;
+            --force)    force=true; shift ;;
+            *)          Logger::error "Unknown flag: ${1}"; return 1 ;;
+        esac
+    done
+
+    start_time=$(date +%s)
+
+    Logger::info "Starting full sync..."
+    if [[ "${dry_run}" == true ]]; then
+        Logger::info "[DRY-RUN] No changes will be made"
+    fi
+
+    # Step 1: git pull --rebase (if in a git repo)
+    if git -C "${DOTFILES_DIR}" rev-parse --is-inside-work-tree &>/dev/null; then
+        Logger::info "[1/5] Pulling latest changes..."
+        if [[ "${dry_run}" == true ]]; then
+            Logger::info "[DRY-RUN] Would run: git pull --rebase"
+        else
+            if ! git -C "${DOTFILES_DIR}" pull --rebase --quiet 2>/dev/null; then
+                Logger::warn "Git pull failed (offline or conflict?)"
+                (( warnings++ ))
+            fi
+        fi
+    else
+        Logger::info "[1/5] Not a git repo, skipping pull"
+    fi
+
+    # Step 2: Regenerate shell configs
+    Logger::info "[2/5] Regenerating shell configs..."
+    if [[ "${dry_run}" == true ]]; then
+        Logger::info "[DRY-RUN] Would run: generators → generate --all"
+    else
+        (cd "${DOTFILES_DIR}/generators" && uv run python -m src.cli generate --all)
+    fi
+
+    # Step 3: Install missing tools from profile
+    local profile="dev"
+    local state_file="${DOTFILES_DIR}/local/state.json"
+    if [[ -f "${state_file}" ]]; then
+        local stored_profile
+        stored_profile=$(jq -r '.profile // "dev"' "${state_file}" 2>/dev/null || echo "dev")
+        profile="${stored_profile}"
+    fi
+
+    Logger::info "[3/5] Installing tools for profile '${profile}'..."
+    source "${DOTFILES_DIR}/lib/hotload/engine.sh"
+
+    local profile_file="${DOTFILES_DIR}/definitions/profiles.toml"
+    if [[ -f "${profile_file}" ]]; then
+        local tools_list
+        # Extract tool list for the active profile from TOML
+        tools_list=$(sed -n "/^\[profiles\.${profile}\]/,/^\[/p" "${profile_file}" \
+            | grep -E '^tools\s*=' \
+            | sed 's/.*=\s*\[//;s/\].*//;s/"//g;s/,/ /g' || true)
+
+        for tool in ${tools_list}; do
+            tool=$(echo "${tool}" | xargs)
+            [[ -z "${tool}" ]] && continue
+
+            if [[ "${force}" == true ]] || ! HotLoadEngine::is_installed "${tool}" 2>/dev/null; then
+                if [[ "${dry_run}" == true ]]; then
+                    Logger::info "[DRY-RUN] Would install: ${tool}"
+                else
+                    Logger::info "Installing: ${tool}"
+                    if HotLoadEngine::install "${tool}" 2>/dev/null; then
+                        (( tools_installed++ ))
+                    else
+                        Logger::warn "Failed to install: ${tool}"
+                        (( warnings++ ))
+                    fi
+                fi
+            fi
+        done
+    else
+        Logger::warn "Profile file not found: ${profile_file}"
+        (( warnings++ ))
+    fi
+
+    # Step 4: Verify installed tools
+    Logger::info "[4/5] Verifying installed tools..."
+    if [[ "${dry_run}" == true ]]; then
+        Logger::info "[DRY-RUN] Would verify all installed tools"
+    else
+        if ! HotLoadEngine::verify 2>/dev/null; then
+            Logger::warn "Some tools failed verification"
+            (( warnings++ ))
+        fi
+    fi
+
+    # Step 5: Run doctor
+    Logger::info "[5/5] Running doctor check..."
+    if [[ "${dry_run}" == true ]]; then
+        Logger::info "[DRY-RUN] Would run doctor checks"
+    else
+        source "${DOTFILES_DIR}/lib/modules/doctor.sh"
+        if ! Doctor::run 2>/dev/null; then
+            Logger::warn "Doctor reported issues"
+            (( warnings++ ))
+        fi
+    fi
+
+    # Summary
+    local end_time
+    end_time=$(date +%s)
+    local elapsed=$(( end_time - start_time ))
+
+    echo ""
+    Logger::info "═══════════════════════════════════════════"
+    Logger::info " Sync Complete"
+    Logger::info "═══════════════════════════════════════════"
+    Logger::info " Profile:        ${profile}"
+    Logger::info " Time elapsed:   ${elapsed}s"
+    Logger::info " Tools installed: ${tools_installed}"
+    if [[ ${warnings} -gt 0 ]]; then
+        Logger::warn " Warnings:       ${warnings}"
+    else
+        Logger::info " Warnings:       0"
+    fi
+    if [[ "${dry_run}" == true ]]; then
+        Logger::info " Mode:           DRY-RUN (no changes made)"
+    fi
+    Logger::info "═══════════════════════════════════════════"
+}
+
+cmd_bench() {
+    local iterations=10
+    local target_ms=50
+
+    Logger::info "Benchmarking shell startup time (${iterations} iterations)..."
+    echo ""
+
+    local shells=()
+    command -v zsh  &>/dev/null && shells+=("zsh")
+    command -v bash &>/dev/null && shells+=("bash")
+    command -v fish &>/dev/null && shells+=("fish")
+
+    if [[ ${#shells[@]} -eq 0 ]]; then
+        Logger::error "No shells found to benchmark"
+        return 1
+    fi
+
+    for shell in "${shells[@]}"; do
+        local times=()
+        local total=0
+        local min=999999
+        local max=0
+
+        for (( i=1; i<=iterations; i++ )); do
+            local start_ns end_ns elapsed_ms
+            # Use perl for millisecond precision (portable across macOS/Linux)
+            start_ns=$(perl -MTime::HiRes=time -e 'printf "%.0f\n", time()*1000')
+
+            case "${shell}" in
+                fish) "${shell}" -c "exit" 2>/dev/null ;;
+                *)    "${shell}" -i -c "exit" 2>/dev/null ;;
+            esac
+
+            end_ns=$(perl -MTime::HiRes=time -e 'printf "%.0f\n", time()*1000')
+            elapsed_ms=$(( end_ns - start_ns ))
+
+            times+=("${elapsed_ms}")
+            total=$(( total + elapsed_ms ))
+            (( elapsed_ms < min )) && min="${elapsed_ms}"
+            (( elapsed_ms > max )) && max="${elapsed_ms}"
+        done
+
+        local avg=$(( total / iterations ))
+
+        local status_icon
+        if [[ "${shell}" == "zsh" ]]; then
+            if [[ ${avg} -le ${target_ms} ]]; then
+                status_icon="PASS"
+            else
+                status_icon="SLOW"
+            fi
+        else
+            status_icon="----"
+        fi
+
+        printf "  %-6s  min: %4dms  avg: %4dms  max: %4dms  [%s]\n" \
+            "${shell}" "${min}" "${avg}" "${max}" "${status_icon}"
+
+        if [[ "${shell}" == "zsh" && ${avg} -gt ${target_ms} ]]; then
+            Logger::warn "  zsh avg (${avg}ms) exceeds target (<${target_ms}ms)"
+        fi
+    done
+
+    echo ""
+    Logger::info "Target: zsh < ${target_ms}ms interactive startup"
+}
+
+cmd_vault_init() {
+    source "${DOTFILES_DIR}/lib/modules/secrets.sh"
+    SecretVault::init
+    SecretVault::fix_permissions
+}
+
+cmd_vault_keygen() {
+    source "${DOTFILES_DIR}/lib/modules/secrets.sh"
+    SecretVault::generate_key
+}
+
+cmd_vault_encrypt() {
+    local file="${1:?File path required}"
+    source "${DOTFILES_DIR}/lib/modules/secrets.sh"
+    SecretVault::encrypt "${file}"
+}
+
+cmd_vault_decrypt() {
+    local file="${1:?File path required}"
+    source "${DOTFILES_DIR}/lib/modules/secrets.sh"
+    SecretVault::decrypt "${file}"
+}
+
+show_help() {
+    cat <<-EOF
+	Usage: dotfiles <command> [args]
+
+	Tool Management:
+	  install <tool>       Install a tool via hot-loading
+	  uninstall <tool>     Uninstall a tool
+	  status               Show all tools status
+	  verify               Verify installed tools work
+
+	Setup:
+	  setup                Interactive first-time setup wizard
+
+	System:
+	  sync [flags]         Full idempotent sync (pull, generate, install, verify, doctor)
+	  update               Pull latest + regenerate configs
+	  generate             Regenerate shell configs from SSOT
+	  doctor               Run system health check
+	  bench                Benchmark shell startup time
+
+	Vault:
+	  vault-init           Initialize local vault with permissions
+	  vault-keygen         Generate age encryption key pair
+	  vault-encrypt <f>    Encrypt a file with age
+	  vault-decrypt <f>    Decrypt a file with age
+
+	Sync Flags:
+	  --dry-run            Show what would happen without making changes
+	  --force              Reinstall tools even if already installed
+
+	Options:
+	  --help, -h           Show this help
+	  --version, -v        Show version
+	EOF
+}
+
+main() {
+    case "${1:-}" in
+        setup)           cmd_setup ;;
+        install)         cmd_install "${2:-}" ;;
+        uninstall)       cmd_uninstall "${2:-}" ;;
+        status)          cmd_status ;;
+        doctor)          cmd_doctor ;;
+        generate|gen)    cmd_generate ;;
+        update)          cmd_update ;;
+        verify)          cmd_verify ;;
+        sync)            shift; cmd_sync "$@" ;;
+        bench)           cmd_bench ;;
+        vault-init)      cmd_vault_init ;;
+        vault-keygen)    cmd_vault_keygen ;;
+        vault-encrypt)   cmd_vault_encrypt "${2:-}" ;;
+        vault-decrypt)   cmd_vault_decrypt "${2:-}" ;;
+        --version|-v)    echo "dotfiles 1.0.0" ;;
+        --help|-h|"")    show_help ;;
+        *)               Logger::error "Unknown command: ${1}"; show_help; exit 1 ;;
+    esac
+}
+
+main "$@"

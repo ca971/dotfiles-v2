@@ -1,0 +1,39 @@
+# ═══════════════════════════════════════════════════════════════════════════════
+# @file tools/available/most.toml
+# @description Tool descriptor for most (Powerful terminal pager (more/less alternative))
+# @since 1.0.0
+# @version 1.0.0
+# ═══════════════════════════════════════════════════════════════════════════════
+
+[meta]
+name = "most"
+description = "Powerful terminal pager (more/less alternative)"
+homepage = "https://www.jedsoft.org/most"
+category = "core"
+version = "latest"
+verify = "most --version"
+
+
+[[install]]
+method = "system"
+platforms = ["linux.debian"]
+package = "most"
+
+[[install]]
+method = "system"
+platforms = ["linux.arch"]
+package = "most"
+
+[[install]]
+method = "system"
+platforms = ["linux.fedora"]
+package = "most"
+
+
+[[install]]
+method = "system"
+platforms = ["bsd"]
+package = "most"
+[config]
+symlinks = []
+dependencies = []

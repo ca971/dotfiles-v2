@@ -1,0 +1,34 @@
+# ═══════════════════════════════════════════════════════════════════════════════
+# @file tools/available/gh.toml
+# @description Tool descriptor for gh (GitHub official command-line tool)
+# @since 1.0.0
+# @version 1.0.0
+# ═══════════════════════════════════════════════════════════════════════════════
+
+[meta]
+name = "gh"
+description = "GitHub official command-line tool"
+homepage = "https://cli.github.com"
+category = "dev"
+version = "latest"
+verify = "gh --version"
+
+[[install]]
+method = "mise"
+platforms = ["darwin", "linux", "wsl", "bsd"]
+plugin = "gh"
+version = "latest"
+
+[[install]]
+method = "brew"
+platforms = ["darwin"]
+package = "gh"
+
+[[install]]
+method = "system"
+platforms = ["linux.debian"]
+package = "gh"
+
+[config]
+symlinks = []
+dependencies = []

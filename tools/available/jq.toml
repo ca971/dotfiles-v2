@@ -1,0 +1,44 @@
+# ═══════════════════════════════════════════════════════════════════════════════
+# @file tools/available/jq.toml
+# @description Tool descriptor for jq (Lightweight command-line JSON processor)
+# @since 1.0.0
+# @version 1.0.0
+# ═══════════════════════════════════════════════════════════════════════════════
+
+[meta]
+name = "jq"
+description = "Lightweight command-line JSON processor"
+homepage = "https://jqlang.github.io/jq"
+category = "core"
+version = "latest"
+verify = "jq --version"
+
+[[install]]
+method = "mise"
+platforms = ["darwin", "linux", "wsl", "bsd"]
+plugin = "jq"
+version = "latest"
+
+[[install]]
+method = "brew"
+platforms = ["darwin"]
+package = "jq"
+
+[[install]]
+method = "system"
+platforms = ["linux.debian"]
+package = "jq"
+
+[[install]]
+method = "system"
+platforms = ["linux.arch"]
+package = "jq"
+
+[[install]]
+method = "system"
+platforms = ["linux.fedora"]
+package = "jq"
+
+[config]
+symlinks = []
+dependencies = []

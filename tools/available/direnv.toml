@@ -1,0 +1,44 @@
+# ═══════════════════════════════════════════════════════════════════════════════
+# @file tools/available/direnv.toml
+# @description Tool descriptor for direnv (Load and unload env vars per directory)
+# @since 1.0.0
+# @version 1.0.0
+# ═══════════════════════════════════════════════════════════════════════════════
+
+[meta]
+name = "direnv"
+description = "Load and unload env vars per directory"
+homepage = "https://direnv.net"
+category = "shell"
+version = "latest"
+verify = "direnv version"
+
+[[install]]
+method = "mise"
+platforms = ["darwin", "linux", "wsl", "bsd"]
+plugin = "direnv"
+version = "latest"
+
+[[install]]
+method = "brew"
+platforms = ["darwin"]
+package = "direnv"
+
+[[install]]
+method = "system"
+platforms = ["linux.debian"]
+package = "direnv"
+
+[[install]]
+method = "system"
+platforms = ["linux.arch"]
+package = "direnv"
+
+[[install]]
+method = "system"
+platforms = ["linux.fedora"]
+package = "direnv"
+
+[config]
+symlinks = []
+dependencies = []

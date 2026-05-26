@@ -1,0 +1,34 @@
+# ═══════════════════════════════════════════════════════════════════════════════
+# @file tools/available/bottom.toml
+# @description Tool descriptor for bottom (Graphical cross-platform system monitor)
+# @since 1.0.0
+# @version 1.0.0
+# ═══════════════════════════════════════════════════════════════════════════════
+
+[meta]
+name = "bottom"
+description = "Graphical cross-platform system monitor"
+homepage = "https://github.com/ClementTsang/bottom"
+category = "system"
+version = "latest"
+verify = "btm --version"
+
+[[install]]
+method = "mise"
+platforms = ["darwin", "linux", "wsl", "bsd"]
+plugin = "bottom"
+version = "latest"
+
+[[install]]
+method = "cargo"
+platforms = ["darwin", "linux", "wsl", "bsd"]
+crate = "bottom"
+
+[[install]]
+method = "brew"
+platforms = ["darwin"]
+package = "bottom"
+
+[config]
+symlinks = []
+dependencies = []

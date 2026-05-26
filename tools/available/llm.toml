@@ -1,0 +1,24 @@
+# ═══════════════════════════════════════════════════════════════════════════════
+# @file tools/available/llm.toml
+# @description Tool descriptor for llm (CLI for interacting with large language models)
+# @since 1.0.0
+# @version 1.0.0
+# ═══════════════════════════════════════════════════════════════════════════════
+
+[meta]
+name = "llm"
+description = "CLI for interacting with large language models"
+homepage = "https://github.com/simonw/llm"
+category = "ai"
+version = "latest"
+verify = "llm --version"
+
+[[install]]
+method = "uv"
+platforms = ["darwin", "linux", "wsl", "bsd"]
+package = "llm"
+version = "latest"
+
+[config]
+symlinks = []
+dependencies = []

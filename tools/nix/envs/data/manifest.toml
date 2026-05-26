@@ -1,0 +1,11 @@
+[meta]
+name = "data"
+description = "Data processing and analysis tools"
+enabled = false
+
+[packages]
+sqlite = "SQLite database engine"
+datasette = "Explore and publish data"
+visidata = "Terminal spreadsheet multitool"
+duckdb = "Analytical SQL database"
+csvkit = "CSV utilities"

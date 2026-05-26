@@ -1,0 +1,60 @@
+# ═══════════════════════════════════════════════════════════════════════════════
+# @file config/lazygit/config.yml
+# @description Lazygit configuration
+# @since 1.0.0
+# @version 1.0.0
+# ═══════════════════════════════════════════════════════════════════════════════
+
+gui:
+  theme:
+    activeBorderColor:
+      - "#89b4fa"
+      - bold
+    inactiveBorderColor:
+      - "#45475a"
+    searchingActiveBorderColor:
+      - "#f9e2af"
+      - bold
+    optionsTextColor:
+      - "#89b4fa"
+    selectedLineBgColor:
+      - "#313244"
+    cherryPickedCommitFgColor:
+      - "#89b4fa"
+    cherryPickedCommitBgColor:
+      - "#45475a"
+    unstagedChangesColor:
+      - "#f38ba8"
+    defaultFgColor:
+      - "#cdd6f4"
+  showIcons: true
+  nerdFontsVersion: "3"
+  showRandomTip: false
+  showCommandLog: false
+  border: rounded
+  animateExplosion: false
+
+git:
+  paging:
+    colorArg: always
+    pager: delta --dark --paging=never
+  commit:
+    signOff: false
+  merging:
+    args: "--no-ff"
+  log:
+    showGraph: always
+    showWholeGraph: false
+
+os:
+  editPreset: "nvim"
+
+keybinding:
+  universal:
+    quit: "q"
+    return: "<escape>"
+    togglePanel: "<tab>"
+    nextTab: "L"
+    prevTab: "H"
+  branches:
+    createPullRequest: "o"

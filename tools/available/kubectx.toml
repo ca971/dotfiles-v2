@@ -1,0 +1,29 @@
+# ═══════════════════════════════════════════════════════════════════════════════
+# @file tools/available/kubectx.toml
+# @description Tool descriptor for kubectx (Switch between Kubernetes contexts and namespaces)
+# @since 1.0.0
+# @version 1.0.0
+# ═══════════════════════════════════════════════════════════════════════════════
+
+[meta]
+name = "kubectx"
+description = "Switch between Kubernetes contexts and namespaces"
+homepage = "https://github.com/ahmetb/kubectx"
+category = "cloud"
+version = "latest"
+verify = "kubectx --help"
+
+[[install]]
+method = "mise"
+platforms = ["darwin", "linux", "wsl", "bsd"]
+plugin = "kubectx"
+version = "latest"
+
+[[install]]
+method = "brew"
+platforms = ["darwin"]
+package = "kubectx"
+
+[config]
+symlinks = []
+dependencies = []

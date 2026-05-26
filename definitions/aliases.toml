@@ -1,0 +1,136 @@
+# ═══════════════════════════════════════════════════════════════════════════════
+# @file definitions/aliases.toml
+# @description Single Source of Truth for all shell aliases
+# @since 1.0.0
+# @version 1.0.0
+# @see docs/SSOT.md
+#
+# Each alias is compiled to native syntax for bash, zsh, fish, and nushell.
+# Fields:
+#   command     - The command to alias to
+#   description - Human-readable description
+#   requires    - [optional] Tool that must be installed
+#   platforms   - [optional] Platform restriction (default: all)
+# ═══════════════════════════════════════════════════════════════════════════════
+
+# ───────────────────────────────────────────────────────────────────────────────
+# Navigation
+# ───────────────────────────────────────────────────────────────────────────────
+
+[aliases.navigation]
+".." = { command = "cd ..", description = "Go up one directory" }
+"..." = { command = "cd ../..", description = "Go up two directories" }
+"...." = { command = "cd ../../..", description = "Go up three directories" }
+"....." = { command = "cd ../../../..", description = "Go up four directories" }
+"-" = { command = "cd -", description = "Go to previous directory" }
+"~" = { command = "cd ~", description = "Go to home directory" }
+
+# ───────────────────────────────────────────────────────────────────────────────
+# Listing (eza)
+# ───────────────────────────────────────────────────────────────────────────────
+
+[aliases.listing]
+ls = { command = "eza --icons --group-directories-first", description = "List files", requires = "eza" }
+ll = { command = "eza -la --icons --group-directories-first --git", description = "Long list with git status", requires = "eza" }
+la = { command = "eza -a --icons --group-directories-first", description = "List all including hidden", requires = "eza" }
+lt = { command = "eza --tree --icons --group-directories-first -L 3", description = "Tree view (3 levels)", requires = "eza" }
+lt2 = { command = "eza --tree --icons --group-directories-first -L 2", description = "Tree view (2 levels)", requires = "eza" }
+lt4 = { command = "eza --tree --icons --group-directories-first -L 4", description = "Tree view (4 levels)", requires = "eza" }
+lm = { command = "eza -la --icons --sort=modified", description = "List sorted by modification time", requires = "eza" }
+lk = { command = "eza -la --icons --sort=size", description = "List sorted by size", requires = "eza" }
+
+# ───────────────────────────────────────────────────────────────────────────────
+# Git
+# ───────────────────────────────────────────────────────────────────────────────
+
+[aliases.git]
+g = { command = "git", description = "Git shorthand" }
+ga = { command = "git add", description = "Git add" }
+gaa = { command = "git add --all", description = "Git add all" }
+gc = { command = "git commit", description = "Git commit" }
+gcm = { command = "git commit -m", description = "Git commit with message" }
+gco = { command = "git checkout", description = "Git checkout" }
+gd = { command = "git diff", description = "Git diff" }
+gds = { command = "git diff --staged", description = "Git diff staged" }
+gf = { command = "git fetch --all --prune", description = "Git fetch all with prune" }
+gl = { command = "git log --oneline --graph --decorate -20", description = "Git log compact" }
+gla = { command = "git log --oneline --graph --decorate --all", description = "Git log all branches" }
+gp = { command = "git push", description = "Git push" }
+gpl = { command = "git pull --rebase", description = "Git pull with rebase" }
+gs = { command = "git status -sb", description = "Git status short" }
+gsw = { command = "git switch", description = "Git switch branch" }
+gsc = { command = "git switch -c", description = "Git switch create branch" }
+gst = { command = "git stash", description = "Git stash" }
+gstp = { command = "git stash pop", description = "Git stash pop" }
+lg = { command = "lazygit", description = "Launch lazygit", requires = "lazygit" }
+
+# ───────────────────────────────────────────────────────────────────────────────
+# File operations
+# ───────────────────────────────────────────────────────────────────────────────
+
+[aliases.files]
+cat = { command = "bat", description = "Cat with syntax highlighting", requires = "bat" }
+find = { command = "fd", description = "Find with fd", requires = "fd" }
+grep = { command = "rg", description = "Grep with ripgrep", requires = "ripgrep" }
+du = { command = "dust", description = "Disk usage with dust", requires = "dust" }
+df = { command = "duf", description = "Disk free with duf", requires = "duf" }
+cp = { command = "cp -iv", description = "Copy interactive verbose" }
+mv = { command = "mv -iv", description = "Move interactive verbose" }
+rm = { command = "trash-put", description = "Move to trash instead of delete", requires = "trash-cli" }
+mkdir = { command = "mkdir -pv", description = "Make directory with parents" }
+
+# ───────────────────────────────────────────────────────────────────────────────
+# System monitoring
+# ───────────────────────────────────────────────────────────────────────────────
+
+[aliases.system]
+top = { command = "btop", description = "System monitor", requires = "btop" }
+ps = { command = "procs", description = "Process viewer", requires = "procs" }
+ports = { command = "ss -tulanp || lsof -iTCP -sTCP:LISTEN -P", description = "Show listening ports" }
+
+# ───────────────────────────────────────────────────────────────────────────────
+# Network
+# ───────────────────────────────────────────────────────────────────────────────
+
+[aliases.network]
+http = { command = "xh", description = "HTTP client", requires = "xh" }
+ping = { command = "gping", description = "Ping with graph", requires = "gping" }
+dig = { command = "doggo", description = "DNS lookup", requires = "doggo" }
+speed = { command = "speedtest-cli", description = "Internet speed test", requires = "speedtest-cli" }
+
+# ───────────────────────────────────────────────────────────────────────────────
+# Docker & Kubernetes
+# ───────────────────────────────────────────────────────────────────────────────
+
+[aliases.containers]
+d = { command = "docker", description = "Docker shorthand" }
+dc = { command = "docker compose", description = "Docker compose" }
+dps = { command = "docker ps --format 'table {{.Names}}\\t{{.Status}}\\t{{.Ports}}'", description = "Docker ps formatted" }
+dex = { command = "docker exec -it", description = "Docker exec interactive" }
+k = { command = "kubectl", description = "Kubectl shorthand", requires = "kubectl" }
+kx = { command = "kubectx", description = "Switch kube context", requires = "kubectx" }
+kn = { command = "kubens", description = "Switch kube namespace", requires = "kubectx" }
+lzd = { command = "lazydocker", description = "Launch lazydocker", requires = "lazydocker" }
+
+# ───────────────────────────────────────────────────────────────────────────────
+# Editor
+# ───────────────────────────────────────────────────────────────────────────────
+
+[aliases.editor]
+v = { command = "nvim", description = "Neovim shorthand", requires = "neovim" }
+vi = { command = "nvim", description = "Vi as neovim", requires = "neovim" }
+vim = { command = "nvim", description = "Vim as neovim", requires = "neovim" }
+
+# ───────────────────────────────────────────────────────────────────────────────
+# Misc utilities
+# ───────────────────────────────────────────────────────────────────────────────
+
+[aliases.misc]
+c = { command = "clear", description = "Clear screen" }
+q = { command = "exit", description = "Exit terminal" }
+h = { command = "history", description = "History shorthand" }
+j = { command = "just", description = "Just shorthand", requires = "just" }
+weather = { command = "curl -s 'wttr.in?format=3'", description = "Quick weather" }
+myip = { command = "curl -s ifconfig.me", description = "Show public IP" }
+path = { command = "echo $PATH | tr ':' '\\n'", description = "Show PATH entries" }
+reload = { command = "exec $SHELL -l", description = "Reload shell" }

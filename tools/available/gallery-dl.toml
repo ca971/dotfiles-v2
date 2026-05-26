@@ -1,0 +1,29 @@
+# ═══════════════════════════════════════════════════════════════════════════════
+# @file tools/available/gallery-dl.toml
+# @description Tool descriptor for gallery-dl (Download image galleries from various sites)
+# @since 1.0.0
+# @version 1.0.0
+# ═══════════════════════════════════════════════════════════════════════════════
+
+[meta]
+name = "gallery-dl"
+description = "Download image galleries from various sites"
+homepage = "https://github.com/mikf/gallery-dl"
+category = "media"
+version = "latest"
+verify = "gallery-dl --version"
+
+[[install]]
+method = "mise"
+platforms = ["darwin", "linux", "wsl", "bsd"]
+plugin = "gallery-dl"
+version = "latest"
+
+[[install]]
+method = "brew"
+platforms = ["darwin"]
+package = "gallery-dl"
+
+[config]
+symlinks = []
+dependencies = []

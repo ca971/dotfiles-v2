@@ -1,0 +1,122 @@
+# ═══════════════════════════════════════════════════════════════════════════════
+# @file definitions/plugins.toml
+# @description Single Source of Truth for Zsh plugins (managed by zinit)
+# @since 1.0.0
+# @version 1.0.0
+# @see docs/SSOT.md
+#
+# Each plugin is defined with zinit ice modifiers for fine-grained control.
+# Fields:
+#   repo        - GitHub "owner/repo" or snippet URL
+#   description - Human-readable description
+#   load        - Loading strategy: "immediate", "turbo_0a", "turbo_0b", "turbo_0c",
+#                 "turbo_1a", "turbo_1b", "turbo_2a" (turbo = deferred, number = wait)
+#   ice         - [optional] Zinit ice modifiers (as key-value pairs)
+#   pick        - [optional] File to source from the plugin
+#   from        - [optional] Source type: "github" (default), "snippet"
+#   depends_on  - [optional] Plugin that must load first
+#
+# LOADING STRATEGY:
+#   immediate  : Loaded synchronously at startup (blocking)
+#   turbo_0a   : wait"0a" — loaded right after prompt appears (fastest turbo)
+#   turbo_0b   : wait"0b" — loaded right after 0a
+#   turbo_0c   : wait"0c" — loaded right after 0b
+#   turbo_1a   : wait"1"  — loaded 1 second after prompt
+#   turbo_2a   : wait"2"  — loaded 2 seconds after prompt (least urgent)
+# ═══════════════════════════════════════════════════════════════════════════════
+
+# ───────────────────────────────────────────────────────────────────────────────
+# Core plugins (turbo 0a — load ASAP after prompt)
+# ───────────────────────────────────────────────────────────────────────────────
+
+[plugins.fast-syntax-highlighting]
+repo = "zdharma-continuum/fast-syntax-highlighting"
+description = "Feature-rich syntax highlighting for Zsh"
+load = "turbo_0a"
+[plugins.fast-syntax-highlighting.ice]
+lucid = true
+atinit = "ZINIT[COMPINIT_OPTS]=-C; zicompinit; zicdreplay"
+
+[plugins.zsh-autosuggestions]
+repo = "zsh-users/zsh-autosuggestions"
+description = "Fish-like autosuggestions based on history"
+load = "turbo_0a"
+[plugins.zsh-autosuggestions.ice]
+lucid = true
+atload = "_zsh_autosuggest_start"
+
+[plugins.zsh-completions]
+repo = "zsh-users/zsh-completions"
+description = "Additional completion definitions"
+load = "turbo_0a"
+[plugins.zsh-completions.ice]
+lucid = true
+blockf = true
+
+# ───────────────────────────────────────────────────────────────────────────────
+# History & Navigation (turbo 0b)
+# ───────────────────────────────────────────────────────────────────────────────
+
+[plugins.zsh-history-substring-search]
+repo = "zsh-users/zsh-history-substring-search"
+description = "History search by typing partial command"
+load = "turbo_0b"
+[plugins.zsh-history-substring-search.ice]
+lucid = true
+atload = "bindkey '^[[A' history-substring-search-up; bindkey '^[[B' history-substring-search-down"
+
+# ───────────────────────────────────────────────────────────────────────────────
+# Utilities (turbo 0c)
+# ───────────────────────────────────────────────────────────────────────────────
+
+[plugins.zsh-autopair]
+repo = "hlissner/zsh-autopair"
+description = "Auto-close brackets, quotes, etc."
+load = "turbo_0c"
+[plugins.zsh-autopair.ice]
+lucid = true
+
+[plugins.alias-tips]
+repo = "djui/alias-tips"
+description = "Reminds you of aliases for commands you type"
+load = "turbo_0c"
+[plugins.alias-tips.ice]
+lucid = true
+
+# ───────────────────────────────────────────────────────────────────────────────
+# Deferred utilities (turbo 1a — 1 second after prompt)
+# ───────────────────────────────────────────────────────────────────────────────
+
+[plugins.forgit]
+repo = "wfxr/forgit"
+description = "Git commands powered by fzf"
+load = "turbo_1a"
+[plugins.forgit.ice]
+lucid = true
+
+[plugins.zsh-you-should-use]
+repo = "MichaelAquilina/zsh-you-should-use"
+description = "Reminds you of existing aliases"
+load = "turbo_1a"
+[plugins.zsh-you-should-use.ice]
+lucid = true
+
+# ───────────────────────────────────────────────────────────────────────────────
+# Snippets (OMZ libs loaded as snippets, turbo 0b)
+# ───────────────────────────────────────────────────────────────────────────────
+
+[plugins.omz-git]
+repo = "OMZL::git.zsh"
+description = "OMZ git library (provides git_current_branch, etc.)"
+load = "turbo_0b"
+from = "snippet"
+[plugins.omz-git.ice]
+lucid = true
+
+[plugins.omz-clipboard]
+repo = "OMZL::clipboard.zsh"
+description = "OMZ clipboard helpers (cross-platform copy/paste)"
+load = "turbo_0b"
+from = "snippet"
+[plugins.omz-clipboard.ice]
+lucid = true

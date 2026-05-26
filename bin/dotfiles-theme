@@ -1,0 +1,130 @@
+#!/usr/bin/env bash
+# ═══════════════════════════════════════════════════════════════════════════════
+# @file bin/dotfiles-theme
+# @description Starship theme switcher (minimal, full, powerline)
+# @since 1.0.0
+# @version 1.0.0
+# @see config/starship/themes/
+#
+# Usage:
+#   dotfiles-theme minimal    # Switch to minimal theme
+#   dotfiles-theme full       # Switch to full nerd font theme
+#   dotfiles-theme powerline  # Switch to powerline theme
+#   dotfiles-theme            # Show current theme
+# ═══════════════════════════════════════════════════════════════════════════════
+
+set -euo pipefail
+
+export DOTFILES_DIR="${DOTFILES_DIR:-${HOME}/.dotfiles}"
+
+source "${DOTFILES_DIR}/lib/core/logger.sh"
+source "${DOTFILES_DIR}/lib/hotload/state.sh"
+
+readonly THEMES_DIR="${DOTFILES_DIR}/config/starship/themes"
+readonly STARSHIP_TARGET="${XDG_CONFIG_HOME:-${HOME}/.config}/starship.toml"
+readonly VALID_THEMES=("minimal" "full" "powerline")
+
+# ═══════════════════════════════════════════════════════════════════════════════
+# @description Show current active theme
+# ═══════════════════════════════════════════════════════════════════════════════
+show_current() {
+    local current
+    current="$(StateManager::get_theme)"
+    echo "Current theme: ${current}"
+}
+
+# ═══════════════════════════════════════════════════════════════════════════════
+# @description List available themes
+# ═══════════════════════════════════════════════════════════════════════════════
+list_themes() {
+    local current
+    current="$(StateManager::get_theme)"
+
+    echo "Available themes:"
+    local theme
+    for theme in "${VALID_THEMES[@]}"; do
+        if [[ "${theme}" == "${current}" ]]; then
+            echo "  * ${theme} (active)"
+        else
+            echo "    ${theme}"
+        fi
+    done
+}
+
+# ═══════════════════════════════════════════════════════════════════════════════
+# @description Switch to a new theme
+# @param $1 {string} Theme name (minimal, full, powerline)
+# ═══════════════════════════════════════════════════════════════════════════════
+switch_theme() {
+    local theme="${1}"
+
+    local valid=0
+    local t
+    for t in "${VALID_THEMES[@]}"; do
+        if [[ "${t}" == "${theme}" ]]; then
+            valid=1
+            break
+        fi
+    done
+
+    if [[ "${valid}" -eq 0 ]]; then
+        Logger::error "Invalid theme: ${theme}"
+        Logger::info "Valid themes: ${VALID_THEMES[*]}"
+        exit 1
+    fi
+
+    local theme_file="${THEMES_DIR}/${theme}.toml"
+    if [[ ! -f "${theme_file}" ]]; then
+        Logger::error "Theme file not found: ${theme_file}"
+        exit 1
+    fi
+
+    # Create symlink to the theme file as starship.toml
+    local target_dir
+    target_dir="$(dirname "${STARSHIP_TARGET}")"
+    [[ -d "${target_dir}" ]] || mkdir -p "${target_dir}"
+
+    rm -f "${STARSHIP_TARGET}"
+    cp "${theme_file}" "${STARSHIP_TARGET}"
+
+    # Update state
+    StateManager::set_theme "${theme}"
+
+    Logger::success "Switched to '${theme}' theme"
+    Logger::info "Restart your shell or run: exec \$SHELL"
+}
+
+# ═══════════════════════════════════════════════════════════════════════════════
+# @description Show usage
+# ═══════════════════════════════════════════════════════════════════════════════
+show_help() {
+    cat <<-EOF
+	Usage: dotfiles-theme [THEME]
+
+	Switch the starship prompt theme.
+
+	Themes:
+	  minimal     Clean, fast, no nerd fonts required
+	  full        All segments, Nerd Font icons, Catppuccin colors
+	  powerline   Colored segments with arrow separators
+
+	Options:
+	  --list, -l  List available themes
+	  --help, -h  Show this help
+	  (no args)   Show current theme
+	EOF
+}
+
+# ═══════════════════════════════════════════════════════════════════════════════
+# @description Main entry point
+# ═══════════════════════════════════════════════════════════════════════════════
+main() {
+    case "${1:-}" in
+        "")          show_current ;;
+        --list|-l)   list_themes ;;
+        --help|-h)   show_help ;;
+        *)           switch_theme "${1}" ;;
+    esac
+}
+
+main "$@"

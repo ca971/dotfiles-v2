@@ -1,0 +1,39 @@
+# ═══════════════════════════════════════════════════════════════════════════════
+# @file tools/available/gnupg.toml
+# @description Tool descriptor for gnupg (GNU Privacy Guard encryption suite)
+# @since 1.0.0
+# @version 1.0.0
+# ═══════════════════════════════════════════════════════════════════════════════
+
+[meta]
+name = "gnupg"
+description = "GNU Privacy Guard encryption suite"
+homepage = "https://gnupg.org"
+category = "security"
+version = "latest"
+verify = "gpg --version"
+
+
+[[install]]
+method = "system"
+platforms = ["linux.debian"]
+package = "gnupg"
+
+[[install]]
+method = "system"
+platforms = ["linux.arch"]
+package = "gnupg"
+
+[[install]]
+method = "system"
+platforms = ["linux.fedora"]
+package = "gnupg2"
+
+
+[[install]]
+method = "system"
+platforms = ["bsd"]
+package = "gnupg"
+[config]
+symlinks = []
+dependencies = []

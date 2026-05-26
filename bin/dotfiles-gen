@@ -1,0 +1,33 @@
+#!/usr/bin/env bash
+# ═══════════════════════════════════════════════════════════════════════════════
+# @file bin/dotfiles-gen
+# @description CLI wrapper for the SSOT generator (TOML -> shell)
+# @since 1.0.0
+# @version 1.0.0
+# @see generators/src/cli.py
+#
+# Usage:
+#   dotfiles-gen generate --all
+#   dotfiles-gen generate --shell zsh
+#   dotfiles-gen validate
+# ═══════════════════════════════════════════════════════════════════════════════
+
+set -euo pipefail
+
+export DOTFILES_DIR="${DOTFILES_DIR:-${HOME}/.dotfiles}"
+
+readonly GEN_DIR="${DOTFILES_DIR}/generators"
+
+if [[ ! -f "${GEN_DIR}/pyproject.toml" ]]; then
+    echo "ERROR: generators not found at ${GEN_DIR}" >&2
+    exit 1
+fi
+
+# Ensure dependencies are installed
+if [[ ! -d "${GEN_DIR}/.venv" ]]; then
+    echo "Installing generator dependencies..."
+    (cd "${GEN_DIR}" && uv sync --quiet)
+fi
+
+# Pass all arguments to the Python CLI
+exec uv run --directory "${GEN_DIR}" python -m src.cli "$@"

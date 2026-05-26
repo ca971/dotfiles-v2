@@ -1,0 +1,44 @@
+# ═══════════════════════════════════════════════════════════════════════════════
+# @file tools/available/sqlite.toml
+# @description Tool descriptor for sqlite (Self-contained SQL database engine)
+# @since 1.0.0
+# @version 1.0.0
+# ═══════════════════════════════════════════════════════════════════════════════
+
+[meta]
+name = "sqlite"
+description = "Self-contained SQL database engine"
+homepage = "https://sqlite.org"
+category = "dev"
+version = "latest"
+verify = "sqlite3 --version"
+
+[[install]]
+method = "mise"
+platforms = ["darwin", "linux", "wsl", "bsd"]
+plugin = "sqlite"
+version = "latest"
+
+[[install]]
+method = "brew"
+platforms = ["darwin"]
+package = "sqlite3"
+
+[[install]]
+method = "system"
+platforms = ["linux.debian"]
+package = "sqlite3"
+
+[[install]]
+method = "system"
+platforms = ["linux.arch"]
+package = "sqlite"
+
+[[install]]
+method = "system"
+platforms = ["linux.fedora"]
+package = "sqlite"
+
+[config]
+symlinks = []
+dependencies = []

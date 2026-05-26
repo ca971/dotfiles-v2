@@ -1,0 +1,44 @@
+# ═══════════════════════════════════════════════════════════════════════════════
+# @file tools/available/ruby.toml
+# @description Tool descriptor for ruby (Dynamic programming language for productivity)
+# @since 1.0.0
+# @version 1.0.0
+# ═══════════════════════════════════════════════════════════════════════════════
+
+[meta]
+name = "ruby"
+description = "Dynamic programming language for productivity"
+homepage = "https://www.ruby-lang.org"
+category = "lang"
+version = "latest"
+verify = "ruby --version"
+
+[[install]]
+method = "mise"
+platforms = ["darwin", "linux", "wsl", "bsd"]
+plugin = "ruby"
+version = "latest"
+
+[[install]]
+method = "brew"
+platforms = ["darwin"]
+package = "ruby"
+
+[[install]]
+method = "system"
+platforms = ["linux.debian"]
+package = "ruby"
+
+[[install]]
+method = "system"
+platforms = ["linux.arch"]
+package = "ruby"
+
+[[install]]
+method = "system"
+platforms = ["linux.fedora"]
+package = "ruby"
+
+[config]
+symlinks = []
+dependencies = []

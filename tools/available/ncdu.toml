@@ -1,0 +1,39 @@
+# ═══════════════════════════════════════════════════════════════════════════════
+# @file tools/available/ncdu.toml
+# @description Tool descriptor for ncdu (NCurses disk usage analyzer)
+# @since 1.0.0
+# @version 1.0.0
+# ═══════════════════════════════════════════════════════════════════════════════
+
+[meta]
+name = "ncdu"
+description = "NCurses disk usage analyzer"
+homepage = "https://dev.yorhel.nl/ncdu"
+category = "system"
+version = "latest"
+verify = "ncdu --version"
+
+
+[[install]]
+method = "system"
+platforms = ["linux.debian"]
+package = "ncdu"
+
+[[install]]
+method = "system"
+platforms = ["linux.arch"]
+package = "ncdu"
+
+[[install]]
+method = "system"
+platforms = ["linux.fedora"]
+package = "ncdu"
+
+
+[[install]]
+method = "system"
+platforms = ["bsd"]
+package = "ncdu"
+[config]
+symlinks = []
+dependencies = []

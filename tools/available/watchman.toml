@@ -1,0 +1,28 @@
+# ═══════════════════════════════════════════════════════════════════════════════
+# @file tools/available/watchman.toml
+# @description Tool descriptor for watchman (File watching service by Meta)
+# @since 1.0.0
+# @version 1.0.0
+# ═══════════════════════════════════════════════════════════════════════════════
+
+[meta]
+name = "watchman"
+description = "File watching service by Meta"
+homepage = "https://facebook.github.io/watchman"
+category = "dev"
+version = "latest"
+verify = "watchman --version"
+
+[[install]]
+method = "brew"
+platforms = ["darwin"]
+package = "watchman"
+
+
+[[install]]
+method = "system"
+platforms = ["linux.debian"]
+package = "watchman"
+[config]
+symlinks = []
+dependencies = []

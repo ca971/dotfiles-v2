@@ -1,0 +1,29 @@
+# ═══════════════════════════════════════════════════════════════════════════════
+# @file tools/available/datasette.toml
+# @description Tool descriptor for datasette (Tool for exploring and publishing data)
+# @since 1.0.0
+# @version 1.0.0
+# ═══════════════════════════════════════════════════════════════════════════════
+
+[meta]
+name = "datasette"
+description = "Tool for exploring and publishing data"
+homepage = "https://datasette.io"
+category = "data"
+version = "latest"
+verify = "datasette --version"
+
+[[install]]
+method = "uv"
+platforms = ["darwin", "linux", "wsl", "bsd"]
+package = "datasette"
+version = "latest"
+
+[[install]]
+method = "brew"
+platforms = ["darwin"]
+package = "datasette"
+
+[config]
+symlinks = []
+dependencies = []

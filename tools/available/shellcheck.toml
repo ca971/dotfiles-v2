@@ -1,0 +1,44 @@
+# ═══════════════════════════════════════════════════════════════════════════════
+# @file tools/available/shellcheck.toml
+# @description Tool descriptor for shellcheck (Static analysis tool for shell scripts)
+# @since 1.0.0
+# @version 1.0.0
+# ═══════════════════════════════════════════════════════════════════════════════
+
+[meta]
+name = "shellcheck"
+description = "Static analysis tool for shell scripts"
+homepage = "https://www.shellcheck.net"
+category = "dev"
+version = "latest"
+verify = "shellcheck --version"
+
+[[install]]
+method = "mise"
+platforms = ["darwin", "linux", "wsl", "bsd"]
+plugin = "shellcheck"
+version = "latest"
+
+[[install]]
+method = "brew"
+platforms = ["darwin"]
+package = "shellcheck"
+
+[[install]]
+method = "system"
+platforms = ["linux.debian"]
+package = "shellcheck"
+
+[[install]]
+method = "system"
+platforms = ["linux.arch"]
+package = "shellcheck"
+
+[[install]]
+method = "system"
+platforms = ["linux.fedora"]
+package = "ShellCheck"
+
+[config]
+symlinks = []
+dependencies = []

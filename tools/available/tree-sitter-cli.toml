@@ -1,0 +1,23 @@
+# ═══════════════════════════════════════════════════════════════════════════════
+# @file tools/available/tree-sitter-cli.toml
+# @description Tool descriptor for tree-sitter-cli (CLI for tree-sitter parser generator)
+# @since 1.0.0
+# @version 1.0.0
+# ═══════════════════════════════════════════════════════════════════════════════
+
+[meta]
+name = "tree-sitter-cli"
+description = "CLI for tree-sitter parser generator"
+homepage = "https://github.com/tree-sitter/tree-sitter"
+category = "dev"
+version = "latest"
+verify = "tree-sitter --version"
+
+[[install]]
+method = "cargo"
+platforms = ["darwin", "linux", "wsl", "bsd"]
+crate = "tree-sitter-cli"
+
+[config]
+symlinks = []
+dependencies = []

@@ -1,0 +1,39 @@
+# ═══════════════════════════════════════════════════════════════════════════════
+# @file tools/available/tig.toml
+# @description Tool descriptor for tig (Text-mode interface for git)
+# @since 1.0.0
+# @version 1.0.0
+# ═══════════════════════════════════════════════════════════════════════════════
+
+[meta]
+name = "tig"
+description = "Text-mode interface for git"
+homepage = "https://jonas.github.io/tig"
+category = "dev"
+version = "latest"
+verify = "tig --version"
+
+
+[[install]]
+method = "system"
+platforms = ["linux.debian"]
+package = "tig"
+
+[[install]]
+method = "system"
+platforms = ["linux.arch"]
+package = "tig"
+
+[[install]]
+method = "system"
+platforms = ["linux.fedora"]
+package = "tig"
+
+
+[[install]]
+method = "system"
+platforms = ["bsd"]
+package = "tig"
+[config]
+symlinks = []
+dependencies = []

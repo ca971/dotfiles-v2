@@ -1,0 +1,39 @@
+# ═══════════════════════════════════════════════════════════════════════════════
+# @file tools/available/gzip.toml
+# @description Tool descriptor for gzip (GNU compression utility)
+# @since 1.0.0
+# @version 1.0.0
+# ═══════════════════════════════════════════════════════════════════════════════
+
+[meta]
+name = "gzip"
+description = "GNU compression utility"
+homepage = "https://www.gnu.org/software/gzip"
+category = "core"
+version = "latest"
+verify = "gzip --version"
+
+
+[[install]]
+method = "system"
+platforms = ["linux.debian"]
+package = "gzip"
+
+[[install]]
+method = "system"
+platforms = ["linux.arch"]
+package = "gzip"
+
+[[install]]
+method = "system"
+platforms = ["linux.fedora"]
+package = "gzip"
+
+
+[[install]]
+method = "system"
+platforms = ["bsd"]
+package = "gzip"
+[config]
+symlinks = []
+dependencies = []

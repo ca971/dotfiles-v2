@@ -1,0 +1,39 @@
+# ═══════════════════════════════════════════════════════════════════════════════
+# @file tools/available/rsync.toml
+# @description Tool descriptor for rsync (Fast and versatile file copying tool)
+# @since 1.0.0
+# @version 1.0.0
+# ═══════════════════════════════════════════════════════════════════════════════
+
+[meta]
+name = "rsync"
+description = "Fast and versatile file copying tool"
+homepage = "https://rsync.samba.org"
+category = "core"
+version = "latest"
+verify = "rsync --version"
+
+
+[[install]]
+method = "system"
+platforms = ["linux.debian"]
+package = "rsync"
+
+[[install]]
+method = "system"
+platforms = ["linux.arch"]
+package = "rsync"
+
+[[install]]
+method = "system"
+platforms = ["linux.fedora"]
+package = "rsync"
+
+
+[[install]]
+method = "system"
+platforms = ["bsd"]
+package = "rsync"
+[config]
+symlinks = []
+dependencies = []

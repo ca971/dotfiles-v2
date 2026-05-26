@@ -1,0 +1,39 @@
+# ═══════════════════════════════════════════════════════════════════════════════
+# @file tools/available/curl.toml
+# @description Tool descriptor for curl (Command-line tool for transferring data with URLs)
+# @since 1.0.0
+# @version 1.0.0
+# ═══════════════════════════════════════════════════════════════════════════════
+
+[meta]
+name = "curl"
+description = "Command-line tool for transferring data with URLs"
+homepage = "https://curl.se"
+category = "core"
+version = "latest"
+verify = "curl --version"
+
+
+[[install]]
+method = "system"
+platforms = ["linux.debian"]
+package = "curl"
+
+[[install]]
+method = "system"
+platforms = ["linux.arch"]
+package = "curl"
+
+[[install]]
+method = "system"
+platforms = ["linux.fedora"]
+package = "curl"
+
+
+[[install]]
+method = "system"
+platforms = ["bsd"]
+package = "curl"
+[config]
+symlinks = []
+dependencies = []

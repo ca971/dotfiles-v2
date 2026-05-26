@@ -1,0 +1,28 @@
+# ═══════════════════════════════════════════════════════════════════════════════
+# @file tools/available/ouch.toml
+# @description Tool descriptor for ouch (Painless compression and decompression)
+# @since 1.0.0
+# @version 1.0.0
+# ═══════════════════════════════════════════════════════════════════════════════
+
+[meta]
+name = "ouch"
+description = "Painless compression and decompression"
+homepage = "https://github.com/ouch-org/ouch"
+category = "core"
+version = "latest"
+verify = "ouch --version"
+
+[[install]]
+method = "cargo"
+platforms = ["darwin", "linux", "wsl", "bsd"]
+crate = "ouch"
+
+[[install]]
+method = "brew"
+platforms = ["darwin"]
+package = "ouch"
+
+[config]
+symlinks = []
+dependencies = []

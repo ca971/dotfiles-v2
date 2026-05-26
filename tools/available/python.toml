@@ -1,0 +1,44 @@
+# ═══════════════════════════════════════════════════════════════════════════════
+# @file tools/available/python.toml
+# @description Tool descriptor for python (Python programming language interpreter)
+# @since 1.0.0
+# @version 1.0.0
+# ═══════════════════════════════════════════════════════════════════════════════
+
+[meta]
+name = "python"
+description = "Python programming language interpreter"
+homepage = "https://www.python.org"
+category = "lang"
+version = "latest"
+verify = "python3 --version"
+
+[[install]]
+method = "mise"
+platforms = ["darwin", "linux", "wsl", "bsd"]
+plugin = "python"
+version = "latest"
+
+[[install]]
+method = "brew"
+platforms = ["darwin"]
+package = "python3"
+
+[[install]]
+method = "system"
+platforms = ["linux.debian"]
+package = "python3"
+
+[[install]]
+method = "system"
+platforms = ["linux.arch"]
+package = "python"
+
+[[install]]
+method = "system"
+platforms = ["linux.fedora"]
+package = "python3"
+
+[config]
+symlinks = []
+dependencies = []

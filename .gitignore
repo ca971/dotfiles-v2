@@ -1,0 +1,38 @@
+# ═══ Local vault (secrets, overrides, machine-specific) ═══
+local/*
+!local/.gitkeep
+
+# ═══ Generated shell output (rebuilt by generators) ═══
+shells/bash/generated/
+shells/zsh/generated/
+shells/fish/generated/
+shells/nushell/generated/
+
+# ═══ Python generators ═══
+generators/.venv/
+generators/__pycache__/
+generators/src/__pycache__/
+generators/src/emitters/__pycache__/
+generators/tests/__pycache__/
+*.pyc
+*.pyo
+
+# ═══ Nix ═══
+tools/nix/envs/*/result
+.direnv/
+
+# ═══ State ═══
+*.lock
+!flake.lock
+
+# ═══ OS artifacts ═══
+.DS_Store
+Thumbs.db
+*~
+*.swp
+*.swo
+
+# ═══ Editor ═══
+.idea/
+.vscode/
+*.code-workspace

@@ -1,0 +1,28 @@
+# ═══════════════════════════════════════════════════════════════════════════════
+# @file tools/available/bandwhich.toml
+# @description Tool descriptor for bandwhich (Terminal bandwidth utilization tool)
+# @since 1.0.0
+# @version 1.0.0
+# ═══════════════════════════════════════════════════════════════════════════════
+
+[meta]
+name = "bandwhich"
+description = "Terminal bandwidth utilization tool"
+homepage = "https://github.com/imsnif/bandwhich"
+category = "net"
+version = "latest"
+verify = "bandwhich --version"
+
+[[install]]
+method = "cargo"
+platforms = ["darwin", "linux", "wsl", "bsd"]
+crate = "bandwhich"
+
+[[install]]
+method = "brew"
+platforms = ["darwin"]
+package = "bandwhich"
+
+[config]
+symlinks = []
+dependencies = []

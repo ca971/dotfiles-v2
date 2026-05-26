@@ -1,0 +1,39 @@
+# ═══════════════════════════════════════════════════════════════════════════════
+# @file tools/available/openssh.toml
+# @description Tool descriptor for openssh (Secure Shell connectivity tools)
+# @since 1.0.0
+# @version 1.0.0
+# ═══════════════════════════════════════════════════════════════════════════════
+
+[meta]
+name = "openssh"
+description = "Secure Shell connectivity tools"
+homepage = "https://www.openssh.com"
+category = "net"
+version = "latest"
+verify = "ssh -V"
+
+
+[[install]]
+method = "system"
+platforms = ["linux.debian"]
+package = "openssh-client"
+
+[[install]]
+method = "system"
+platforms = ["linux.arch"]
+package = "openssh"
+
+[[install]]
+method = "system"
+platforms = ["linux.fedora"]
+package = "openssh-clients"
+
+
+[[install]]
+method = "system"
+platforms = ["bsd"]
+package = "openssh-portable"
+[config]
+symlinks = []
+dependencies = []

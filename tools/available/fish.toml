@@ -1,0 +1,39 @@
+# ═══════════════════════════════════════════════════════════════════════════════
+# @file tools/available/fish.toml
+# @description Tool descriptor for fish (Friendly interactive shell)
+# @since 1.0.0
+# @version 1.0.0
+# ═══════════════════════════════════════════════════════════════════════════════
+
+[meta]
+name = "fish"
+description = "Friendly interactive shell"
+homepage = "https://fishshell.com"
+category = "shell"
+version = "latest"
+verify = "fish --version"
+
+
+[[install]]
+method = "system"
+platforms = ["linux.debian"]
+package = "fish"
+
+[[install]]
+method = "system"
+platforms = ["linux.arch"]
+package = "fish"
+
+[[install]]
+method = "system"
+platforms = ["linux.fedora"]
+package = "fish"
+
+
+[[install]]
+method = "system"
+platforms = ["bsd"]
+package = "fish"
+[config]
+symlinks = []
+dependencies = []

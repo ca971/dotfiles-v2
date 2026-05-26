@@ -1,0 +1,44 @@
+# ═══════════════════════════════════════════════════════════════════════════════
+# @file tools/available/ansible.toml
+# @description Tool descriptor for ansible (IT automation and configuration management)
+# @since 1.0.0
+# @version 1.0.0
+# ═══════════════════════════════════════════════════════════════════════════════
+
+[meta]
+name = "ansible"
+description = "IT automation and configuration management"
+homepage = "https://github.com/ansible/ansible"
+category = "devops"
+version = "latest"
+verify = "ansible --version"
+
+[[install]]
+method = "mise"
+platforms = ["darwin", "linux", "wsl", "bsd"]
+plugin = "ansible"
+version = "latest"
+
+[[install]]
+method = "brew"
+platforms = ["darwin"]
+package = "ansible"
+
+[[install]]
+method = "system"
+platforms = ["linux.debian"]
+package = "ansible"
+
+[[install]]
+method = "system"
+platforms = ["linux.arch"]
+package = "ansible"
+
+[[install]]
+method = "system"
+platforms = ["linux.fedora"]
+package = "ansible"
+
+[config]
+symlinks = []
+dependencies = []

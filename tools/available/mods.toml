@@ -1,0 +1,29 @@
+# ═══════════════════════════════════════════════════════════════════════════════
+# @file tools/available/mods.toml
+# @description Tool descriptor for mods (AI in the terminal via stdin pipe)
+# @since 1.0.0
+# @version 1.0.0
+# ═══════════════════════════════════════════════════════════════════════════════
+
+[meta]
+name = "mods"
+description = "AI in the terminal via stdin pipe"
+homepage = "https://github.com/charmbracelet/mods"
+category = "ai"
+version = "latest"
+verify = "mods --version"
+
+[[install]]
+method = "mise"
+platforms = ["darwin", "linux", "wsl", "bsd"]
+plugin = "mods"
+version = "latest"
+
+[[install]]
+method = "brew"
+platforms = ["darwin"]
+package = "mods"
+
+[config]
+symlinks = []
+dependencies = []

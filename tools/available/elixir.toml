@@ -1,0 +1,44 @@
+# ═══════════════════════════════════════════════════════════════════════════════
+# @file tools/available/elixir.toml
+# @description Tool descriptor for elixir (Dynamic, functional programming language)
+# @since 1.0.0
+# @version 1.0.0
+# ═══════════════════════════════════════════════════════════════════════════════
+
+[meta]
+name = "elixir"
+description = "Dynamic, functional programming language"
+homepage = "https://elixir-lang.org"
+category = "lang"
+version = "latest"
+verify = "elixir --version"
+
+[[install]]
+method = "mise"
+platforms = ["darwin", "linux", "wsl", "bsd"]
+plugin = "elixir"
+version = "latest"
+
+[[install]]
+method = "brew"
+platforms = ["darwin"]
+package = "elixir"
+
+[[install]]
+method = "system"
+platforms = ["linux.debian"]
+package = "elixir"
+
+[[install]]
+method = "system"
+platforms = ["linux.arch"]
+package = "elixir"
+
+[[install]]
+method = "system"
+platforms = ["linux.fedora"]
+package = "elixir"
+
+[config]
+symlinks = []
+dependencies = []

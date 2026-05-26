@@ -1,0 +1,39 @@
+# ═══════════════════════════════════════════════════════════════════════════════
+# @file tools/available/parallel.toml
+# @description Tool descriptor for parallel (Shell tool for executing jobs in parallel)
+# @since 1.0.0
+# @version 1.0.0
+# ═══════════════════════════════════════════════════════════════════════════════
+
+[meta]
+name = "parallel"
+description = "Shell tool for executing jobs in parallel"
+homepage = "https://www.gnu.org/software/parallel"
+category = "core"
+version = "latest"
+verify = "parallel --version"
+
+
+[[install]]
+method = "system"
+platforms = ["linux.debian"]
+package = "parallel"
+
+[[install]]
+method = "system"
+platforms = ["linux.arch"]
+package = "parallel"
+
+[[install]]
+method = "system"
+platforms = ["linux.fedora"]
+package = "parallel"
+
+
+[[install]]
+method = "system"
+platforms = ["bsd"]
+package = "parallel"
+[config]
+symlinks = []
+dependencies = []

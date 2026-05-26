@@ -1,0 +1,29 @@
+# ═══════════════════════════════════════════════════════════════════════════════
+# @file tools/available/grype.toml
+# @description Tool descriptor for grype (Vulnerability scanner for containers and filesystems)
+# @since 1.0.0
+# @version 1.0.0
+# ═══════════════════════════════════════════════════════════════════════════════
+
+[meta]
+name = "grype"
+description = "Vulnerability scanner for containers and filesystems"
+homepage = "https://github.com/anchore/grype"
+category = "security"
+version = "latest"
+verify = "grype version"
+
+[[install]]
+method = "mise"
+platforms = ["darwin", "linux", "wsl", "bsd"]
+plugin = "grype"
+version = "latest"
+
+[[install]]
+method = "brew"
+platforms = ["darwin"]
+package = "grype"
+
+[config]
+symlinks = []
+dependencies = []

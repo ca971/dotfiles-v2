@@ -1,0 +1,39 @@
+# ═══════════════════════════════════════════════════════════════════════════════
+# @file tools/available/iftop.toml
+# @description Tool descriptor for iftop (Display bandwidth usage on a network interface)
+# @since 1.0.0
+# @version 1.0.0
+# ═══════════════════════════════════════════════════════════════════════════════
+
+[meta]
+name = "iftop"
+description = "Display bandwidth usage on a network interface"
+homepage = "https://www.ex-parrot.com/pdw/iftop"
+category = "net"
+version = "latest"
+verify = "iftop -h 2>&1 | head -1"
+
+
+[[install]]
+method = "system"
+platforms = ["linux.debian"]
+package = "iftop"
+
+[[install]]
+method = "system"
+platforms = ["linux.arch"]
+package = "iftop"
+
+[[install]]
+method = "system"
+platforms = ["linux.fedora"]
+package = "iftop"
+
+
+[[install]]
+method = "system"
+platforms = ["bsd"]
+package = "iftop"
+[config]
+symlinks = []
+dependencies = []

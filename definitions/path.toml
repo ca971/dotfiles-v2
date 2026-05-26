@@ -1,0 +1,129 @@
+# ═══════════════════════════════════════════════════════════════════════════════
+# @file definitions/path.toml
+# @description Single Source of Truth for PATH entries (ordered, conditional)
+# @since 1.0.0
+# @version 1.0.0
+# @see docs/SSOT.md
+#
+# Entries are added in order (first = highest priority).
+# Fields:
+#   path        - Directory to add to PATH
+#   description - Human-readable description
+#   platforms   - [optional] Platform restriction (default: all)
+#   condition   - [optional] Only add if this path exists
+#   prepend     - [optional] Whether to prepend (default: true)
+# ═══════════════════════════════════════════════════════════════════════════════
+
+# ───────────────────────────────────────────────────────────────────────────────
+# User local (highest priority)
+# ───────────────────────────────────────────────────────────────────────────────
+
+[[path]]
+path = "$HOME/.local/bin"
+description = "User local binaries"
+prepend = true
+
+[[path]]
+path = "$DOTFILES_DIR/bin"
+description = "Dotfiles CLI tools"
+prepend = true
+
+# ───────────────────────────────────────────────────────────────────────────────
+# Language runtimes
+# ───────────────────────────────────────────────────────────────────────────────
+
+[[path]]
+path = "$GOPATH/bin"
+description = "Go binaries"
+condition = "$GOPATH"
+prepend = true
+
+[[path]]
+path = "$CARGO_HOME/bin"
+description = "Rust/Cargo binaries"
+condition = "$CARGO_HOME/bin"
+prepend = true
+
+[[path]]
+path = "$HOME/.deno/bin"
+description = "Deno binaries"
+condition = "$HOME/.deno/bin"
+prepend = true
+
+# ───────────────────────────────────────────────────────────────────────────────
+# Tool managers
+# ───────────────────────────────────────────────────────────────────────────────
+
+[[path]]
+path = "$HOME/.mise/shims"
+description = "Mise shims"
+condition = "$HOME/.mise/shims"
+prepend = true
+
+# ───────────────────────────────────────────────────────────────────────────────
+# macOS-specific
+# ───────────────────────────────────────────────────────────────────────────────
+
+[[path]]
+path = "/opt/homebrew/bin"
+description = "Homebrew (Apple Silicon)"
+platforms = ["darwin"]
+condition = "/opt/homebrew/bin"
+prepend = true
+
+[[path]]
+path = "/opt/homebrew/sbin"
+description = "Homebrew sbin (Apple Silicon)"
+platforms = ["darwin"]
+condition = "/opt/homebrew/sbin"
+prepend = true
+
+[[path]]
+path = "/usr/local/bin"
+description = "Homebrew (Intel Mac) / system local"
+prepend = true
+
+# ───────────────────────────────────────────────────────────────────────────────
+# Nix
+# ───────────────────────────────────────────────────────────────────────────────
+
+[[path]]
+path = "$HOME/.nix-profile/bin"
+description = "Nix user profile"
+condition = "$HOME/.nix-profile/bin"
+prepend = true
+
+[[path]]
+path = "/nix/var/nix/profiles/default/bin"
+description = "Nix system profile"
+condition = "/nix/var/nix/profiles/default/bin"
+prepend = true
+
+# ───────────────────────────────────────────────────────────────────────────────
+# System (lowest priority)
+# ───────────────────────────────────────────────────────────────────────────────
+
+[[path]]
+path = "/usr/local/sbin"
+description = "System local sbin"
+prepend = false
+
+[[path]]
+path = "/usr/bin"
+description = "System binaries"
+prepend = false
+
+[[path]]
+path = "/usr/sbin"
+description = "System sbin"
+prepend = false
+
+[[path]]
+path = "/bin"
+description = "Core binaries"
+prepend = false
+
+[[path]]
+path = "/sbin"
+description = "Core sbin"
+prepend = false

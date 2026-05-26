@@ -1,0 +1,42 @@
+# ═══════════════════════════════════════════════════════════════════════════════
+# @file config/git/attributes
+# @description Global git attributes (diff drivers, merge strategies, LFS)
+# @since 1.0.0
+# @version 1.0.0
+# ═══════════════════════════════════════════════════════════════════════════════
+
+# ── Auto-detect text files and normalize line endings ─────────────────────────
+* text=auto
+
+# ── Force LF for shell scripts ────────────────────────────────────────────────
+*.sh text eol=lf
+*.bash text eol=lf
+*.zsh text eol=lf
+*.fish text eol=lf
+
+# ── Binary files ──────────────────────────────────────────────────────────────
+*.png binary
+*.jpg binary
+*.jpeg binary
+*.gif binary
+*.ico binary
+*.pdf binary
+*.zip binary
+*.gz binary
+*.tar binary
+*.7z binary
+*.woff binary
+*.woff2 binary
+*.ttf binary
+*.otf binary
+
+# ── Diff drivers ──────────────────────────────────────────────────────────────
+*.md diff=markdown
+*.toml diff=toml
+*.json diff=json
+*.yaml diff=yaml
+*.yml diff=yaml
+
+# ── LFS tracking (if enabled) ────────────────────────────────────────────────
+# *.psd filter=lfs diff=lfs merge=lfs -text
+# *.ai filter=lfs diff=lfs merge=lfs -text

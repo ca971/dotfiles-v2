@@ -1,0 +1,161 @@
+# ═══════════════════════════════════════════════════════════════════════════════
+# @file definitions/functions.toml
+# @description Single Source of Truth for shell utility functions
+# @since 1.0.0
+# @version 1.0.0
+# @see docs/SSOT.md
+#
+# Each function is defined with a portable body and compiled per shell.
+# Fields:
+#   description - Human-readable description
+#   body        - Function body (POSIX-compatible where possible)
+#   requires    - [optional] Tool dependencies
+#   platforms   - [optional] Platform restriction
+# ═══════════════════════════════════════════════════════════════════════════════
+
+# ───────────────────────────────────────────────────────────────────────────────
+# Directory & Navigation
+# ───────────────────────────────────────────────────────────────────────────────
+
+[functions.mkcd]
+description = "Create a directory and cd into it"
+body = 'mkdir -p "$1" && cd "$1"'
+
+[functions.up]
+description = "Go up N directories (default: 1)"
+body = '''
+local n="${1:-1}"
+local path=""
+for ((i=0; i<n; i++)); do path="../${path}"; done
+cd "${path}" || return 1
+'''
+
+# ───────────────────────────────────────────────────────────────────────────────
+# File search & preview
+# ───────────────────────────────────────────────────────────────────────────────
+
+[functions.fzp]
+description = "Fuzzy find files with preview (bat)"
+requires = ["fzf", "fd", "bat"]
+body = '''
+fd --type f --hidden --follow --exclude .git | \
+  fzf --preview "bat --color=always --style=numbers --line-range=:500 {}" \
+      --bind "enter:become($EDITOR {})"
+'''
+
+[functions.fzd]
+description = "Fuzzy find and cd into directory"
+requires = ["fzf", "fd"]
+body = '''
+local dir
+dir=$(fd --type d --hidden --follow --exclude .git | fzf --preview "eza --tree --icons --level=2 {}")
+[[ -n "$dir" ]] && cd "$dir"
+'''
+
+[functions.fzh]
+description = "Fuzzy search shell history"
+requires = ["fzf"]
+body = '''
+local cmd
+cmd=$(history | fzf --tac --no-sort | sed 's/^[[:space:]]*[0-9]*[[:space:]]*//')
+[[ -n "$cmd" ]] && eval "$cmd"
+'''
+
+# ───────────────────────────────────────────────────────────────────────────────
+# Git helpers
+# ───────────────────────────────────────────────────────────────────────────────
+
+[functions.gbc]
+description = "Git branch cleanup (delete merged branches)"
+body = '''
+git branch --merged | grep -v "\\*\\|main\\|master\\|develop" | xargs -r git branch -d
+'''
+
+[functions.gwip]
+description = "Git work-in-progress commit"
+body = 'git add -A && git commit -m "wip: $(date +%Y-%m-%d_%H:%M)"'
+
+[functions.gundo]
+description = "Undo last git commit (keep changes staged)"
+body = 'git reset --soft HEAD~1'
+
+# ───────────────────────────────────────────────────────────────────────────────
+# System info
+# ───────────────────────────────────────────────────────────────────────────────
+
+[functions.portof]
+description = "Find process using a port"
+body = 'lsof -i :"$1" | grep LISTEN'
+
+[functions.extract]
+description = "Universal archive extractor"
+body = '''
+case "$1" in
+  *.tar.bz2) tar xjf "$1" ;;
+  *.tar.gz)  tar xzf "$1" ;;
+  *.tar.xz)  tar xJf "$1" ;;
+  *.tar.zst) tar --zstd -xf "$1" ;;
+  *.bz2)     bunzip2 "$1" ;;
+  *.rar)     unrar x "$1" ;;
+  *.gz)      gunzip "$1" ;;
+  *.tar)     tar xf "$1" ;;
+  *.tbz2)    tar xjf "$1" ;;
+  *.tgz)     tar xzf "$1" ;;
+  *.zip)     unzip "$1" ;;
+  *.Z)       uncompress "$1" ;;
+  *.7z)      7z x "$1" ;;
+  *)         echo "Cannot extract: $1" >&2; return 1 ;;
+esac
+'''
+
+[functions.serve]
+description = "Start a simple HTTP server in current directory"
+body = 'python3 -m http.server "${1:-8000}"'
+
+# ───────────────────────────────────────────────────────────────────────────────
+# Docker helpers
+# ───────────────────────────────────────────────────────────────────────────────
+
+[functions.dsh]
+description = "Shell into a running Docker container"
+requires = ["docker-cli"]
+body = 'docker exec -it "$1" "${2:-/bin/sh}"'
+
+[functions.dclean]
+description = "Remove all stopped containers and dangling images"
+requires = ["docker-cli"]
+body = '''
+docker container prune -f
+docker image prune -f
+docker volume prune -f
+'''
+
+# ───────────────────────────────────────────────────────────────────────────────
+# Misc utilities
+# ───────────────────────────────────────────────────────────────────────────────
+
+[functions.take]
+description = "Create a directory, cd into it, and init git"
+body = 'mkdir -p "$1" && cd "$1" && git init'
+
+[functions.bak]
+description = "Create a timestamped backup of a file"
+body = 'cp "$1" "${1}.bak.$(date +%Y%m%d_%H%M%S)"'
+
+[functions.path_append]
+description = "Append a directory to PATH if not already present"
+body = '''
+case ":$PATH:" in
+  *:"$1":*) ;;
+  *) export PATH="$PATH:$1" ;;
+esac
+'''
+
+[functions.path_prepend]
+description = "Prepend a directory to PATH if not already present"
+body = '''
+case ":$PATH:" in
+  *:"$1":*) ;;
+  *) export PATH="$1:$PATH" ;;
+esac
+'''

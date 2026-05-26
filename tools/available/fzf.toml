@@ -1,0 +1,44 @@
+# ═══════════════════════════════════════════════════════════════════════════════
+# @file tools/available/fzf.toml
+# @description Tool descriptor for fzf (General-purpose command-line fuzzy finder)
+# @since 1.0.0
+# @version 1.0.0
+# ═══════════════════════════════════════════════════════════════════════════════
+
+[meta]
+name = "fzf"
+description = "General-purpose command-line fuzzy finder"
+homepage = "https://github.com/junegunn/fzf"
+category = "core"
+version = "latest"
+verify = "fzf --version"
+
+[[install]]
+method = "mise"
+platforms = ["darwin", "linux", "wsl", "bsd"]
+plugin = "fzf"
+version = "latest"
+
+[[install]]
+method = "brew"
+platforms = ["darwin"]
+package = "fzf"
+
+[[install]]
+method = "system"
+platforms = ["linux.debian"]
+package = "fzf"
+
+[[install]]
+method = "system"
+platforms = ["linux.arch"]
+package = "fzf"
+
+[[install]]
+method = "system"
+platforms = ["linux.fedora"]
+package = "fzf"
+
+[config]
+symlinks = []
+dependencies = []

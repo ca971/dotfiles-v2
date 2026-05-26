@@ -1,0 +1,29 @@
+# ═══════════════════════════════════════════════════════════════════════════════
+# @file tools/available/terraform.toml
+# @description Tool descriptor for terraform (Infrastructure as code tool)
+# @since 1.0.0
+# @version 1.0.0
+# ═══════════════════════════════════════════════════════════════════════════════
+
+[meta]
+name = "terraform"
+description = "Infrastructure as code tool"
+homepage = "https://www.terraform.io"
+category = "cloud"
+version = "latest"
+verify = "terraform version"
+
+[[install]]
+method = "mise"
+platforms = ["darwin", "linux", "wsl", "bsd"]
+plugin = "terraform"
+version = "latest"
+
+[[install]]
+method = "brew"
+platforms = ["darwin"]
+package = "terraform"
+
+[config]
+symlinks = []
+dependencies = []

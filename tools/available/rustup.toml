@@ -1,0 +1,23 @@
+# ═══════════════════════════════════════════════════════════════════════════════
+# @file tools/available/rustup.toml
+# @description Tool descriptor for rustup (Rust toolchain installer and manager)
+# @since 1.0.0
+# @version 1.0.0
+# ═══════════════════════════════════════════════════════════════════════════════
+
+[meta]
+name = "rustup"
+description = "Rust toolchain installer and manager"
+homepage = "https://rustup.rs"
+category = "lang"
+version = "latest"
+verify = "rustup --version"
+
+[[install]]
+method = "curl"
+platforms = ["darwin", "linux", "wsl", "bsd"]
+command = "curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- -y"
+
+[config]
+symlinks = []
+dependencies = []

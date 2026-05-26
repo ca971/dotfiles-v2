@@ -1,0 +1,29 @@
+# ═══════════════════════════════════════════════════════════════════════════════
+# @file tools/available/gum.toml
+# @description Tool descriptor for gum (Tool for glamorous shell scripts)
+# @since 1.0.0
+# @version 1.0.0
+# ═══════════════════════════════════════════════════════════════════════════════
+
+[meta]
+name = "gum"
+description = "Tool for glamorous shell scripts"
+homepage = "https://github.com/charmbracelet/gum"
+category = "shell"
+version = "latest"
+verify = "gum --version"
+
+[[install]]
+method = "mise"
+platforms = ["darwin", "linux", "wsl", "bsd"]
+plugin = "gum"
+version = "latest"
+
+[[install]]
+method = "brew"
+platforms = ["darwin"]
+package = "gum"
+
+[config]
+symlinks = []
+dependencies = []

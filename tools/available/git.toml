@@ -1,0 +1,39 @@
+# ═══════════════════════════════════════════════════════════════════════════════
+# @file tools/available/git.toml
+# @description Tool descriptor for git (Distributed version control system)
+# @since 1.0.0
+# @version 1.0.0
+# ═══════════════════════════════════════════════════════════════════════════════
+
+[meta]
+name = "git"
+description = "Distributed version control system"
+homepage = "https://git-scm.com"
+category = "core"
+version = "latest"
+verify = "git --version"
+
+
+[[install]]
+method = "system"
+platforms = ["linux.debian"]
+package = "git"
+
+[[install]]
+method = "system"
+platforms = ["linux.arch"]
+package = "git"
+
+[[install]]
+method = "system"
+platforms = ["linux.fedora"]
+package = "git"
+
+
+[[install]]
+method = "system"
+platforms = ["bsd"]
+package = "git"
+[config]
+symlinks = []
+dependencies = []

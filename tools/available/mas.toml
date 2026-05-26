@@ -1,0 +1,29 @@
+# ═══════════════════════════════════════════════════════════════════════════════
+# @file tools/available/mas.toml
+# @description Tool descriptor for mas (Mac App Store CLI)
+# @since 1.0.0
+# @version 1.0.0
+# ═══════════════════════════════════════════════════════════════════════════════
+
+[meta]
+name = "mas"
+description = "Mac App Store CLI"
+homepage = "https://github.com/mas-cli/mas"
+category = "system"
+version = "latest"
+verify = "mas version"
+
+[[install]]
+method = "mise"
+platforms = ["darwin", "linux", "wsl", "bsd"]
+plugin = "mas"
+version = "latest"
+
+[[install]]
+method = "brew"
+platforms = ["darwin"]
+package = "mas"
+
+[config]
+symlinks = []
+dependencies = []

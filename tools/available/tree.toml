@@ -1,0 +1,39 @@
+# ═══════════════════════════════════════════════════════════════════════════════
+# @file tools/available/tree.toml
+# @description Tool descriptor for tree (Display directory structure as a tree)
+# @since 1.0.0
+# @version 1.0.0
+# ═══════════════════════════════════════════════════════════════════════════════
+
+[meta]
+name = "tree"
+description = "Display directory structure as a tree"
+homepage = "https://oldmanprogrammer.net/source.php?dir=projects/tree"
+category = "core"
+version = "latest"
+verify = "tree --version"
+
+
+[[install]]
+method = "system"
+platforms = ["linux.debian"]
+package = "tree"
+
+[[install]]
+method = "system"
+platforms = ["linux.arch"]
+package = "tree"
+
+[[install]]
+method = "system"
+platforms = ["linux.fedora"]
+package = "tree"
+
+
+[[install]]
+method = "system"
+platforms = ["bsd"]
+package = "tree"
+[config]
+symlinks = []
+dependencies = []

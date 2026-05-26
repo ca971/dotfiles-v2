@@ -1,0 +1,29 @@
+# ═══════════════════════════════════════════════════════════════════════════════
+# @file tools/available/argocd.toml
+# @description Tool descriptor for argocd (GitOps continuous delivery for Kubernetes)
+# @since 1.0.0
+# @version 1.0.0
+# ═══════════════════════════════════════════════════════════════════════════════
+
+[meta]
+name = "argocd"
+description = "GitOps continuous delivery for Kubernetes"
+homepage = "https://argo-cd.readthedocs.io"
+category = "cloud"
+version = "latest"
+verify = "argocd version --client"
+
+[[install]]
+method = "mise"
+platforms = ["darwin", "linux", "wsl", "bsd"]
+plugin = "argocd"
+version = "latest"
+
+[[install]]
+method = "brew"
+platforms = ["darwin"]
+package = "argocd"
+
+[config]
+symlinks = []
+dependencies = []

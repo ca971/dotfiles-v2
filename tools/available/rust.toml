@@ -1,0 +1,29 @@
+# ═══════════════════════════════════════════════════════════════════════════════
+# @file tools/available/rust.toml
+# @description Tool descriptor for rust (Systems programming language)
+# @since 1.0.0
+# @version 1.0.0
+# ═══════════════════════════════════════════════════════════════════════════════
+
+[meta]
+name = "rust"
+description = "Systems programming language"
+homepage = "https://www.rust-lang.org"
+category = "lang"
+version = "latest"
+verify = "rustc --version"
+
+[[install]]
+method = "mise"
+platforms = ["darwin", "linux", "wsl", "bsd"]
+plugin = "rust"
+version = "latest"
+
+[[install]]
+method = "brew"
+platforms = ["darwin"]
+package = "rust"
+
+[config]
+symlinks = []
+dependencies = []

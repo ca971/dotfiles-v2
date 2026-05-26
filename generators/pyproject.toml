@@ -1,0 +1,30 @@
+[project]
+name = "dotfiles-generators"
+version = "1.0.0"
+description = "TOML → Shell transpiler for dotfiles SSOT definitions"
+requires-python = ">=3.11"
+dependencies = [
+    "tomli>=2.0; python_version < '3.11'",
+    "pydantic>=2.0",
+    "jinja2>=3.1",
+]
+
+[project.optional-dependencies]
+dev = [
+    "pytest>=8.0",
+    "pytest-cov>=4.0",
+    "ruff>=0.4",
+]
+
+[project.scripts]
+dotfiles-gen = "src.cli:main"
+
+[tool.ruff]
+line-length = 100
+target-version = "py311"
+
+[tool.ruff.lint]
+select = ["E", "F", "W", "I", "N", "UP", "B", "A", "C4", "SIM"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]

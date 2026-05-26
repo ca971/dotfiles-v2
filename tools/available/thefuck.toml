@@ -1,0 +1,29 @@
+# ═══════════════════════════════════════════════════════════════════════════════
+# @file tools/available/thefuck.toml
+# @description Tool descriptor for thefuck (Corrects your previous console command)
+# @since 1.0.0
+# @version 1.0.0
+# ═══════════════════════════════════════════════════════════════════════════════
+
+[meta]
+name = "thefuck"
+description = "Corrects your previous console command"
+homepage = "https://github.com/nvbn/thefuck"
+category = "shell"
+version = "latest"
+verify = "thefuck --version"
+
+[[install]]
+method = "uv"
+platforms = ["darwin", "linux", "wsl", "bsd"]
+package = "thefuck"
+version = "latest"
+
+[[install]]
+method = "brew"
+platforms = ["darwin"]
+package = "thefuck"
+
+[config]
+symlinks = []
+dependencies = []

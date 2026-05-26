@@ -1,0 +1,24 @@
+# ═══════════════════════════════════════════════════════════════════════════════
+# @file tools/available/lazyssh.toml
+# @description Tool descriptor for lazyssh (SSH connection manager with a TUI)
+# @since 1.0.0
+# @version 1.0.0
+# ═══════════════════════════════════════════════════════════════════════════════
+
+[meta]
+name = "lazyssh"
+description = "SSH connection manager with a TUI"
+homepage = "https://github.com/Adembc/lazyssh"
+category = "net"
+version = "latest"
+verify = "lazyssh --version"
+
+[[install]]
+method = "mise"
+platforms = ["darwin", "linux", "wsl", "bsd"]
+plugin = "lazyssh"
+version = "latest"
+
+[config]
+symlinks = []
+dependencies = []

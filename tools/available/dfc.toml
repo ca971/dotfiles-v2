@@ -1,0 +1,43 @@
+# ═══════════════════════════════════════════════════════════════════════════════
+# @file tools/available/dfc.toml
+# @description Tool descriptor for dfc (Display file system space usage with colors)
+# @since 1.0.0
+# @version 1.0.0
+# ═══════════════════════════════════════════════════════════════════════════════
+
+[meta]
+name = "dfc"
+description = "Display file system space usage with colors"
+homepage = "https://github.com/rolinh/dfc"
+category = "system"
+version = "latest"
+verify = "dfc --version"
+
+[[install]]
+method = "brew"
+platforms = ["darwin"]
+package = "dfc"
+
+[[install]]
+method = "system"
+platforms = ["linux.debian"]
+package = "dfc"
+
+[[install]]
+method = "system"
+platforms = ["linux.arch"]
+package = "dfc"
+
+[[install]]
+method = "system"
+platforms = ["linux.fedora"]
+package = "dfc"
+
+
+[[install]]
+method = "system"
+platforms = ["bsd"]
+package = "dfc"
+[config]
+symlinks = []
+dependencies = []

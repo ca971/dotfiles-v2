@@ -1,0 +1,18 @@
+# ═══════════════════════════════════════════════════════════════════════════════
+# @file tools/nix/envs/_template/manifest.toml
+# @description Template manifest for creating new Nix environments
+# @since 1.0.0
+# @version 1.0.0
+#
+# Copy this directory to create a new environment:
+#   cp -r tools/nix/envs/_template tools/nix/envs/myenv
+# ═══════════════════════════════════════════════════════════════════════════════
+
+[meta]
+name = "template"
+description = "Template environment — copy and customize"
+enabled = false
+
+[packages]
+# Add nixpkgs packages here
+# example = "pkgs.example"

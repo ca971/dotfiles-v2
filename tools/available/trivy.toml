@@ -1,0 +1,29 @@
+# ═══════════════════════════════════════════════════════════════════════════════
+# @file tools/available/trivy.toml
+# @description Tool descriptor for trivy (Security scanner for containers and filesystems)
+# @since 1.0.0
+# @version 1.0.0
+# ═══════════════════════════════════════════════════════════════════════════════
+
+[meta]
+name = "trivy"
+description = "Security scanner for containers and filesystems"
+homepage = "https://github.com/aquasecurity/trivy"
+category = "security"
+version = "latest"
+verify = "trivy --version"
+
+[[install]]
+method = "mise"
+platforms = ["darwin", "linux", "wsl", "bsd"]
+plugin = "trivy"
+version = "latest"
+
+[[install]]
+method = "brew"
+platforms = ["darwin"]
+package = "trivy"
+
+[config]
+symlinks = []
+dependencies = []

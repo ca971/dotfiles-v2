@@ -1,0 +1,12 @@
+[meta]
+name = "go"
+description = "Go development toolchain"
+enabled = true
+
+[packages]
+go = "Go compiler and tools"
+gopls = "Go language server"
+delve = "Go debugger"
+golangci-lint = "Go meta linter"
+gotools = "Go auxiliary tools (goimports, etc.)"
+air = "Live reload for Go"

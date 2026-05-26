@@ -1,0 +1,29 @@
+# ═══════════════════════════════════════════════════════════════════════════════
+# @file tools/available/kubectl.toml
+# @description Tool descriptor for kubectl (Kubernetes command-line tool)
+# @since 1.0.0
+# @version 1.0.0
+# ═══════════════════════════════════════════════════════════════════════════════
+
+[meta]
+name = "kubectl"
+description = "Kubernetes command-line tool"
+homepage = "https://kubernetes.io"
+category = "cloud"
+version = "latest"
+verify = "kubectl version --client"
+
+[[install]]
+method = "mise"
+platforms = ["darwin", "linux", "wsl", "bsd"]
+plugin = "kubectl"
+version = "latest"
+
+[[install]]
+method = "brew"
+platforms = ["darwin"]
+package = "kubectl"
+
+[config]
+symlinks = []
+dependencies = []

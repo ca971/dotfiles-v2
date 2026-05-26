@@ -1,0 +1,24 @@
+# ═══════════════════════════════════════════════════════════════════════════════
+# @file tools/available/pyfiglet.toml
+# @description Tool descriptor for pyfiglet (Pure Python FIGlet implementation)
+# @since 1.0.0
+# @version 1.0.0
+# ═══════════════════════════════════════════════════════════════════════════════
+
+[meta]
+name = "pyfiglet"
+description = "Pure Python FIGlet implementation"
+homepage = "https://github.com/pwaller/pyfiglet"
+category = "shell"
+version = "latest"
+verify = "pyfiglet --version"
+
+[[install]]
+method = "uv"
+platforms = ["darwin", "linux", "wsl", "bsd"]
+package = "pyfiglet"
+version = "latest"
+
+[config]
+symlinks = []
+dependencies = []

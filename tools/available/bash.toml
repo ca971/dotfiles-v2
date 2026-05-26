@@ -1,0 +1,39 @@
+# ═══════════════════════════════════════════════════════════════════════════════
+# @file tools/available/bash.toml
+# @description Tool descriptor for bash (GNU Bourne Again SHell)
+# @since 1.0.0
+# @version 1.0.0
+# ═══════════════════════════════════════════════════════════════════════════════
+
+[meta]
+name = "bash"
+description = "GNU Bourne Again SHell"
+homepage = "https://www.gnu.org/software/bash"
+category = "shell"
+version = "latest"
+verify = "bash --version"
+
+
+[[install]]
+method = "system"
+platforms = ["linux.debian"]
+package = "bash"
+
+[[install]]
+method = "system"
+platforms = ["linux.arch"]
+package = "bash"
+
+[[install]]
+method = "system"
+platforms = ["linux.fedora"]
+package = "bash"
+
+
+[[install]]
+method = "system"
+platforms = ["bsd"]
+package = "bash"
+[config]
+symlinks = []
+dependencies = []

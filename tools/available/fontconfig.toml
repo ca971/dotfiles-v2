@@ -1,0 +1,39 @@
+# ═══════════════════════════════════════════════════════════════════════════════
+# @file tools/available/fontconfig.toml
+# @description Tool descriptor for fontconfig (Font configuration and customization library)
+# @since 1.0.0
+# @version 1.0.0
+# ═══════════════════════════════════════════════════════════════════════════════
+
+[meta]
+name = "fontconfig"
+description = "Font configuration and customization library"
+homepage = "https://www.freedesktop.org/wiki/Software/fontconfig"
+category = "system"
+version = "latest"
+verify = "fc-list --version"
+
+
+[[install]]
+method = "system"
+platforms = ["linux.debian"]
+package = "fontconfig"
+
+[[install]]
+method = "system"
+platforms = ["linux.arch"]
+package = "fontconfig"
+
+[[install]]
+method = "system"
+platforms = ["linux.fedora"]
+package = "fontconfig"
+
+
+[[install]]
+method = "system"
+platforms = ["bsd"]
+package = "fontconfig"
+[config]
+symlinks = []
+dependencies = []

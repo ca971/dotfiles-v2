@@ -1,0 +1,24 @@
+# ═══════════════════════════════════════════════════════════════════════════════
+# @file tools/available/hwi.toml
+# @description Tool descriptor for hwi (Hardware wallet interface for Bitcoin)
+# @since 1.0.0
+# @version 1.0.0
+# ═══════════════════════════════════════════════════════════════════════════════
+
+[meta]
+name = "hwi"
+description = "Hardware wallet interface for Bitcoin"
+homepage = "https://github.com/bitcoin-core/HWI"
+category = "crypto"
+version = "latest"
+verify = "hwi --version"
+
+[[install]]
+method = "uv"
+platforms = ["darwin", "linux", "wsl", "bsd"]
+package = "hwi"
+version = "latest"
+
+[config]
+symlinks = []
+dependencies = []

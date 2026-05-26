@@ -1,0 +1,34 @@
+# ═══════════════════════════════════════════════════════════════════════════════
+# @file tools/available/hurl.toml
+# @description Tool descriptor for hurl (Run and test HTTP requests in plain text)
+# @since 1.0.0
+# @version 1.0.0
+# ═══════════════════════════════════════════════════════════════════════════════
+
+[meta]
+name = "hurl"
+description = "Run and test HTTP requests in plain text"
+homepage = "https://hurl.dev"
+category = "net"
+version = "latest"
+verify = "hurl --version"
+
+[[install]]
+method = "mise"
+platforms = ["darwin", "linux", "wsl", "bsd"]
+plugin = "hurl"
+version = "latest"
+
+[[install]]
+method = "cargo"
+platforms = ["darwin", "linux", "wsl", "bsd"]
+crate = "hurl"
+
+[[install]]
+method = "brew"
+platforms = ["darwin"]
+package = "hurl"
+
+[config]
+symlinks = []
+dependencies = []

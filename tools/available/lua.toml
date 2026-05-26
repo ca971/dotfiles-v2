@@ -1,0 +1,44 @@
+# ═══════════════════════════════════════════════════════════════════════════════
+# @file tools/available/lua.toml
+# @description Tool descriptor for lua (Lightweight embeddable scripting language)
+# @since 1.0.0
+# @version 1.0.0
+# ═══════════════════════════════════════════════════════════════════════════════
+
+[meta]
+name = "lua"
+description = "Lightweight embeddable scripting language"
+homepage = "https://www.lua.org"
+category = "lang"
+version = "latest"
+verify = "lua -v"
+
+[[install]]
+method = "mise"
+platforms = ["darwin", "linux", "wsl", "bsd"]
+plugin = "lua"
+version = "latest"
+
+[[install]]
+method = "brew"
+platforms = ["darwin"]
+package = "lua"
+
+[[install]]
+method = "system"
+platforms = ["linux.debian"]
+package = "lua5.4"
+
+[[install]]
+method = "system"
+platforms = ["linux.arch"]
+package = "lua"
+
+[[install]]
+method = "system"
+platforms = ["linux.fedora"]
+package = "lua"
+
+[config]
+symlinks = []
+dependencies = []

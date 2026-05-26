@@ -1,0 +1,29 @@
+# ═══════════════════════════════════════════════════════════════════════════════
+# @file tools/available/coreutils.toml
+# @description Tool descriptor for coreutils (Cross-platform Rust rewrite of GNU coreutils)
+# @since 1.0.0
+# @version 1.0.0
+# ═══════════════════════════════════════════════════════════════════════════════
+
+[meta]
+name = "coreutils"
+description = "Cross-platform Rust rewrite of GNU coreutils"
+homepage = "https://github.com/uutils/coreutils"
+category = "core"
+version = "latest"
+verify = "coreutils --version"
+
+[[install]]
+method = "mise"
+platforms = ["darwin", "linux", "wsl", "bsd"]
+plugin = "coreutils"
+version = "latest"
+
+[[install]]
+method = "cargo"
+platforms = ["darwin", "linux", "wsl", "bsd"]
+crate = "coreutils"
+
+[config]
+symlinks = []
+dependencies = []

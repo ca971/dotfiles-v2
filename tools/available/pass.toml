@@ -1,0 +1,39 @@
+# ═══════════════════════════════════════════════════════════════════════════════
+# @file tools/available/pass.toml
+# @description Tool descriptor for pass (Standard Unix password manager using GPG)
+# @since 1.0.0
+# @version 1.0.0
+# ═══════════════════════════════════════════════════════════════════════════════
+
+[meta]
+name = "pass"
+description = "Standard Unix password manager using GPG"
+homepage = "https://www.passwordstore.org"
+category = "security"
+version = "latest"
+verify = "pass --version"
+
+
+[[install]]
+method = "system"
+platforms = ["linux.debian"]
+package = "pass"
+
+[[install]]
+method = "system"
+platforms = ["linux.arch"]
+package = "pass"
+
+[[install]]
+method = "system"
+platforms = ["linux.fedora"]
+package = "pass"
+
+
+[[install]]
+method = "system"
+platforms = ["bsd"]
+package = "password-store"
+[config]
+symlinks = []
+dependencies = []

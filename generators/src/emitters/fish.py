@@ -1,0 +1,168 @@
+"""
+@file generators/src/emitters/fish.py
+@description Fish-specific code emitter
+@class FishEmitter
+@extends ShellEmitter
+@since 1.0.0
+@version 1.0.0
+"""
+
+from __future__ import annotations
+
+from ..models import (
+    AliasDefinitions,
+    EnvDefinitions,
+    FunctionDefinitions,
+    KeybindingDefinitions,
+    PathDefinitions,
+)
+from .base import ShellEmitter
+
+
+class FishEmitter(ShellEmitter):
+    """
+    @class FishEmitter
+    @extends ShellEmitter
+    @description Generates Fish-compatible shell code from SSOT definitions
+    @since 1.0.0
+    """
+
+    @property
+    def shell_name(self) -> str:
+        return "fish"
+
+    def emit_aliases(self, definitions: AliasDefinitions) -> str:
+        lines: list[str] = []
+        for group_name, aliases in definitions.aliases.items():
+            lines.append(f"\n# --- {group_name} ---")
+            for name, alias in aliases.items():
+                lines.append(f"abbr -a {name} '{alias.command}'")
+        return "\n".join(lines) + "\n"
+
+    def emit_functions(self, definitions: FunctionDefinitions) -> str:
+        lines: list[str] = []
+        for name, func in definitions.functions.items():
+            lines.append(f"\n# {func.description}")
+            lines.append(f"function {name}")
+            body = func.body.strip()
+            fish_body = self._posix_to_fish(body)
+            for body_line in fish_body.splitlines():
+                lines.append(f"    {body_line}")
+            lines.append("end")
+        return "\n".join(lines) + "\n"
+
+    def emit_env(self, definitions: EnvDefinitions) -> str:
+        lines: list[str] = []
+        for group_name, env_vars in definitions.env.items():
+            lines.append(f"\n# --- {group_name} ---")
+            for name, var in env_vars.items():
+                value = var.value.replace("$HOME", "$HOME").replace("$", "$")
+                if var.condition:
+                    lines.append(f"if command -sq {var.condition.split()[-1]}")
+                    lines.append(f"    set -gx {name} \"{value}\"")
+                    lines.append("end")
+                else:
+                    lines.append(f"set -gx {name} \"{value}\"")
+        return "\n".join(lines) + "\n"
+
+    def emit_path(self, definitions: PathDefinitions) -> str:
+        lines: list[str] = ["\n# --- PATH construction ---"]
+        for entry in definitions.path:
+            path_val = entry.path
+            if entry.condition:
+                lines.append(f"if test -d \"{entry.condition}\"")
+                if entry.prepend:
+                    lines.append(f"    fish_add_path --prepend \"{path_val}\"")
+                else:
+                    lines.append(f"    fish_add_path --append \"{path_val}\"")
+                lines.append("end")
+            else:
+                if entry.prepend:
+                    lines.append(f"fish_add_path --prepend \"{path_val}\"")
+                else:
+                    lines.append(f"fish_add_path --append \"{path_val}\"")
+        return "\n".join(lines) + "\n"
+
+    def emit_keybindings(self, definitions: KeybindingDefinitions) -> str:
+        key_map = {
+            "ctrl-a": r"\ca",
+            "ctrl-e": r"\ce",
+            "ctrl-f": r"\cf",
+            "ctrl-g": r"\cg",
+            "ctrl-k": r"\ck",
+            "ctrl-n": r"\cn",
+            "ctrl-r": r"\cr",
+            "ctrl-t": r"\ct",
+            "ctrl-u": r"\cu",
+            "ctrl-w": r"\cw",
+            "ctrl-space": r"\c@",
+            "alt-b": r"\eb",
+            "alt-c": r"\ec",
+            "alt-d": r"\ed",
+            "alt-f": r"\ef",
+        }
+
+        lines: list[str] = ["\n# --- Keybindings ---"]
+        for _group_name, bindings in definitions.keybindings.items():
+            for _name, kb in bindings.items():
+                fish_key = key_map.get(kb.key, kb.key)
+                lines.append(f"bind {fish_key} '{kb.action}'")
+        return "\n".join(lines) + "\n"
+
+    def _wrap_init_check(self, verify_cmd: str, init_cmd: str) -> str:
+        """@description Fish-specific availability check wrapper."""
+        return f"if command -sq {verify_cmd}\n    {init_cmd}\nend"
+
+    @staticmethod
+    def _posix_to_fish(body: str) -> str:
+        """
+        @description POSIX → Fish syntax conversion with word-boundary awareness
+        @param body POSIX shell function body
+        @return Fish-compatible function body
+        """
+        import re
+
+        result = body
+
+        # Variable substitutions
+        result = re.sub(r'\$\{1:-([^}]*)\}', r'(set -q argv[1]; and echo $argv[1]; or echo \1)', result)
+        result = result.replace("$@", "$argv")
+        result = result.replace("$2", "$argv[2]")
+        result = result.replace("$1", "$argv[1]")
+        result = re.sub(r'\bexport\s+', 'set -gx ', result)
+        result = re.sub(r'\blocal\b', 'set -l', result)
+
+        # Conditionals: [[ ... ]] → test ...
+        result = re.sub(r'\[\[\s*(.+?)\s*\]\]\s*;\s*then', r'if test \1', result)
+        result = re.sub(r'\[\[\s*(.+?)\s*\]\]\s*&&\s*then', r'if test \1', result)
+        result = re.sub(
+            r'\[\[\s*!\s+-\s*(.+?)\s+(\S+)\s*\]\]',
+            r'not test -\1 \2',
+            result,
+        )
+        result = re.sub(
+            r'\[\[\s*-\s*(.+?)\s+(\S+)\s*\]\]',
+            r'test -\1 \2',
+            result,
+        )
+
+        # Keywords (order matters: protect elif before replacing fi)
+        result = re.sub(r'\belif\b', '__ELIF_PROTECT__', result)
+        result = re.sub(r'\bfi\b', 'end', result)
+        result = re.sub(r'__ELIF_PROTECT__', 'else if', result)
+        result = re.sub(r'\bdone\b', 'end', result)
+        result = re.sub(r'\besac\b', 'end', result)
+
+        # case → switch
+        result = re.sub(r'\bcase\s+(\S+)\s+in\b', r'switch \1', result)
+        result = re.sub(r'^(\s*)(\S+)\)\s*$', r'\1case \2', result, flags=re.MULTILINE)
+        result = re.sub(r'^(\s*)\*\)\s*$', r'\1case \'*\'', result, flags=re.MULTILINE)
+
+        # for loops
+        result = re.sub(r'\bfor\s+(\S+)\s+in\b', r'for \1 in', result)
+        result = re.sub(r'\bdo\b', '', result)
+
+        # subshell $() stays the same in fish (already compatible)
+        # backtick substitution stays the same
+
+        return result

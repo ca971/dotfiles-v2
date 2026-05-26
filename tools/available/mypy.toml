@@ -1,0 +1,29 @@
+# ═══════════════════════════════════════════════════════════════════════════════
+# @file tools/available/mypy.toml
+# @description Tool descriptor for mypy (Static type checker for Python)
+# @since 1.0.0
+# @version 1.0.0
+# ═══════════════════════════════════════════════════════════════════════════════
+
+[meta]
+name = "mypy"
+description = "Static type checker for Python"
+homepage = "https://mypy-lang.org"
+category = "python"
+version = "latest"
+verify = "mypy --version"
+
+[[install]]
+method = "uv"
+platforms = ["darwin", "linux", "wsl", "bsd"]
+package = "mypy"
+version = "latest"
+
+[[install]]
+method = "brew"
+platforms = ["darwin"]
+package = "mypy"
+
+[config]
+symlinks = []
+dependencies = []

@@ -1,0 +1,39 @@
+# ═══════════════════════════════════════════════════════════════════════════════
+# @file tools/available/p7zip.toml
+# @description Tool descriptor for p7zip (Command-line version of 7-Zip)
+# @since 1.0.0
+# @version 1.0.0
+# ═══════════════════════════════════════════════════════════════════════════════
+
+[meta]
+name = "p7zip"
+description = "Command-line version of 7-Zip"
+homepage = "https://github.com/p7zip-project/p7zip"
+category = "core"
+version = "latest"
+verify = "7z --help | head -1"
+
+
+[[install]]
+method = "system"
+platforms = ["linux.debian"]
+package = "p7zip-full"
+
+[[install]]
+method = "system"
+platforms = ["linux.arch"]
+package = "p7zip"
+
+[[install]]
+method = "system"
+platforms = ["linux.fedora"]
+package = "p7zip"
+
+
+[[install]]
+method = "system"
+platforms = ["bsd"]
+package = "p7zip"
+[config]
+symlinks = []
+dependencies = []

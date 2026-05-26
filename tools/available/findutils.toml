@@ -1,0 +1,39 @@
+# ═══════════════════════════════════════════════════════════════════════════════
+# @file tools/available/findutils.toml
+# @description Tool descriptor for findutils (GNU find, xargs, and locate utilities)
+# @since 1.0.0
+# @version 1.0.0
+# ═══════════════════════════════════════════════════════════════════════════════
+
+[meta]
+name = "findutils"
+description = "GNU find, xargs, and locate utilities"
+homepage = "https://www.gnu.org/software/findutils"
+category = "core"
+version = "latest"
+verify = "find --version"
+
+
+[[install]]
+method = "system"
+platforms = ["linux.debian"]
+package = "findutils"
+
+[[install]]
+method = "system"
+platforms = ["linux.arch"]
+package = "findutils"
+
+[[install]]
+method = "system"
+platforms = ["linux.fedora"]
+package = "findutils"
+
+
+[[install]]
+method = "system"
+platforms = ["bsd"]
+package = "findutils"
+[config]
+symlinks = []
+dependencies = []

@@ -1,0 +1,44 @@
+# ═══════════════════════════════════════════════════════════════════════════════
+# @file tools/available/make.toml
+# @description Tool descriptor for make (Build automation tool)
+# @since 1.0.0
+# @version 1.0.0
+# ═══════════════════════════════════════════════════════════════════════════════
+
+[meta]
+name = "make"
+description = "Build automation tool"
+homepage = "https://www.gnu.org/software/make"
+category = "dev"
+version = "latest"
+verify = "make --version"
+
+[[install]]
+method = "mise"
+platforms = ["darwin", "linux", "wsl", "bsd"]
+plugin = "make"
+version = "latest"
+
+[[install]]
+method = "brew"
+platforms = ["darwin"]
+package = "make"
+
+[[install]]
+method = "system"
+platforms = ["linux.debian"]
+package = "make"
+
+[[install]]
+method = "system"
+platforms = ["linux.arch"]
+package = "make"
+
+[[install]]
+method = "system"
+platforms = ["linux.fedora"]
+package = "make"
+
+[config]
+symlinks = []
+dependencies = []

@@ -1,0 +1,38 @@
+# ═══════════════════════════════════════════════════════════════════════════════
+# @file tools/available/fq.toml
+# @description Tool descriptor for fq (jq for binary formats)
+# @since 1.0.0
+# @version 1.0.0
+# ═══════════════════════════════════════════════════════════════════════════════
+
+[meta]
+name = "fq"
+description = "jq for binary formats"
+homepage = "https://github.com/wader/fq"
+category = "dev"
+version = "latest"
+verify = "fq --version"
+
+[[install]]
+method = "brew"
+platforms = ["darwin"]
+package = "fq"
+
+
+[[install]]
+method = "system"
+platforms = ["linux.debian"]
+package = "fq"
+
+[[install]]
+method = "system"
+platforms = ["linux.arch"]
+package = "fq"
+
+[[install]]
+method = "system"
+platforms = ["bsd"]
+package = "fq"
+[config]
+symlinks = []
+dependencies = []

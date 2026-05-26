@@ -1,0 +1,39 @@
+# ═══════════════════════════════════════════════════════════════════════════════
+# @file tools/available/pwgen.toml
+# @description Tool descriptor for pwgen (Password generator)
+# @since 1.0.0
+# @version 1.0.0
+# ═══════════════════════════════════════════════════════════════════════════════
+
+[meta]
+name = "pwgen"
+description = "Password generator"
+homepage = "https://sourceforge.net/projects/pwgen"
+category = "security"
+version = "latest"
+verify = "pwgen --version"
+
+
+[[install]]
+method = "system"
+platforms = ["linux.debian"]
+package = "pwgen"
+
+[[install]]
+method = "system"
+platforms = ["linux.arch"]
+package = "pwgen"
+
+[[install]]
+method = "system"
+platforms = ["linux.fedora"]
+package = "pwgen"
+
+
+[[install]]
+method = "system"
+platforms = ["bsd"]
+package = "pwgen"
+[config]
+symlinks = []
+dependencies = []

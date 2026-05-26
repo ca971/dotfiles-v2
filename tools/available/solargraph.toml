@@ -1,0 +1,28 @@
+# ═══════════════════════════════════════════════════════════════════════════════
+# @file tools/available/solargraph.toml
+# @description Tool descriptor for solargraph (Ruby language server with IntelliSense)
+# @since 1.0.0
+# @version 1.0.0
+# ═══════════════════════════════════════════════════════════════════════════════
+
+[meta]
+name = "solargraph"
+description = "Ruby language server with IntelliSense"
+homepage = "https://solargraph.org"
+category = "ruby"
+version = "latest"
+verify = "solargraph --version"
+
+[[install]]
+method = "brew"
+platforms = ["darwin"]
+package = "solargraph"
+
+
+[[install]]
+method = "system"
+platforms = ["linux.debian"]
+package = "solargraph"
+[config]
+symlinks = []
+dependencies = []

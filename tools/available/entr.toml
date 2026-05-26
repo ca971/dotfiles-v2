@@ -1,0 +1,43 @@
+# ═══════════════════════════════════════════════════════════════════════════════
+# @file tools/available/entr.toml
+# @description Tool descriptor for entr (Run commands when files change)
+# @since 1.0.0
+# @version 1.0.0
+# ═══════════════════════════════════════════════════════════════════════════════
+
+[meta]
+name = "entr"
+description = "Run commands when files change"
+homepage = "https://eradman.com/entrproject"
+category = "dev"
+version = "latest"
+verify = "entr 2>&1 | head -1"
+
+[[install]]
+method = "brew"
+platforms = ["darwin"]
+package = "entr"
+
+[[install]]
+method = "system"
+platforms = ["linux.debian"]
+package = "entr"
+
+[[install]]
+method = "system"
+platforms = ["linux.arch"]
+package = "entr"
+
+[[install]]
+method = "system"
+platforms = ["linux.fedora"]
+package = "entr"
+
+
+[[install]]
+method = "system"
+platforms = ["bsd"]
+package = "entr"
+[config]
+symlinks = []
+dependencies = []

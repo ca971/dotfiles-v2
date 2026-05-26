@@ -1,0 +1,29 @@
+# ═══════════════════════════════════════════════════════════════════════════════
+# @file tools/available/lazygit.toml
+# @description Tool descriptor for lazygit (Simple terminal UI for git commands)
+# @since 1.0.0
+# @version 1.0.0
+# ═══════════════════════════════════════════════════════════════════════════════
+
+[meta]
+name = "lazygit"
+description = "Simple terminal UI for git commands"
+homepage = "https://github.com/jesseduffield/lazygit"
+category = "dev"
+version = "latest"
+verify = "lazygit --version"
+
+[[install]]
+method = "mise"
+platforms = ["darwin", "linux", "wsl", "bsd"]
+plugin = "lazygit"
+version = "latest"
+
+[[install]]
+method = "brew"
+platforms = ["darwin"]
+package = "lazygit"
+
+[config]
+symlinks = []
+dependencies = []

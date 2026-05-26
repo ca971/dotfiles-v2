@@ -1,0 +1,29 @@
+# ═══════════════════════════════════════════════════════════════════════════════
+# @file tools/available/speedtest-cli.toml
+# @description Tool descriptor for speedtest-cli (Internet bandwidth speed test CLI)
+# @since 1.0.0
+# @version 1.0.0
+# ═══════════════════════════════════════════════════════════════════════════════
+
+[meta]
+name = "speedtest-cli"
+description = "Internet bandwidth speed test CLI"
+homepage = "https://github.com/sivel/speedtest-cli"
+category = "net"
+version = "latest"
+verify = "speedtest-cli --version"
+
+[[install]]
+method = "uv"
+platforms = ["darwin", "linux", "wsl", "bsd"]
+package = "speedtest-cli"
+version = "latest"
+
+[[install]]
+method = "brew"
+platforms = ["darwin"]
+package = "speedtest-cli"
+
+[config]
+symlinks = []
+dependencies = []

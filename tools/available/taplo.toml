@@ -1,0 +1,29 @@
+# ═══════════════════════════════════════════════════════════════════════════════
+# @file tools/available/taplo.toml
+# @description Tool descriptor for taplo (TOML toolkit with LSP, formatter, and validator)
+# @since 1.0.0
+# @version 1.0.0
+# ═══════════════════════════════════════════════════════════════════════════════
+
+[meta]
+name = "taplo"
+description = "TOML toolkit with LSP, formatter, and validator"
+homepage = "https://taplo.tamasfe.dev"
+category = "dev"
+version = "latest"
+verify = "taplo --version"
+
+[[install]]
+method = "mise"
+platforms = ["darwin", "linux", "wsl", "bsd"]
+plugin = "taplo"
+version = "latest"
+
+[[install]]
+method = "cargo"
+platforms = ["darwin", "linux", "wsl", "bsd"]
+crate = "taplo-cli"
+
+[config]
+symlinks = []
+dependencies = []

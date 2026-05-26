@@ -1,0 +1,194 @@
+# ═══════════════════════════════════════════════════════════════════════════════
+# @file definitions/profiles.toml
+# @description Machine profiles — tool sets grouped by usage pattern
+# @since 1.0.0
+# @version 1.0.0
+# @see lib/hotload/engine.sh
+#
+# Each profile defines a curated list of tools for a specific machine type.
+# Profiles can extend other profiles to inherit their tool sets.
+# The engine resolves the full chain and installs all required tools.
+# ═══════════════════════════════════════════════════════════════════════════════
+
+[meta]
+description = "Machine profiles — tool sets by usage pattern"
+
+# ───────────────────────────────────────────────────────────────────────────────
+# Minimal — Essential CLI tools for any machine
+# ───────────────────────────────────────────────────────────────────────────────
+
+[profiles.minimal]
+description = "Essential CLI tools for any machine"
+tools = [
+    "bash",
+    "curl",
+    "git",
+    "jq",
+    "fd",
+    "ripgrep",
+    "fzf",
+    "zoxide",
+    "bat",
+    "eza",
+    "starship",
+    "zsh",
+    "tree",
+    "wget",
+    "rsync",
+    "gnupg",
+    "openssh",
+    "unzip",
+    "xz",
+    "gzip",
+]
+
+# ───────────────────────────────────────────────────────────────────────────────
+# Dev — Developer workstation
+# ───────────────────────────────────────────────────────────────────────────────
+
+[profiles.dev]
+description = "Developer workstation"
+extends = "minimal"
+tools = [
+    "neovim",
+    "lazygit",
+    "gh",
+    "just",
+    "direnv",
+    "tmux",
+    "starship",
+    "git-delta",
+    "difftastic",
+    "shellcheck",
+    "ruff",
+    "typos",
+    "pre-commit",
+    "deno",
+    "nodejs",
+    "python",
+    "go",
+    "rust",
+    "docker-cli",
+    "docker-compose",
+    "commitizen",
+    "ast-grep",
+    "hyperfine",
+    "tokei",
+    "onefetch",
+    "dust",
+    "duf",
+    "procs",
+    "atuin",
+    "navi",
+    "tealdeer",
+    "lsd",
+    "broot",
+    "yazi",
+]
+
+# ───────────────────────────────────────────────────────────────────────────────
+# DevOps — DevOps and cloud engineering
+# ───────────────────────────────────────────────────────────────────────────────
+
+[profiles.devops]
+description = "DevOps and cloud engineering"
+extends = "dev"
+tools = [
+    "kubectl",
+    "kubectx",
+    "k9s",
+    "helm",
+    "kustomize",
+    "argocd",
+    "terraform",
+    "docker-compose",
+    "dive",
+    "lazydocker",
+    "trivy",
+    "grype",
+    "cosign",
+    "syft",
+    "sops",
+    "stern",
+    "awscli",
+    "doctl",
+    "colima",
+    "lima",
+    "podman",
+]
+
+# ───────────────────────────────────────────────────────────────────────────────
+# Data — Data engineering and analysis
+# ───────────────────────────────────────────────────────────────────────────────
+
+[profiles.data]
+description = "Data engineering and analysis"
+extends = "dev"
+tools = [
+    "duckdb",
+    "sqlite",
+    "sqlite-utils",
+    "datasette",
+    "miller",
+    "xsv",
+    "csvlens",
+    "jnv",
+    "visidata",
+    "python",
+    "ipython",
+    "httpie",
+    "xh",
+]
+
+# ───────────────────────────────────────────────────────────────────────────────
+# Server — Headless server / remote machine
+# ───────────────────────────────────────────────────────────────────────────────
+
+[profiles.server]
+description = "Headless server / remote machine"
+extends = "minimal"
+tools = [
+    "htop",
+    "btop",
+    "ncdu",
+    "tmux",
+    "mtr",
+    "nmap",
+    "iftop",
+    "neovim",
+    "tig",
+    "lnav",
+    "parallel",
+    "entr",
+]
+
+# ───────────────────────────────────────────────────────────────────────────────
+# Full — Everything — full workstation setup
+# ───────────────────────────────────────────────────────────────────────────────
+
+[profiles.full]
+description = "Everything — full workstation setup"
+extends = "devops"
+tools = [
+    "duckdb",
+    "sqlite-utils",
+    "datasette",
+    "miller",
+    "visidata",
+    "ollama",
+    "aichat",
+    "llm",
+    "mods",
+    "vhs",
+    "gum",
+    "glow",
+    "chafa",
+    "ffmpeg",
+    "imagemagick",
+    "yt-dlp",
+    "gallery-dl",
+    "hugo",
+    "presenterm",
+    "neovide",
+    "topgrade",
+]

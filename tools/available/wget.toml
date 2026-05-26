@@ -1,0 +1,39 @@
+# ═══════════════════════════════════════════════════════════════════════════════
+# @file tools/available/wget.toml
+# @description Tool descriptor for wget (Network downloader supporting HTTP/HTTPS/FTP)
+# @since 1.0.0
+# @version 1.0.0
+# ═══════════════════════════════════════════════════════════════════════════════
+
+[meta]
+name = "wget"
+description = "Network downloader supporting HTTP/HTTPS/FTP"
+homepage = "https://www.gnu.org/software/wget"
+category = "net"
+version = "latest"
+verify = "wget --version"
+
+
+[[install]]
+method = "system"
+platforms = ["linux.debian"]
+package = "wget"
+
+[[install]]
+method = "system"
+platforms = ["linux.arch"]
+package = "wget"
+
+[[install]]
+method = "system"
+platforms = ["linux.fedora"]
+package = "wget"
+
+
+[[install]]
+method = "system"
+platforms = ["bsd"]
+package = "wget"
+[config]
+symlinks = []
+dependencies = []

@@ -1,0 +1,39 @@
+# ═══════════════════════════════════════════════════════════════════════════════
+# @file tools/available/pstree.toml
+# @description Tool descriptor for pstree (Display running processes as a tree)
+# @since 1.0.0
+# @version 1.0.0
+# ═══════════════════════════════════════════════════════════════════════════════
+
+[meta]
+name = "pstree"
+description = "Display running processes as a tree"
+homepage = "https://gitlab.com/psmisc/psmisc"
+category = "system"
+version = "latest"
+verify = "pstree --version"
+
+
+[[install]]
+method = "system"
+platforms = ["linux.debian"]
+package = "psmisc"
+
+[[install]]
+method = "system"
+platforms = ["linux.arch"]
+package = "psmisc"
+
+[[install]]
+method = "system"
+platforms = ["linux.fedora"]
+package = "psmisc"
+
+
+[[install]]
+method = "system"
+platforms = ["bsd"]
+package = "psmisc"
+[config]
+symlinks = []
+dependencies = []

@@ -1,0 +1,39 @@
+# ═══════════════════════════════════════════════════════════════════════════════
+# @file tools/available/tcpdump.toml
+# @description Tool descriptor for tcpdump (Network traffic analyzer)
+# @since 1.0.0
+# @version 1.0.0
+# ═══════════════════════════════════════════════════════════════════════════════
+
+[meta]
+name = "tcpdump"
+description = "Network traffic analyzer"
+homepage = "https://www.tcpdump.org"
+category = "net"
+version = "latest"
+verify = "tcpdump --version"
+
+
+[[install]]
+method = "system"
+platforms = ["linux.debian"]
+package = "tcpdump"
+
+[[install]]
+method = "system"
+platforms = ["linux.arch"]
+package = "tcpdump"
+
+[[install]]
+method = "system"
+platforms = ["linux.fedora"]
+package = "tcpdump"
+
+
+[[install]]
+method = "system"
+platforms = ["bsd"]
+package = "tcpdump"
+[config]
+symlinks = []
+dependencies = []

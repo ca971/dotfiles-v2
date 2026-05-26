@@ -1,0 +1,34 @@
+# ═══════════════════════════════════════════════════════════════════════════════
+# @file tools/available/yazi.toml
+# @description Tool descriptor for yazi (Blazing fast terminal file manager)
+# @since 1.0.0
+# @version 1.0.0
+# ═══════════════════════════════════════════════════════════════════════════════
+
+[meta]
+name = "yazi"
+description = "Blazing fast terminal file manager"
+homepage = "https://github.com/sxyazi/yazi"
+category = "core"
+version = "latest"
+verify = "yazi --version"
+
+[[install]]
+method = "mise"
+platforms = ["darwin", "linux", "wsl", "bsd"]
+plugin = "yazi"
+version = "latest"
+
+[[install]]
+method = "cargo"
+platforms = ["darwin", "linux", "wsl", "bsd"]
+crate = "yazi-fm"
+
+[[install]]
+method = "brew"
+platforms = ["darwin"]
+package = "yazi"
+
+[config]
+symlinks = []
+dependencies = []

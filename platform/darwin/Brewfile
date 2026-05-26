@@ -1,0 +1,36 @@
+# ═══════════════════════════════════════════════════════════════════════════════
+# @file platform/darwin/Brewfile
+# @description Declarative macOS-only packages (fallback for tools not in mise/uv)
+# @since 1.0.0
+# @version 1.0.0
+#
+# IMPORTANT: This file is for macOS-ONLY tools that cannot be installed
+# cross-platform via mise, uv, or curl. Most tools belong in tools/available/.
+# ═══════════════════════════════════════════════════════════════════════════════
+
+# ───────────────────────────────────────────────────────────────────────────────
+# Taps
+# ───────────────────────────────────────────────────────────────────────────────
+tap "homebrew/cask-fonts"
+
+# ───────────────────────────────────────────────────────────────────────────────
+# Formulae (macOS-only or best-experience-on-mac)
+# ───────────────────────────────────────────────────────────────────────────────
+brew "mas"              # Mac App Store CLI (macOS only)
+brew "pngpaste"         # Paste PNG from clipboard (macOS only)
+brew "colima"           # Container runtime for macOS (Lima-based)
+brew "pinentry-mac"     # GPG pinentry for macOS keychain
+
+# ───────────────────────────────────────────────────────────────────────────────
+# Casks (GUI applications)
+# ───────────────────────────────────────────────────────────────────────────────
+cask "wezterm"          # GPU-accelerated terminal
+cask "neovide"          # Neovim GUI
+cask "font-jetbrains-mono-nerd-font"
+cask "font-fira-code-nerd-font"
+cask "font-hack-nerd-font"
+
+# ───────────────────────────────────────────────────────────────────────────────
+# Mac App Store (via mas)
+# ───────────────────────────────────────────────────────────────────────────────
+# mas "Xcode", id: 497799835

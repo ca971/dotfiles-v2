@@ -1,0 +1,39 @@
+# ═══════════════════════════════════════════════════════════════════════════════
+# @file tools/available/cppcheck.toml
+# @description Tool descriptor for cppcheck (Static analysis tool for C/C++ code)
+# @since 1.0.0
+# @version 1.0.0
+# ═══════════════════════════════════════════════════════════════════════════════
+
+[meta]
+name = "cppcheck"
+description = "Static analysis tool for C/C++ code"
+homepage = "https://cppcheck.sourceforge.io"
+category = "dev"
+version = "latest"
+verify = "cppcheck --version"
+
+
+[[install]]
+method = "system"
+platforms = ["linux.debian"]
+package = "cppcheck"
+
+[[install]]
+method = "system"
+platforms = ["linux.arch"]
+package = "cppcheck"
+
+[[install]]
+method = "system"
+platforms = ["linux.fedora"]
+package = "cppcheck"
+
+
+[[install]]
+method = "system"
+platforms = ["bsd"]
+package = "cppcheck"
+[config]
+symlinks = []
+dependencies = []

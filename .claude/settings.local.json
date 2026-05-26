@@ -1,0 +1,12 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(docker run *)",
+      "Bash(DOCKER_BUILDKIT=0 docker build -f tests/e2e/Dockerfile.interactive -t dotfiles-test .)",
+      "Bash(docker build *)",
+      "Bash(mise registry *)",
+      "Bash(awk '{print $1}')",
+      "Read(//tmp/**)"
+    ]
+  }
+}

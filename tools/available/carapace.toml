@@ -1,0 +1,24 @@
+# ═══════════════════════════════════════════════════════════════════════════════
+# @file tools/available/carapace.toml
+# @description Tool descriptor for carapace (Multi-shell completion engine)
+# @since 1.0.0
+# @version 1.0.0
+# ═══════════════════════════════════════════════════════════════════════════════
+
+[meta]
+name = "carapace"
+description = "Multi-shell completion engine"
+homepage = "https://github.com/carapace-sh/carapace-bin"
+category = "shell"
+version = "latest"
+verify = "carapace --version"
+
+[[install]]
+method = "mise"
+platforms = ["darwin", "linux", "wsl", "bsd"]
+plugin = "carapace"
+version = "latest"
+
+[config]
+symlinks = []
+dependencies = []

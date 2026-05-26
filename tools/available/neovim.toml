@@ -1,0 +1,44 @@
+# ═══════════════════════════════════════════════════════════════════════════════
+# @file tools/available/neovim.toml
+# @description Tool descriptor for neovim (Hyperextensible Vim-based text editor)
+# @since 1.0.0
+# @version 1.0.0
+# ═══════════════════════════════════════════════════════════════════════════════
+
+[meta]
+name = "neovim"
+description = "Hyperextensible Vim-based text editor"
+homepage = "https://neovim.io"
+category = "editor"
+version = "latest"
+verify = "nvim --version"
+
+[[install]]
+method = "mise"
+platforms = ["darwin", "linux", "wsl", "bsd"]
+plugin = "neovim"
+version = "latest"
+
+[[install]]
+method = "brew"
+platforms = ["darwin"]
+package = "neovim"
+
+[[install]]
+method = "system"
+platforms = ["linux.debian"]
+package = "neovim"
+
+[[install]]
+method = "system"
+platforms = ["linux.arch"]
+package = "neovim"
+
+[[install]]
+method = "system"
+platforms = ["linux.fedora"]
+package = "neovim"
+
+[config]
+symlinks = []
+dependencies = []

@@ -1,0 +1,29 @@
+# ═══════════════════════════════════════════════════════════════════════════════
+# @file tools/available/colima.toml
+# @description Tool descriptor for colima (Container runtimes on macOS with minimal setup)
+# @since 1.0.0
+# @version 1.0.0
+# ═══════════════════════════════════════════════════════════════════════════════
+
+[meta]
+name = "colima"
+description = "Container runtimes on macOS with minimal setup"
+homepage = "https://github.com/abiosoft/colima"
+category = "containers"
+version = "latest"
+verify = "colima version"
+
+[[install]]
+method = "mise"
+platforms = ["darwin", "linux", "wsl", "bsd"]
+plugin = "colima"
+version = "latest"
+
+[[install]]
+method = "brew"
+platforms = ["darwin"]
+package = "colima"
+
+[config]
+symlinks = []
+dependencies = []

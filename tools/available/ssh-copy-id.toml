@@ -1,0 +1,39 @@
+# ═══════════════════════════════════════════════════════════════════════════════
+# @file tools/available/ssh-copy-id.toml
+# @description Tool descriptor for ssh-copy-id (Install SSH keys on a remote server)
+# @since 1.0.0
+# @version 1.0.0
+# ═══════════════════════════════════════════════════════════════════════════════
+
+[meta]
+name = "ssh-copy-id"
+description = "Install SSH keys on a remote server"
+homepage = "https://www.openssh.com"
+category = "net"
+version = "latest"
+verify = "ssh-copy-id 2>&1 | head -1"
+
+
+[[install]]
+method = "system"
+platforms = ["linux.debian"]
+package = "openssh-client"
+
+[[install]]
+method = "system"
+platforms = ["linux.arch"]
+package = "openssh"
+
+[[install]]
+method = "system"
+platforms = ["linux.fedora"]
+package = "openssh-clients"
+
+
+[[install]]
+method = "system"
+platforms = ["bsd"]
+package = "openssh-portable"
+[config]
+symlinks = []
+dependencies = []

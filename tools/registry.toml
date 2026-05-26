@@ -1,0 +1,29 @@
+# ═══════════════════════════════════════════════════════════════════════════════
+# @file tools/registry.toml
+# @description Master index of all tools (categories, tags, dependencies)
+# @since 1.0.0
+# @version 1.0.0
+# @see docs/HOTLOAD.md
+#
+# This file provides metadata for grouping and filtering tools.
+# The actual install definitions are in tools/available/<name>.toml
+# ═══════════════════════════════════════════════════════════════════════════════
+
+[categories]
+core = "Essential CLI utilities (bat, eza, fd, ripgrep, jq)"
+runtime = "Language runtimes and version managers (go, node, python, rust)"
+dev = "Development tools (git, neovim, just, biome, shellcheck)"
+containers = "Container and orchestration (docker, k9s, kubectl, helm)"
+network = "Network utilities (curl, xh, doggo, gping)"
+security = "Security and encryption (age, sops, gnupg, keychain)"
+data = "Data processing (datasette, sqlite-utils, visidata, jq, yq)"
+media = "Media tools (ffmpeg, yt-dlp, gallery-dl, imagemagick)"
+system = "System monitoring (btop, procs, dust, duf, bandwhich)"
+navigation = "File navigation and search (yazi, fzf, zoxide, broot)"
+cloud = "Cloud and DevOps (terraform, awscli, doctl)"
+editor = "Editors and IDE tools (neovim, stylua, taplo)"
+misc = "Miscellaneous utilities"
+
+[tags]
+minimal = ["bat", "eza", "fd", "fzf", "ripgrep", "jq", "git", "starship", "zoxide"]
+full = "all"

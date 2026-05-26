@@ -1,0 +1,29 @@
+# ═══════════════════════════════════════════════════════════════════════════════
+# @file tools/available/hadolint.toml
+# @description Tool descriptor for hadolint (Dockerfile linter and best practice checker)
+# @since 1.0.0
+# @version 1.0.0
+# ═══════════════════════════════════════════════════════════════════════════════
+
+[meta]
+name = "hadolint"
+description = "Dockerfile linter and best practice checker"
+homepage = "https://github.com/hadolint/hadolint"
+category = "containers"
+version = "latest"
+verify = "hadolint --version"
+
+[[install]]
+method = "mise"
+platforms = ["darwin", "linux", "wsl", "bsd"]
+plugin = "hadolint"
+version = "latest"
+
+[[install]]
+method = "brew"
+platforms = ["darwin"]
+package = "hadolint"
+
+[config]
+symlinks = []
+dependencies = []

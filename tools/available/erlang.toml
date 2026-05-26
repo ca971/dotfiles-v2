@@ -1,0 +1,34 @@
+# ═══════════════════════════════════════════════════════════════════════════════
+# @file tools/available/erlang.toml
+# @description Tool descriptor for erlang (Programming language for concurrent systems)
+# @since 1.0.0
+# @version 1.0.0
+# ═══════════════════════════════════════════════════════════════════════════════
+
+[meta]
+name = "erlang"
+description = "Programming language for concurrent systems"
+homepage = "https://www.erlang.org"
+category = "lang"
+version = "latest"
+verify = "erl -noshell -eval 'halt(0)'"
+
+[[install]]
+method = "mise"
+platforms = ["darwin", "linux", "wsl", "bsd"]
+plugin = "erlang"
+version = "latest"
+
+[[install]]
+method = "brew"
+platforms = ["darwin"]
+package = "erlang"
+
+[[install]]
+method = "system"
+platforms = ["linux.debian"]
+package = "erlang"
+
+[config]
+symlinks = []
+dependencies = []

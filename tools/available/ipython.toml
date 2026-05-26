@@ -1,0 +1,29 @@
+# ═══════════════════════════════════════════════════════════════════════════════
+# @file tools/available/ipython.toml
+# @description Tool descriptor for ipython (Enhanced interactive Python shell)
+# @since 1.0.0
+# @version 1.0.0
+# ═══════════════════════════════════════════════════════════════════════════════
+
+[meta]
+name = "ipython"
+description = "Enhanced interactive Python shell"
+homepage = "https://ipython.org"
+category = "python"
+version = "latest"
+verify = "ipython --version"
+
+[[install]]
+method = "uv"
+platforms = ["darwin", "linux", "wsl", "bsd"]
+package = "ipython"
+version = "latest"
+
+[[install]]
+method = "brew"
+platforms = ["darwin"]
+package = "ipython"
+
+[config]
+symlinks = []
+dependencies = []

@@ -1,0 +1,24 @@
+# ═══════════════════════════════════════════════════════════════════════════════
+# @file tools/available/ckcc-protocol.toml
+# @description Tool descriptor for ckcc-protocol (Coldcard USB protocol library and CLI)
+# @since 1.0.0
+# @version 1.0.0
+# ═══════════════════════════════════════════════════════════════════════════════
+
+[meta]
+name = "ckcc-protocol"
+description = "Coldcard USB protocol library and CLI"
+homepage = "https://github.com/Coldcard/ckcc-protocol"
+category = "crypto"
+version = "latest"
+verify = "ckcc --version"
+
+[[install]]
+method = "uv"
+platforms = ["darwin", "linux", "wsl", "bsd"]
+package = "ckcc-protocol"
+version = "latest"
+
+[config]
+symlinks = []
+dependencies = []

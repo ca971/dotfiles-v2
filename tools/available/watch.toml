@@ -1,0 +1,39 @@
+# ═══════════════════════════════════════════════════════════════════════════════
+# @file tools/available/watch.toml
+# @description Tool descriptor for watch (Execute a program periodically and show output)
+# @since 1.0.0
+# @version 1.0.0
+# ═══════════════════════════════════════════════════════════════════════════════
+
+[meta]
+name = "watch"
+description = "Execute a program periodically and show output"
+homepage = "https://gitlab.com/procps-ng/procps"
+category = "system"
+version = "latest"
+verify = "watch --version"
+
+
+[[install]]
+method = "system"
+platforms = ["linux.debian"]
+package = "procps"
+
+[[install]]
+method = "system"
+platforms = ["linux.arch"]
+package = "procps-ng"
+
+[[install]]
+method = "system"
+platforms = ["linux.fedora"]
+package = "procps-ng"
+
+
+[[install]]
+method = "system"
+platforms = ["bsd"]
+package = "cmdwatch"
+[config]
+symlinks = []
+dependencies = []

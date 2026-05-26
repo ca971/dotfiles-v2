@@ -1,0 +1,29 @@
+# ═══════════════════════════════════════════════════════════════════════════════
+# @file tools/available/yq.toml
+# @description Tool descriptor for yq (Lightweight YAML/JSON/XML processor)
+# @since 1.0.0
+# @version 1.0.0
+# ═══════════════════════════════════════════════════════════════════════════════
+
+[meta]
+name = "yq"
+description = "Lightweight YAML/JSON/XML processor"
+homepage = "https://github.com/mikefarah/yq"
+category = "core"
+version = "latest"
+verify = "yq --version"
+
+[[install]]
+method = "mise"
+platforms = ["darwin", "linux", "wsl", "bsd"]
+plugin = "yq"
+version = "latest"
+
+[[install]]
+method = "brew"
+platforms = ["darwin"]
+package = "yq"
+
+[config]
+symlinks = []
+dependencies = []

@@ -1,0 +1,29 @@
+# ═══════════════════════════════════════════════════════════════════════════════
+# @file tools/available/fastfetch.toml
+# @description Tool descriptor for fastfetch (Fast system information fetcher)
+# @since 1.0.0
+# @version 1.0.0
+# ═══════════════════════════════════════════════════════════════════════════════
+
+[meta]
+name = "fastfetch"
+description = "Fast system information fetcher"
+homepage = "https://github.com/fastfetch-cli/fastfetch"
+category = "system"
+version = "latest"
+verify = "fastfetch --version"
+
+[[install]]
+method = "mise"
+platforms = ["darwin", "linux", "wsl", "bsd"]
+plugin = "fastfetch"
+version = "latest"
+
+[[install]]
+method = "brew"
+platforms = ["darwin"]
+package = "fastfetch"
+
+[config]
+symlinks = []
+dependencies = []

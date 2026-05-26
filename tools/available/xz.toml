@@ -1,0 +1,39 @@
+# ═══════════════════════════════════════════════════════════════════════════════
+# @file tools/available/xz.toml
+# @description Tool descriptor for xz (Lossless data compression with LZMA2)
+# @since 1.0.0
+# @version 1.0.0
+# ═══════════════════════════════════════════════════════════════════════════════
+
+[meta]
+name = "xz"
+description = "Lossless data compression with LZMA2"
+homepage = "https://tukaani.org/xz"
+category = "core"
+version = "latest"
+verify = "xz --version"
+
+
+[[install]]
+method = "system"
+platforms = ["linux.debian"]
+package = "xz-utils"
+
+[[install]]
+method = "system"
+platforms = ["linux.arch"]
+package = "xz"
+
+[[install]]
+method = "system"
+platforms = ["linux.fedora"]
+package = "xz"
+
+
+[[install]]
+method = "system"
+platforms = ["bsd"]
+package = "xz"
+[config]
+symlinks = []
+dependencies = []

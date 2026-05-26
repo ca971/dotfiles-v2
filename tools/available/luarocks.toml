@@ -1,0 +1,39 @@
+# ═══════════════════════════════════════════════════════════════════════════════
+# @file tools/available/luarocks.toml
+# @description Tool descriptor for luarocks (Package manager for Lua modules)
+# @since 1.0.0
+# @version 1.0.0
+# ═══════════════════════════════════════════════════════════════════════════════
+
+[meta]
+name = "luarocks"
+description = "Package manager for Lua modules"
+homepage = "https://luarocks.org"
+category = "lang"
+version = "latest"
+verify = "luarocks --version"
+
+
+[[install]]
+method = "system"
+platforms = ["linux.debian"]
+package = "luarocks"
+
+[[install]]
+method = "system"
+platforms = ["linux.arch"]
+package = "luarocks"
+
+[[install]]
+method = "system"
+platforms = ["linux.fedora"]
+package = "luarocks"
+
+
+[[install]]
+method = "system"
+platforms = ["bsd"]
+package = "luarocks"
+[config]
+symlinks = []
+dependencies = []

@@ -1,0 +1,29 @@
+# ═══════════════════════════════════════════════════════════════════════════════
+# @file tools/available/helm.toml
+# @description Tool descriptor for helm (Kubernetes package manager)
+# @since 1.0.0
+# @version 1.0.0
+# ═══════════════════════════════════════════════════════════════════════════════
+
+[meta]
+name = "helm"
+description = "Kubernetes package manager"
+homepage = "https://helm.sh"
+category = "cloud"
+version = "latest"
+verify = "helm version"
+
+[[install]]
+method = "mise"
+platforms = ["darwin", "linux", "wsl", "bsd"]
+plugin = "helm"
+version = "latest"
+
+[[install]]
+method = "brew"
+platforms = ["darwin"]
+package = "helm"
+
+[config]
+symlinks = []
+dependencies = []

@@ -1,0 +1,29 @@
+# ═══════════════════════════════════════════════════════════════════════════════
+# @file tools/available/sevenzip.toml
+# @description Tool descriptor for sevenzip (Modern 7-Zip file archiver)
+# @since 1.0.0
+# @version 1.0.0
+# ═══════════════════════════════════════════════════════════════════════════════
+
+[meta]
+name = "sevenzip"
+description = "Modern 7-Zip file archiver"
+homepage = "https://7-zip.org"
+category = "core"
+version = "latest"
+verify = "7zz --help | head -1"
+
+
+[[install]]
+method = "system"
+platforms = ["linux.debian"]
+package = "7zip"
+
+
+[[install]]
+method = "system"
+platforms = ["bsd"]
+package = "7-zip"
+[config]
+symlinks = []
+dependencies = []

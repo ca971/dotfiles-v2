@@ -1,0 +1,62 @@
+# ═══════════════════════════════════════════════════════════════════════════════
+# @file config/starship/themes/minimal.toml
+# @description Minimal theme — clean, fast, no nerd fonts required
+# @since 1.0.0
+# @version 1.0.0
+# ═══════════════════════════════════════════════════════════════════════════════
+
+format = """
+$directory\
+$git_branch\
+$git_status\
+$cmd_duration\
+$line_break\
+$character"""
+
+right_format = ""
+add_newline = false
+
+[character]
+success_symbol = "[>](bold green)"
+error_symbol = "[>](bold red)"
+vimcmd_symbol = "[<](bold purple)"
+
+[directory]
+truncation_length = 3
+truncation_symbol = "…/"
+style = "bold blue"
+read_only = " ro"
+
+[git_branch]
+symbol = ""
+format = "[$branch]($style) "
+style = "bold purple"
+
+[git_status]
+format = '([$all_status$ahead_behind]($style) )'
+style = "red"
+
+[cmd_duration]
+min_time = 3000
+format = "[$duration]($style) "
+style = "yellow"
+
+# Disable all language modules for speed
+[python]
+disabled = true
+[nodejs]
+disabled = true
+[rust]
+disabled = true
+[golang]
+disabled = true
+[ruby]
+disabled = true
+[lua]
+disabled = true
+[docker_context]
+disabled = true
+[kubernetes]
+disabled = true
+[package]
+disabled = true

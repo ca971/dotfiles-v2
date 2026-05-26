@@ -1,0 +1,15 @@
+# ═══════════════════════════════════════════════════════════════════════════════
+# @file config/bat/config
+# @description Bat configuration (cat clone with syntax highlighting)
+# @since 1.0.0
+# @version 1.0.0
+# ═══════════════════════════════════════════════════════════════════════════════
+
+--theme="Catppuccin Mocha"
+--style="numbers,changes,header,grid"
+--italic-text=always
+--map-syntax "*.conf:INI"
+--map-syntax "*.toml:TOML"
+--map-syntax ".gitignore:Git Ignore"
+--map-syntax "*.env:Bourne Again Shell (bash)"
+--pager="less -RFX"

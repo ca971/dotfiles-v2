@@ -1,0 +1,29 @@
+# ═══════════════════════════════════════════════════════════════════════════════
+# @file tools/available/jnv.toml
+# @description Tool descriptor for jnv (Interactive JSON filter with jq)
+# @since 1.0.0
+# @version 1.0.0
+# ═══════════════════════════════════════════════════════════════════════════════
+
+[meta]
+name = "jnv"
+description = "Interactive JSON filter with jq"
+homepage = "https://github.com/ynqa/jnv"
+category = "data"
+version = "latest"
+verify = "jnv --version"
+
+[[install]]
+method = "mise"
+platforms = ["darwin", "linux", "wsl", "bsd"]
+plugin = "jnv"
+version = "latest"
+
+[[install]]
+method = "cargo"
+platforms = ["darwin", "linux", "wsl", "bsd"]
+crate = "jnv"
+
+[config]
+symlinks = []
+dependencies = []

@@ -1,0 +1,40 @@
+# ═══════════════════════════════════════════════════════════════════════════════
+# @file config/atuin/config.toml
+# @description Atuin shell history configuration
+# @since 1.0.0
+# @version 1.0.0
+# ═══════════════════════════════════════════════════════════════════════════════
+
+[settings]
+dialect = "us"
+auto_sync = true
+update_check = false
+sync_address = "https://api.atuin.sh"
+sync_frequency = "10m"
+search_mode = "fuzzy"
+filter_mode = "global"
+style = "compact"
+inline_height = 20
+show_preview = true
+show_help = true
+show_tabs = true
+exit_mode = "return-original"
+history_filter = [
+    "^ls",
+    "^cd",
+    "^clear",
+    "^exit",
+]
+
+[keys]
+scroll_exits = true
+
+[stats]
+common_subcommands = [
+    "git",
+    "docker",
+    "kubectl",
+    "cargo",
+    "npm",
+    "just",
+]

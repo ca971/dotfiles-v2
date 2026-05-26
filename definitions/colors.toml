@@ -1,0 +1,88 @@
+# ═══════════════════════════════════════════════════════════════════════════════
+# @file definitions/colors.toml
+# @description Single Source of Truth for color palette (Catppuccin Mocha)
+# @since 1.0.0
+# @version 1.0.0
+# @see docs/SSOT.md
+#
+# Base palette: Catppuccin Mocha
+# Used by: starship, bat, fzf, vivid, tmux, zellij, neovim
+# ═══════════════════════════════════════════════════════════════════════════════
+
+[palette]
+name = "catppuccin-mocha"
+description = "Catppuccin Mocha color palette"
+
+# ───────────────────────────────────────────────────────────────────────────────
+# Base colors
+# ───────────────────────────────────────────────────────────────────────────────
+
+[palette.base]
+rosewater = "#f5e0dc"
+flamingo = "#f2cdcd"
+pink = "#f5c2e7"
+mauve = "#cba6f7"
+red = "#f38ba8"
+maroon = "#eba0ac"
+peach = "#fab387"
+yellow = "#f9e2af"
+green = "#a6e3a1"
+teal = "#94e2d5"
+sky = "#89dceb"
+sapphire = "#74c7ec"
+blue = "#89b4fa"
+lavender = "#b4befe"
+
+# ───────────────────────────────────────────────────────────────────────────────
+# Surface & Background
+# ───────────────────────────────────────────────────────────────────────────────
+
+[palette.surface]
+text = "#cdd6f4"
+subtext1 = "#bac2de"
+subtext0 = "#a6adc8"
+overlay2 = "#9399b2"
+overlay1 = "#7f849c"
+overlay0 = "#6c7086"
+surface2 = "#585b70"
+surface1 = "#45475a"
+surface0 = "#313244"
+base = "#1e1e2e"
+mantle = "#181825"
+crust = "#11111b"
+
+# ───────────────────────────────────────────────────────────────────────────────
+# Semantic colors (mapped from palette for shell use)
+# ───────────────────────────────────────────────────────────────────────────────
+
+[semantic]
+success = "#a6e3a1"
+warning = "#f9e2af"
+error = "#f38ba8"
+info = "#89b4fa"
+debug = "#6c7086"
+accent = "#cba6f7"
+muted = "#585b70"
+highlight = "#f5c2e7"
+
+# ───────────────────────────────────────────────────────────────────────────────
+# ANSI 16-color mapping (for terminal emulators)
+# ───────────────────────────────────────────────────────────────────────────────
+
+[ansi]
+black = "#45475a"
+red = "#f38ba8"
+green = "#a6e3a1"
+yellow = "#f9e2af"
+blue = "#89b4fa"
+magenta = "#f5c2e7"
+cyan = "#94e2d5"
+white = "#bac2de"
+bright_black = "#585b70"
+bright_red = "#f38ba8"
+bright_green = "#a6e3a1"
+bright_yellow = "#f9e2af"
+bright_blue = "#89b4fa"
+bright_magenta = "#f5c2e7"
+bright_cyan = "#94e2d5"
+bright_white = "#a6adc8"

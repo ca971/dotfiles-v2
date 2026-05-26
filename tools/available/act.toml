@@ -1,0 +1,29 @@
+# ═══════════════════════════════════════════════════════════════════════════════
+# @file tools/available/act.toml
+# @description Tool descriptor for act (Run GitHub Actions locally)
+# @since 1.0.0
+# @version 1.0.0
+# ═══════════════════════════════════════════════════════════════════════════════
+
+[meta]
+name = "act"
+description = "Run GitHub Actions locally"
+homepage = "https://github.com/nektos/act"
+category = "devops"
+version = "latest"
+verify = "act --version"
+
+[[install]]
+method = "mise"
+platforms = ["darwin", "linux", "wsl", "bsd"]
+plugin = "act"
+version = "latest"
+
+[[install]]
+method = "brew"
+platforms = ["darwin"]
+package = "act"
+
+[config]
+symlinks = []
+dependencies = []

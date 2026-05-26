@@ -1,0 +1,39 @@
+# ═══════════════════════════════════════════════════════════════════════════════
+# @file tools/available/grep.toml
+# @description Tool descriptor for grep (GNU pattern matching utility)
+# @since 1.0.0
+# @version 1.0.0
+# ═══════════════════════════════════════════════════════════════════════════════
+
+[meta]
+name = "grep"
+description = "GNU pattern matching utility"
+homepage = "https://www.gnu.org/software/grep"
+category = "core"
+version = "latest"
+verify = "grep --version"
+
+
+[[install]]
+method = "system"
+platforms = ["linux.debian"]
+package = "grep"
+
+[[install]]
+method = "system"
+platforms = ["linux.arch"]
+package = "grep"
+
+[[install]]
+method = "system"
+platforms = ["linux.fedora"]
+package = "grep"
+
+
+[[install]]
+method = "system"
+platforms = ["bsd"]
+package = "grep"
+[config]
+symlinks = []
+dependencies = []

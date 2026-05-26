@@ -1,0 +1,39 @@
+# ═══════════════════════════════════════════════════════════════════════════════
+# @file tools/available/nodejs.toml
+# @description Tool descriptor for nodejs (JavaScript runtime built on V8 engine)
+# @since 1.0.0
+# @version 1.0.0
+# ═══════════════════════════════════════════════════════════════════════════════
+
+[meta]
+name = "nodejs"
+description = "JavaScript runtime built on V8 engine"
+homepage = "https://nodejs.org"
+category = "lang"
+version = "latest"
+verify = "node --version"
+
+
+[[install]]
+method = "system"
+platforms = ["linux.debian"]
+package = "nodejs"
+
+[[install]]
+method = "system"
+platforms = ["linux.arch"]
+package = "nodejs"
+
+[[install]]
+method = "system"
+platforms = ["linux.fedora"]
+package = "nodejs"
+
+
+[[install]]
+method = "system"
+platforms = ["bsd"]
+package = "node"
+[config]
+symlinks = []
+dependencies = []

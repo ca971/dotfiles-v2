@@ -1,0 +1,43 @@
+# ═══════════════════════════════════════════════════════════════════════════════
+# @file tools/available/chafa.toml
+# @description Tool descriptor for chafa (Terminal image viewer using Unicode and ANSI)
+# @since 1.0.0
+# @version 1.0.0
+# ═══════════════════════════════════════════════════════════════════════════════
+
+[meta]
+name = "chafa"
+description = "Terminal image viewer using Unicode and ANSI"
+homepage = "https://hpjansson.org/chafa"
+category = "media"
+version = "latest"
+verify = "chafa --version"
+
+[[install]]
+method = "brew"
+platforms = ["darwin"]
+package = "chafa"
+
+[[install]]
+method = "system"
+platforms = ["linux.debian"]
+package = "chafa"
+
+[[install]]
+method = "system"
+platforms = ["linux.arch"]
+package = "chafa"
+
+[[install]]
+method = "system"
+platforms = ["linux.fedora"]
+package = "chafa"
+
+
+[[install]]
+method = "system"
+platforms = ["bsd"]
+package = "chafa"
+[config]
+symlinks = []
+dependencies = []

@@ -1,0 +1,29 @@
+# ═══════════════════════════════════════════════════════════════════════════════
+# @file tools/available/glow.toml
+# @description Tool descriptor for glow (Render markdown on the CLI with glamour)
+# @since 1.0.0
+# @version 1.0.0
+# ═══════════════════════════════════════════════════════════════════════════════
+
+[meta]
+name = "glow"
+description = "Render markdown on the CLI with glamour"
+homepage = "https://github.com/charmbracelet/glow"
+category = "dev"
+version = "latest"
+verify = "glow --version"
+
+[[install]]
+method = "mise"
+platforms = ["darwin", "linux", "wsl", "bsd"]
+plugin = "glow"
+version = "latest"
+
+[[install]]
+method = "brew"
+platforms = ["darwin"]
+package = "glow"
+
+[config]
+symlinks = []
+dependencies = []

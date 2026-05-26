@@ -1,0 +1,50 @@
+# ═══════════════════════════════════════════════════════════════════════════════
+# @file definitions/completions.toml
+# @description Single Source of Truth for custom shell completions
+# @since 1.0.0
+# @version 1.0.0
+# @see docs/SSOT.md
+#
+# Defines custom completions for the dotfiles CLI and related tools.
+# Tool-native completions (e.g., gh, kubectl) are handled by the tools themselves.
+# ═══════════════════════════════════════════════════════════════════════════════
+
+# ───────────────────────────────────────────────────────────────────────────────
+# dotfiles CLI
+# ───────────────────────────────────────────────────────────────────────────────
+
+[completions.dotfiles]
+description = "Completions for the dotfiles CLI"
+subcommands = [
+    "install",
+    "uninstall",
+    "update",
+    "status",
+    "doctor",
+    "generate",
+    "theme",
+    "nix",
+]
+
+[completions.dotfiles.flags]
+"--verbose" = "Enable debug logging"
+"--dry-run" = "Show what would be done"
+"--help" = "Show help message"
+"--minimal" = "Minimal install"
+"--no-gui" = "Skip GUI apps"
+
+# ───────────────────────────────────────────────────────────────────────────────
+# dotfiles-theme
+# ───────────────────────────────────────────────────────────────────────────────
+
+[completions.dotfiles-theme]
+description = "Completions for the theme switcher"
+subcommands = ["minimal", "full", "powerline"]
+
+# ───────────────────────────────────────────────────────────────────────────────
+# dotfiles-nix
+# ───────────────────────────────────────────────────────────────────────────────
+
+[completions.dotfiles-nix]
+description = "Completions for the Nix env manager"
+subcommands = ["list", "enter", "create", "disable", "enable", "status"]

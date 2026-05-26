@@ -1,0 +1,24 @@
+# ═══════════════════════════════════════════════════════════════════════════════
+# @file tools/available/biome.toml
+# @description Tool descriptor for biome (Toolchain for web projects (lint, format))
+# @since 1.0.0
+# @version 1.0.0
+# ═══════════════════════════════════════════════════════════════════════════════
+
+[meta]
+name = "biome"
+description = "Toolchain for web projects (lint, format)"
+homepage = "https://github.com/biomejs/biome"
+category = "dev"
+version = "latest"
+verify = "biome --version"
+
+[[install]]
+method = "mise"
+platforms = ["darwin", "linux", "wsl", "bsd"]
+plugin = "biome"
+version = "latest"
+
+[config]
+symlinks = []
+dependencies = []

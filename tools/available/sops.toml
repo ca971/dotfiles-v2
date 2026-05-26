@@ -1,0 +1,29 @@
+# ═══════════════════════════════════════════════════════════════════════════════
+# @file tools/available/sops.toml
+# @description Tool descriptor for sops (Simple and flexible encrypted file editor)
+# @since 1.0.0
+# @version 1.0.0
+# ═══════════════════════════════════════════════════════════════════════════════
+
+[meta]
+name = "sops"
+description = "Simple and flexible encrypted file editor"
+homepage = "https://github.com/getsops/sops"
+category = "security"
+version = "latest"
+verify = "sops --version"
+
+[[install]]
+method = "mise"
+platforms = ["darwin", "linux", "wsl", "bsd"]
+plugin = "sops"
+version = "latest"
+
+[[install]]
+method = "brew"
+platforms = ["darwin"]
+package = "sops"
+
+[config]
+symlinks = []
+dependencies = []

@@ -1,0 +1,39 @@
+# ═══════════════════════════════════════════════════════════════════════════════
+# @file tools/available/lnav.toml
+# @description Tool descriptor for lnav (Advanced log file navigator)
+# @since 1.0.0
+# @version 1.0.0
+# ═══════════════════════════════════════════════════════════════════════════════
+
+[meta]
+name = "lnav"
+description = "Advanced log file navigator"
+homepage = "https://lnav.org"
+category = "system"
+version = "latest"
+verify = "lnav --version"
+
+[[install]]
+method = "mise"
+platforms = ["darwin", "linux", "wsl", "bsd"]
+plugin = "lnav"
+version = "latest"
+
+[[install]]
+method = "brew"
+platforms = ["darwin"]
+package = "lnav"
+
+[[install]]
+method = "system"
+platforms = ["linux.debian"]
+package = "lnav"
+
+[[install]]
+method = "system"
+platforms = ["linux.arch"]
+package = "lnav"
+
+[config]
+symlinks = []
+dependencies = []

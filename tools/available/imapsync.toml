@@ -1,0 +1,34 @@
+# ═══════════════════════════════════════════════════════════════════════════════
+# @file tools/available/imapsync.toml
+# @description Tool descriptor for imapsync (IMAP mailbox sync and migration tool)
+# @since 1.0.0
+# @version 1.0.0
+# ═══════════════════════════════════════════════════════════════════════════════
+
+[meta]
+name = "imapsync"
+description = "IMAP mailbox sync and migration tool"
+homepage = "https://imapsync.lamiral.info"
+category = "net"
+version = "latest"
+verify = "imapsync --version"
+
+[[install]]
+method = "uv"
+platforms = ["darwin", "linux", "wsl", "bsd"]
+package = "imapsync"
+version = "latest"
+
+[[install]]
+method = "brew"
+platforms = ["darwin"]
+package = "imapsync"
+
+[[install]]
+method = "system"
+platforms = ["linux.debian"]
+package = "imapsync"
+
+[config]
+symlinks = []
+dependencies = []

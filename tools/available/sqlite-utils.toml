@@ -1,0 +1,29 @@
+# ═══════════════════════════════════════════════════════════════════════════════
+# @file tools/available/sqlite-utils.toml
+# @description Tool descriptor for sqlite-utils (CLI tool and Python library for SQLite)
+# @since 1.0.0
+# @version 1.0.0
+# ═══════════════════════════════════════════════════════════════════════════════
+
+[meta]
+name = "sqlite-utils"
+description = "CLI tool and Python library for SQLite"
+homepage = "https://sqlite-utils.datasette.io"
+category = "data"
+version = "latest"
+verify = "sqlite-utils --version"
+
+[[install]]
+method = "uv"
+platforms = ["darwin", "linux", "wsl", "bsd"]
+package = "sqlite-utils"
+version = "latest"
+
+[[install]]
+method = "brew"
+platforms = ["darwin"]
+package = "sqlite-utils"
+
+[config]
+symlinks = []
+dependencies = []

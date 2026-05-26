@@ -1,0 +1,39 @@
+# ═══════════════════════════════════════════════════════════════════════════════
+# @file tools/available/lftp.toml
+# @description Tool descriptor for lftp (Sophisticated file transfer program)
+# @since 1.0.0
+# @version 1.0.0
+# ═══════════════════════════════════════════════════════════════════════════════
+
+[meta]
+name = "lftp"
+description = "Sophisticated file transfer program"
+homepage = "https://lftp.yar.ru"
+category = "net"
+version = "latest"
+verify = "lftp --version"
+
+
+[[install]]
+method = "system"
+platforms = ["linux.debian"]
+package = "lftp"
+
+[[install]]
+method = "system"
+platforms = ["linux.arch"]
+package = "lftp"
+
+[[install]]
+method = "system"
+platforms = ["linux.fedora"]
+package = "lftp"
+
+
+[[install]]
+method = "system"
+platforms = ["bsd"]
+package = "lftp"
+[config]
+symlinks = []
+dependencies = []
