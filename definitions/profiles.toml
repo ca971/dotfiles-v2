@@ -14,32 +14,20 @@
 description = "Machine profiles — tool sets by usage pattern"
 
 # ───────────────────────────────────────────────────────────────────────────────
-# Minimal — Essential CLI tools for any machine
+# Minimal — Essential CLI tools for any machine (installed via mise)
 # ───────────────────────────────────────────────────────────────────────────────
 
 [profiles.minimal]
-description = "Essential CLI tools for any machine"
+description = "Essential CLI tools via mise"
 tools = [
-    "bash",
-    "curl",
-    "git",
-    "jq",
-    "fd",
-    "ripgrep",
-    "fzf",
-    "zoxide",
-    "bat",
-    "eza",
     "starship",
-    "zsh",
-    "tree",
-    "wget",
-    "rsync",
-    "gnupg",
-    "openssh",
-    "unzip",
-    "xz",
-    "gzip",
+    "eza",
+    "neovim",
+    "atuin",
+    "fzf",
+    "duf",
+    "dfc",
+    "btop",
 ]
 
 # ───────────────────────────────────────────────────────────────────────────────
@@ -56,7 +44,6 @@ tools = [
     "just",
     "direnv",
     "tmux",
-    "starship",
     "git-delta",
     "difftastic",
     "shellcheck",
@@ -76,14 +63,29 @@ tools = [
     "tokei",
     "onefetch",
     "dust",
-    "duf",
     "procs",
-    "atuin",
     "navi",
     "tealdeer",
     "lsd",
     "broot",
     "yazi",
+    "bat",
+    "fd",
+    "ripgrep",
+    "zoxide",
+    "jq",
+    "bash",
+    "curl",
+    "git",
+    "zsh",
+    "tree",
+    "wget",
+    "rsync",
+    "gnupg",
+    "openssh",
+    "unzip",
+    "xz",
+    "gzip",
 ]
 
 # ───────────────────────────────────────────────────────────────────────────────
@@ -101,7 +103,6 @@ tools = [
     "kustomize",
     "argocd",
     "terraform",
-    "docker-compose",
     "dive",
     "lazydocker",
     "trivy",

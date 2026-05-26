@@ -1,0 +1,87 @@
+# ═══════════════════════════════════════════════════════════════════════════════
+# @file config/mise/config.toml
+# @description mise-en-place configuration for dotfiles-managed tools
+# @since 1.0.0
+# @version 1.0.0
+#
+# Symlinked to ~/.config/mise/config.toml by the symlink module.
+# This file is the authoritative source for mise-managed tools.
+# ═══════════════════════════════════════════════════════════════════════════════
+
+[settings]
+# Increase timeout to 60s for slow APIs (prevents timeouts during GitHub congestion)
+fetch_remote_versions_timeout = "60s"
+# Cache the list of available versions for 1 hour to reduce API calls and avoid rate limiting
+fetch_remote_versions_cache = "1h"
+
+# Automatically delete the downloaded source/binary after a successful installation
+always_keep_download = false
+# Automatically delete the temporary installation directory if the install fails
+always_keep_install = false
+
+# Number of simultaneous installation jobs
+jobs = 4
+
+[tools]
+# ─── Minimal core (bootstrap --minimal) ───
+starship = "latest"  # The minimal, blazing-fast, and infinitely customizable prompt
+eza = "latest"       # A modern, maintained replacement for ls
+neovim = "nightly"   # Hyperextensible Vim-based text editor
+atuin = "latest"     # Magical shell history powered by SQLite
+fzf = "latest"       # A command-line fuzzy finder
+duf = "latest"       # Disk Usage/Free Utility — a better 'df' alternative
+dfc = "latest"       # Display file system space usage with colors
+btop = "latest"      # Yet another cross-platform graphical process/system monitor
+
+# ─── Rust-powered alternatives ───
+bat = "latest"       # A cat clone with syntax highlighting and Git integration
+fd = "latest"        # A simple, fast and user-friendly alternative to 'find'
+ripgrep = "latest"   # Line-oriented search tool that recursively searches directories
+zoxide = "latest"    # A smarter cd command for your terminal
+bottom = "latest"    # Graphical process/system monitor (system tray)
+dust = "latest"      # A more intuitive version of du in Rust
+
+# ─── Dev utilities ───
+lazygit = "latest"   # Simple terminal UI for git commands
+gh = "latest"        # GitHub's official command line tool
+just = "latest"      # Handy runner for project-specific commands
+direnv = "latest"    # Unclutter your .profile based on the current directory
+gum = "latest"       # A tool for glamorous shell scripts
+hyperfine = "latest" # A command-line benchmarking tool
+tokei = "latest"     # Program that allows you to count your code, quickly
+
+# ─── Shells ───
+"aqua:nushell/nushell" = "latest" # A new type of shell focusing on structured data
+
+# ─── Formatters & Linters ───
+shellcheck = "latest" # Static analysis tool for shell scripts
+taplo = "latest"      # A TOML toolkit for linting and formatting
+biome = "latest"      # Toolchain of the web (linter, formatter, and more)
+stylua = "latest"     # An opinionated Lua code formatter
+
+# ─── Web, API & Data ───
+jq = "latest"    # Lightweight and flexible command-line JSON processor
+yq = "latest"    # Portable command-line YAML, JSON, XML, CSV and TOML processor
+xh = "latest"    # Friendly and fast tool for sending HTTP requests
+
+# ─── Languages & Runtimes ───
+python = "latest" # General purpose programming language
+node = "latest"   # JavaScript runtime environment
+go = "latest"     # Google's statically typed compiled language
+rust = "latest"   # Systems programming language focusing on safety and speed
+deno = "latest"   # Secure runtime for JavaScript and TypeScript
+
+# ─── Containers & Virtualization ───
+colima = "latest"         # Container runtime for macOS (Docker Desktop replacement)
+lima = "latest"           # Linux virtual machines on macOS (required by Colima)
+docker-cli = "latest"     # CLI for interacting with Docker
+docker-compose = "latest" # Tool for defining and running multi-container apps
+
+# ─── Cloud, Ops & Security ───
+awscli = "latest"   # Official CLI for Amazon Web Services
+kubectl = "latest"  # Command line tool for communicating with a Kubernetes cluster
+helm = "latest"     # The Kubernetes Package Manager
+k9s = "latest"      # Kubernetes CLI To Manage Your Clusters In Style
+terraform = "latest" # Tool for building, changing, and versioning infrastructure
+sops = "latest"     # Editor of encrypted files
+age = "latest"      # A simple, modern and secure file encryption tool

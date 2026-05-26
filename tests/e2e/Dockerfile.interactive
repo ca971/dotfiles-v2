@@ -87,8 +87,8 @@ RUN mkdir -p "${HOME}/.config" && \
 # Install nushell via mise (aqua backend)
 RUN mise install aqua:nushell/nushell@latest && mise use --global aqua:nushell/nushell@latest
 
-# Add mise shims to PATH for non-interactive access
-ENV PATH="${HOME}/.local/share/mise/shims:${PATH}"
+# Add mise shims and dotfiles bin to PATH
+ENV PATH="${HOME}/.local/share/mise/shims:${DOTFILES_DIR}/bin:${PATH}"
 
 # Set shell to zsh for interactive testing
 RUN sudo chsh -s /usr/bin/zsh testuser
