@@ -84,13 +84,18 @@ jobs:
   bats:
     name: Bats (shell tests)
     runs-on: ubuntu-latest
-    continue-on-error: true  # tests need full environment; non-blocking in CI
     steps:
       - uses: actions/checkout@v4
       - name: Install Bats
         run: |
           sudo apt-get update -qq
           sudo apt-get install -y -qq bats zsh fish python3
+      - name: Install mise and uv
+        run: |
+          curl -fsSL https://mise.run | sh
+          echo "${HOME}/.local/bin" >> "${GITHUB_PATH}"
+          curl -LsSf https://astral.sh/uv/install.sh | sh
+          echo "${HOME}/.local/bin" >> "${GITHUB_PATH}"
       - name: Setup test fixtures
         run: |
           mkdir -p local
