@@ -1,0 +1,214 @@
+#!/usr/bin/env bash
+# ═══════════════════════════════════════════════════════════════════════════════
+# @file bin/dotfiles-ai
+# @description AI agent context manager — symlink shared files to agent configs
+# @since 1.0.0
+# @version 1.0.0
+#
+# Usage:
+#   dotfiles-ai link [agent]    # Symlink shared context files to agent dirs
+#   dotfiles-ai unlink [agent]  # Remove symlinks
+#   dotfiles-ai status          # Show which agents have active symlinks
+#   dotfiles-ai skills          # Regenerate and link skills
+# ═══════════════════════════════════════════════════════════════════════════════
+
+set -euo pipefail
+
+export DOTFILES_DIR="${DOTFILES_DIR:-${HOME}/.dotfiles}"
+
+source "${DOTFILES_DIR}/lib/core/logger.sh"
+
+readonly SHARED_DIR="${DOTFILES_DIR}/config/ai/shared"
+readonly SKILLS_GEN_DIR="${DOTFILES_DIR}/skills/generated"
+
+# Mapping: shared_filename → agent_dir
+declare -A AGENT_DIRS=(
+    ["hermes"]="${HOME}/.hermes"
+    ["claude"]="${HOME}/.claude"
+    ["codex"]="${HOME}/.codex"
+    ["opencode"]="${HOME}/.opencode"
+)
+
+# Files to symlink from shared/ to each agent dir
+readonly CONTEXT_FILES=("SOUL.md" "AGENT.md" "MEMORY.md" "USER.md")
+
+# ═══════════════════════════════════════════════════════════════════════════════
+# @description Create symlinks for all context files to an agent directory
+# ═══════════════════════════════════════════════════════════════════════════════
+link_agent() {
+    local agent="${1:?Agent name required}"
+    local agent_dir="${AGENT_DIRS[${agent}]:-}"
+
+    if [[ -z "${agent_dir}" ]]; then
+        Logger::error "Unknown agent: ${agent}"
+        Logger::info "Known agents: ${!AGENT_DIRS[*]}"
+        return 1
+    fi
+
+    Logger::info "Linking context files for ${agent}..."
+
+    mkdir -p "${agent_dir}"
+
+    local file
+    for file in "${CONTEXT_FILES[@]}"; do
+        local src="${SHARED_DIR}/${file}"
+        local dst="${agent_dir}/${file}"
+
+        if [[ ! -f "${src}" ]]; then
+            Logger::warn "  Source not found: ${src}"
+            continue
+        fi
+
+        # Remove existing file or symlink
+        if [[ -L "${dst}" ]] || [[ -f "${dst}" ]]; then
+            rm -f "${dst}"
+        fi
+
+        ln -s "${src}" "${dst}"
+        Logger::debug "  ${dst} → ${src}"
+    done
+
+    # Also link CLAUDE.md if it exists
+    local claude_src="${SHARED_DIR}/CLAUDE.md"
+    if [[ -f "${claude_src}" ]]; then
+        local claude_dst="${agent_dir}/CLAUDE.md"
+        [[ -L "${claude_dst}" ]] || [[ -f "${claude_dst}" ]] && rm -f "${claude_dst}"
+        ln -s "${claude_src}" "${claude_dst}"
+        Logger::debug "  ${claude_dst} → ${claude_src}"
+    fi
+
+    # Link skills
+    local skills_dir="${SKILLS_GEN_DIR}/${agent}"
+    if [[ -d "${skills_dir}" ]]; then
+        local skills_dst="${agent_dir}/skills"
+        if [[ -L "${skills_dst}" ]] || [[ -d "${skills_dst}" ]]; then
+            rm -rf "${skills_dst}"
+        fi
+        ln -s "${skills_dir}" "${skills_dst}"
+        Logger::debug "  ${skills_dst} → ${skills_dir}"
+    fi
+
+    Logger::success "Context files linked for ${agent}"
+}
+
+# ═══════════════════════════════════════════════════════════════════════════════
+# @description Remove symlinks from an agent directory
+# ═══════════════════════════════════════════════════════════════════════════════
+unlink_agent() {
+    local agent="${1:?Agent name required}"
+    local agent_dir="${AGENT_DIRS[${agent}]:-}"
+
+    if [[ -z "${agent_dir}" ]]; then
+        Logger::error "Unknown agent: ${agent}"
+        return 1
+    fi
+
+    Logger::info "Removing symlinks for ${agent}..."
+
+    local file
+    for file in "${CONTEXT_FILES[@]}" "CLAUDE.md"; do
+        local dst="${agent_dir}/${file}"
+        if [[ -L "${dst}" ]]; then
+            rm -f "${dst}"
+            Logger::debug "  Removed: ${dst}"
+        fi
+    done
+
+    local skills_dst="${agent_dir}/skills"
+    if [[ -L "${skills_dst}" ]]; then
+        rm -f "${skills_dst}"
+        Logger::debug "  Removed: ${skills_dst}"
+    fi
+
+    Logger::success "Symlinks removed for ${agent}"
+}
+
+# ═══════════════════════════════════════════════════════════════════════════════
+# @description Show which agents have active symlinks
+# ═══════════════════════════════════════════════════════════════════════════════
+show_status() {
+    printf "%-12s %-20s %s\n" "AGENT" "FILES" "SKILLS"
+    printf "%-12s %-20s %s\n" "─────" "─────" "──────"
+
+    for agent in "${!AGENT_DIRS[@]}"; do
+        local agent_dir="${AGENT_DIRS[${agent}]}"
+        local linked=0
+        local has_skills=""
+
+        for file in "${CONTEXT_FILES[@]}" "CLAUDE.md"; do
+            if [[ -L "${agent_dir}/${file}" ]]; then
+                ((linked++))
+            fi
+        done
+
+        if [[ -L "${agent_dir}/skills" ]]; then
+            has_skills="yes"
+        fi
+
+        if [[ "${linked}" -gt 0 ]]; then
+            printf "%-12s %-20s %s\n" "${agent}" "${linked} files linked" "${has_skills:-no}"
+        else
+            printf "%-12s %-20s %s\n" "${agent}" "(not linked)" "-"
+        fi
+    done
+}
+
+# ═══════════════════════════════════════════════════════════════════════════════
+# @description Show help
+# ═══════════════════════════════════════════════════════════════════════════════
+show_help() {
+    cat <<-EOF
+	Usage: dotfiles-ai <command> [agent]
+
+	Commands:
+	  link [agent]      Symlink context files + skills to agent (default: all)
+	  unlink [agent]    Remove symlinks from agent (default: all)
+	  status            Show which agents have active symlinks
+
+	Agents: hermes, claude, codex, opencode
+
+	Examples:
+	  dotfiles-ai link              # Link all agents
+	  dotfiles-ai link claude       # Link Claude only
+	  dotfiles-ai status            # Show status
+	EOF
+}
+
+# ═══════════════════════════════════════════════════════════════════════════════
+# @description Main entry point
+# ═══════════════════════════════════════════════════════════════════════════════
+main() {
+    case "${1:-}" in
+        link)
+            if [[ -n "${2:-}" ]]; then
+                link_agent "${2}"
+            else
+                for agent in "${!AGENT_DIRS[@]}"; do
+                    link_agent "${agent}"
+                done
+            fi
+            ;;
+        unlink)
+            if [[ -n "${2:-}" ]]; then
+                unlink_agent "${2}"
+            else
+                for agent in "${!AGENT_DIRS[@]}"; do
+                    unlink_agent "${agent}"
+                done
+            fi
+            ;;
+        status)
+            show_status
+            ;;
+        --help|-h|"")
+            show_help
+            ;;
+        *)
+            Logger::error "Unknown command: ${1}"
+            show_help
+            exit 1
+            ;;
+    esac
+}
+
+main "$@"
