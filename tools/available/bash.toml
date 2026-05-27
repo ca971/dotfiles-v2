@@ -39,6 +39,11 @@ method = "system"
 platforms = ["linux.fedora"]
 package = "bash"
 
+[[install]]
+method = "brew"
+platforms = ["darwin"]
+package = "bash"
+
 [config]
 symlinks = []
 dependencies = []

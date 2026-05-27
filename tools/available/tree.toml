@@ -34,6 +34,11 @@ package = "tree"
 method = "system"
 platforms = ["bsd"]
 package = "tree"
+[[install]]
+method = "brew"
+platforms = ["darwin"]
+package = "tree"
+
 [config]
 symlinks = []
 dependencies = []

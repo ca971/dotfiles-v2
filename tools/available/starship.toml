@@ -35,7 +35,5 @@ platforms = ["darwin", "linux", "wsl", "bsd"]
 crate = "starship"
 
 [config]
-symlinks = [
-    { src = "config/starship", dst = "~/.config/starship" }
-]
+symlinks = [{ src = "config/starship", dst = "~/.config/starship" }]
 dependencies = []

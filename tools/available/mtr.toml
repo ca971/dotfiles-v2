@@ -34,6 +34,11 @@ package = "mtr"
 method = "system"
 platforms = ["bsd"]
 package = "mtr-nox11"
+[[install]]
+method = "brew"
+platforms = ["darwin"]
+package = "mtr"
+
 [config]
 symlinks = []
 dependencies = []

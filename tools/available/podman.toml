@@ -39,6 +39,11 @@ method = "system"
 platforms = ["linux.fedora"]
 package = "podman"
 
+[[install]]
+method = "brew"
+platforms = ["darwin"]
+package = "podman"
+
 [config]
 symlinks = []
 dependencies = []

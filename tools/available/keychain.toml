@@ -34,6 +34,11 @@ package = "keychain"
 method = "system"
 platforms = ["bsd"]
 package = "keychain"
+[[install]]
+method = "brew"
+platforms = ["darwin"]
+package = "keychain"
+
 [config]
 symlinks = []
 dependencies = []

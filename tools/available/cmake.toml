@@ -39,6 +39,11 @@ method = "system"
 platforms = ["linux.fedora"]
 package = "cmake"
 
+[[install]]
+method = "brew"
+platforms = ["darwin"]
+package = "cmake"
+
 [config]
 symlinks = []
 dependencies = []

@@ -34,6 +34,11 @@ package = "openssh-clients"
 method = "system"
 platforms = ["bsd"]
 package = "openssh-portable"
+[[install]]
+method = "brew"
+platforms = ["darwin"]
+package = "openssh"
+
 [config]
 symlinks = []
 dependencies = []

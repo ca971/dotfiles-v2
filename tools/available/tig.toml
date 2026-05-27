@@ -34,6 +34,11 @@ package = "tig"
 method = "system"
 platforms = ["bsd"]
 package = "tig"
+[[install]]
+method = "brew"
+platforms = ["darwin"]
+package = "tig"
+
 [config]
 symlinks = []
 dependencies = []

@@ -44,6 +44,11 @@ method = "system"
 platforms = ["linux.fedora"]
 package = "ripgrep"
 
+[[install]]
+method = "brew"
+platforms = ["darwin"]
+package = "ripgrep"
+
 [config]
 symlinks = []
 dependencies = []

@@ -34,6 +34,11 @@ package = "nmap"
 method = "system"
 platforms = ["bsd"]
 package = "nmap"
+[[install]]
+method = "brew"
+platforms = ["darwin"]
+package = "nmap"
+
 [config]
 symlinks = []
 dependencies = []

@@ -34,6 +34,11 @@ method = "system"
 platforms = ["linux.arch"]
 package = "lsd"
 
+[[install]]
+method = "brew"
+platforms = ["darwin"]
+package = "lsd"
+
 [config]
 symlinks = []
 dependencies = []

@@ -29,6 +29,11 @@ method = "system"
 platforms = ["linux.debian"]
 package = "erlang"
 
+[[install]]
+method = "brew"
+platforms = ["darwin"]
+package = "erlang"
+
 [config]
 symlinks = []
 dependencies = []

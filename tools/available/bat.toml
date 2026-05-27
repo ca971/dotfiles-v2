@@ -44,8 +44,11 @@ method = "system"
 platforms = ["linux.fedora"]
 package = "bat"
 
+[[install]]
+method = "brew"
+platforms = ["darwin"]
+package = "bat"
+
 [config]
-symlinks = [
-    { src = "config/bat", dst = "~/.config/bat" }
-]
+symlinks = [{ src = "config/bat", dst = "~/.config/bat" }]
 dependencies = []

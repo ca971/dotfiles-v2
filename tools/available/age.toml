@@ -39,6 +39,11 @@ method = "system"
 platforms = ["linux.fedora"]
 package = "age"
 
+[[install]]
+method = "brew"
+platforms = ["darwin"]
+package = "age"
+
 [config]
 symlinks = []
 dependencies = []

@@ -39,6 +39,11 @@ method = "system"
 platforms = ["linux.fedora"]
 package = "direnv"
 
+[[install]]
+method = "brew"
+platforms = ["darwin"]
+package = "direnv"
+
 [config]
 symlinks = []
 dependencies = []

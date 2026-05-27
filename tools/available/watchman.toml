@@ -21,8 +21,13 @@ package = "watchman"
 
 [[install]]
 method = "system"
-platforms = ["linux.debian"]
+platforms = ["linux.debian", "bsd"]
 package = "watchman"
+[[install]]
+method = "brew"
+platforms = ["darwin"]
+package = "watchman"
+
 [config]
 symlinks = []
 dependencies = []

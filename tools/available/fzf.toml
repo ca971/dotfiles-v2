@@ -39,6 +39,11 @@ method = "system"
 platforms = ["linux.fedora"]
 package = "fzf"
 
+[[install]]
+method = "brew"
+platforms = ["darwin"]
+package = "fzf"
+
 [config]
 symlinks = []
 dependencies = []

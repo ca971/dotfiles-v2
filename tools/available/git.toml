@@ -34,6 +34,11 @@ package = "git"
 method = "system"
 platforms = ["bsd"]
 package = "git"
+[[install]]
+method = "brew"
+platforms = ["darwin"]
+package = "git"
+
 [config]
 symlinks = []
 dependencies = []

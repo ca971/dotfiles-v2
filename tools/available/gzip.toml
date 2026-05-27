@@ -34,6 +34,11 @@ package = "gzip"
 method = "system"
 platforms = ["bsd"]
 package = "gzip"
+[[install]]
+method = "brew"
+platforms = ["darwin"]
+package = "gzip"
+
 [config]
 symlinks = []
 dependencies = []

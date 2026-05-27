@@ -34,6 +34,11 @@ package = "wget"
 method = "system"
 platforms = ["bsd"]
 package = "wget"
+[[install]]
+method = "brew"
+platforms = ["darwin"]
+package = "wget"
+
 [config]
 symlinks = []
 dependencies = []

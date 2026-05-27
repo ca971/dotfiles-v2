@@ -38,6 +38,11 @@ package = "dfc"
 method = "system"
 platforms = ["bsd"]
 package = "dfc"
+[[install]]
+method = "brew"
+platforms = ["darwin"]
+package = "dfc"
+
 [config]
 symlinks = []
 dependencies = []

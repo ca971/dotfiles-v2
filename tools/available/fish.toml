@@ -34,6 +34,11 @@ package = "fish"
 method = "system"
 platforms = ["bsd"]
 package = "fish"
+[[install]]
+method = "brew"
+platforms = ["darwin"]
+package = "fish"
+
 [config]
 symlinks = []
 dependencies = []

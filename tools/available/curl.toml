@@ -34,6 +34,11 @@ package = "curl"
 method = "system"
 platforms = ["bsd"]
 package = "curl"
+[[install]]
+method = "brew"
+platforms = ["darwin"]
+package = "curl"
+
 [config]
 symlinks = []
 dependencies = []

@@ -34,6 +34,11 @@ package = "xz"
 method = "system"
 platforms = ["bsd"]
 package = "xz"
+[[install]]
+method = "brew"
+platforms = ["darwin"]
+package = "xz"
+
 [config]
 symlinks = []
 dependencies = []

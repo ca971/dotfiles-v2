@@ -39,6 +39,11 @@ method = "system"
 platforms = ["linux.fedora"]
 package = "golang"
 
+[[install]]
+method = "brew"
+platforms = ["darwin"]
+package = "go"
+
 [config]
 symlinks = []
 dependencies = []

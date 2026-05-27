@@ -34,6 +34,11 @@ package = "gnupg2"
 method = "system"
 platforms = ["bsd"]
 package = "gnupg"
+[[install]]
+method = "brew"
+platforms = ["darwin"]
+package = "gnupg"
+
 [config]
 symlinks = []
 dependencies = []

@@ -44,6 +44,11 @@ method = "system"
 platforms = ["linux.fedora"]
 package = "fd-find"
 
+[[install]]
+method = "brew"
+platforms = ["darwin"]
+package = "fd"
+
 [config]
 symlinks = []
 dependencies = []

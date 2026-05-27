@@ -39,6 +39,11 @@ method = "system"
 platforms = ["linux.fedora"]
 package = "ansible"
 
+[[install]]
+method = "brew"
+platforms = ["darwin"]
+package = "ansible"
+
 [config]
 symlinks = []
 dependencies = []

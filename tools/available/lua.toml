@@ -39,6 +39,11 @@ method = "system"
 platforms = ["linux.fedora"]
 package = "lua"
 
+[[install]]
+method = "brew"
+platforms = ["darwin"]
+package = "lua"
+
 [config]
 symlinks = []
 dependencies = []

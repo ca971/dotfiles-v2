@@ -34,6 +34,11 @@ package = "tcpdump"
 method = "system"
 platforms = ["bsd"]
 package = "tcpdump"
+[[install]]
+method = "brew"
+platforms = ["darwin"]
+package = "tcpdump"
+
 [config]
 symlinks = []
 dependencies = []

@@ -33,6 +33,11 @@ package = "fq"
 method = "system"
 platforms = ["bsd"]
 package = "fq"
+[[install]]
+method = "brew"
+platforms = ["darwin"]
+package = "fq"
+
 [config]
 symlinks = []
 dependencies = []

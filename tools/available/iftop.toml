@@ -34,6 +34,11 @@ package = "iftop"
 method = "system"
 platforms = ["bsd"]
 package = "iftop"
+[[install]]
+method = "brew"
+platforms = ["darwin"]
+package = "iftop"
+
 [config]
 symlinks = []
 dependencies = []

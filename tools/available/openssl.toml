@@ -34,6 +34,11 @@ package = "openssl"
 method = "system"
 platforms = ["bsd"]
 package = "openssl"
+[[install]]
+method = "brew"
+platforms = ["darwin"]
+package = "openssl"
+
 [config]
 symlinks = []
 dependencies = []

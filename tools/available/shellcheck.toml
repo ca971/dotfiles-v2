@@ -39,6 +39,11 @@ method = "system"
 platforms = ["linux.fedora"]
 package = "ShellCheck"
 
+[[install]]
+method = "brew"
+platforms = ["darwin"]
+package = "shellcheck"
+
 [config]
 symlinks = []
 dependencies = []

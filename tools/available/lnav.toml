@@ -34,6 +34,11 @@ method = "system"
 platforms = ["linux.arch"]
 package = "lnav"
 
+[[install]]
+method = "brew"
+platforms = ["darwin"]
+package = "lnav"
+
 [config]
 symlinks = []
 dependencies = []

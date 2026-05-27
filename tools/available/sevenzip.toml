@@ -24,6 +24,11 @@ package = "7zip"
 method = "system"
 platforms = ["bsd"]
 package = "7-zip"
+[[install]]
+method = "brew"
+platforms = ["darwin"]
+package = "sevenzip"
+
 [config]
 symlinks = []
 dependencies = []

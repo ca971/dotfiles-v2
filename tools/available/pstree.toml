@@ -34,6 +34,11 @@ package = "psmisc"
 method = "system"
 platforms = ["bsd"]
 package = "psmisc"
+[[install]]
+method = "brew"
+platforms = ["darwin"]
+package = "pstree"
+
 [config]
 symlinks = []
 dependencies = []

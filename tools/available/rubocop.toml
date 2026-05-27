@@ -21,13 +21,18 @@ package = "rubocop"
 
 [[install]]
 method = "system"
-platforms = ["linux.debian"]
+platforms = ["linux.debian", "bsd"]
 package = "rubocop"
 
 [[install]]
 method = "system"
-platforms = ["linux.arch"]
+platforms = ["linux.arch", "bsd"]
 package = "rubocop"
+[[install]]
+method = "brew"
+platforms = ["darwin"]
+package = "rubocop"
+
 [config]
 symlinks = []
 dependencies = []

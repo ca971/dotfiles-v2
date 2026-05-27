@@ -34,6 +34,11 @@ package = "p7zip"
 method = "system"
 platforms = ["bsd"]
 package = "p7zip"
+[[install]]
+method = "brew"
+platforms = ["darwin"]
+package = "p7zip"
+
 [config]
 symlinks = []
 dependencies = []

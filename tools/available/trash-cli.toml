@@ -28,6 +28,11 @@ method = "system"
 platforms = ["linux.debian"]
 package = "trash-cli"
 
+[[install]]
+method = "brew"
+platforms = ["darwin"]
+package = "trash-cli"
+
 [config]
 symlinks = []
 dependencies = []

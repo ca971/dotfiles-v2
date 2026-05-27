@@ -38,6 +38,11 @@ package = "entr"
 method = "system"
 platforms = ["bsd"]
 package = "entr"
+[[install]]
+method = "brew"
+platforms = ["darwin"]
+package = "entr"
+
 [config]
 symlinks = []
 dependencies = []

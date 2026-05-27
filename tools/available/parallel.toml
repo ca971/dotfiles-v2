@@ -34,6 +34,11 @@ package = "parallel"
 method = "system"
 platforms = ["bsd"]
 package = "parallel"
+[[install]]
+method = "brew"
+platforms = ["darwin"]
+package = "parallel"
+
 [config]
 symlinks = []
 dependencies = []

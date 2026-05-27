@@ -29,6 +29,11 @@ method = "system"
 platforms = ["linux.debian"]
 package = "imapsync"
 
+[[install]]
+method = "brew"
+platforms = ["darwin"]
+package = "imapsync"
+
 [config]
 symlinks = []
 dependencies = []

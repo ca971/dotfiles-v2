@@ -38,6 +38,11 @@ package = "chafa"
 method = "system"
 platforms = ["bsd"]
 package = "chafa"
+[[install]]
+method = "brew"
+platforms = ["darwin"]
+package = "chafa"
+
 [config]
 symlinks = []
 dependencies = []

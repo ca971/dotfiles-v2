@@ -39,6 +39,11 @@ method = "system"
 platforms = ["linux.fedora"]
 package = "tmux"
 
+[[install]]
+method = "brew"
+platforms = ["darwin"]
+package = "tmux"
+
 [config]
 symlinks = []
 dependencies = []

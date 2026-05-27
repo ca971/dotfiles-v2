@@ -34,6 +34,11 @@ package = "ncdu"
 method = "system"
 platforms = ["bsd"]
 package = "ncdu"
+[[install]]
+method = "brew"
+platforms = ["darwin"]
+package = "ncdu"
+
 [config]
 symlinks = []
 dependencies = []

@@ -34,6 +34,11 @@ package = "lftp"
 method = "system"
 platforms = ["bsd"]
 package = "lftp"
+[[install]]
+method = "brew"
+platforms = ["darwin"]
+package = "lftp"
+
 [config]
 symlinks = []
 dependencies = []

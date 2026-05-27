@@ -34,6 +34,11 @@ package = "mutt"
 method = "system"
 platforms = ["bsd"]
 package = "mutt"
+[[install]]
+method = "brew"
+platforms = ["darwin"]
+package = "mutt"
+
 [config]
 symlinks = []
 dependencies = []

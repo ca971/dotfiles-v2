@@ -34,6 +34,11 @@ package = "pwgen"
 method = "system"
 platforms = ["bsd"]
 package = "pwgen"
+[[install]]
+method = "brew"
+platforms = ["darwin"]
+package = "pwgen"
+
 [config]
 symlinks = []
 dependencies = []

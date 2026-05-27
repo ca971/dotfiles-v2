@@ -39,6 +39,11 @@ method = "system"
 platforms = ["linux.fedora"]
 package = "luajit"
 
+[[install]]
+method = "brew"
+platforms = ["darwin"]
+package = "luajit"
+
 [config]
 symlinks = []
 dependencies = []

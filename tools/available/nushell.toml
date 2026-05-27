@@ -15,7 +15,7 @@ verify = "nu --version"
 
 [[install]]
 method = "mise"
-platforms = ["darwin", "linux", "wsl"]
+platforms = ["darwin", "linux", "wsl", "bsd"]
 plugin = "aqua:nushell/nushell"
 version = "latest"
 
@@ -26,7 +26,7 @@ package = "nushell"
 
 [[install]]
 method = "cargo"
-platforms = ["darwin", "linux", "wsl"]
+platforms = ["darwin", "linux", "wsl", "bsd"]
 crate = "nu"
 
 [config]

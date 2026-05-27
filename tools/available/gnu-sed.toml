@@ -34,6 +34,11 @@ package = "sed"
 method = "system"
 platforms = ["bsd"]
 package = "gsed"
+[[install]]
+method = "brew"
+platforms = ["darwin"]
+package = "gnu-sed"
+
 [config]
 symlinks = []
 dependencies = []

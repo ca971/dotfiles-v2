@@ -29,6 +29,11 @@ method = "system"
 platforms = ["linux.debian"]
 package = "gh"
 
+[[install]]
+method = "brew"
+platforms = ["darwin"]
+package = "gh"
+
 [config]
 symlinks = []
 dependencies = []

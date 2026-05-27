@@ -28,6 +28,11 @@ method = "system"
 platforms = ["linux.arch"]
 package = "git-delta"
 
+[[install]]
+method = "brew"
+platforms = ["darwin"]
+package = "git-delta"
+
 [config]
 symlinks = []
 dependencies = []

@@ -34,6 +34,11 @@ method = "system"
 platforms = ["linux.arch"]
 package = "eza"
 
+[[install]]
+method = "brew"
+platforms = ["darwin"]
+package = "eza"
+
 [config]
 symlinks = []
 dependencies = []

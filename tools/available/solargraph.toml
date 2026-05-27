@@ -21,8 +21,13 @@ package = "solargraph"
 
 [[install]]
 method = "system"
-platforms = ["linux.debian"]
+platforms = ["linux.debian", "bsd"]
 package = "solargraph"
+[[install]]
+method = "brew"
+platforms = ["darwin"]
+package = "solargraph"
+
 [config]
 symlinks = []
 dependencies = []

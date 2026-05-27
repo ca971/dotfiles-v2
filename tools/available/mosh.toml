@@ -34,6 +34,11 @@ package = "mosh"
 method = "system"
 platforms = ["bsd"]
 package = "mosh"
+[[install]]
+method = "brew"
+platforms = ["darwin"]
+package = "mosh"
+
 [config]
 symlinks = []
 dependencies = []

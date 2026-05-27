@@ -39,6 +39,11 @@ method = "system"
 platforms = ["linux.fedora"]
 package = "sqlite"
 
+[[install]]
+method = "brew"
+platforms = ["darwin"]
+package = "sqlite"
+
 [config]
 symlinks = []
 dependencies = []

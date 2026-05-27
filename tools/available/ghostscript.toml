@@ -38,6 +38,11 @@ package = "ghostscript"
 method = "system"
 platforms = ["bsd"]
 package = "ghostscript10"
+[[install]]
+method = "brew"
+platforms = ["darwin"]
+package = "ghostscript"
+
 [config]
 symlinks = []
 dependencies = []

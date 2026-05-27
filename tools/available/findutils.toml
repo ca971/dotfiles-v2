@@ -34,6 +34,11 @@ package = "findutils"
 method = "system"
 platforms = ["bsd"]
 package = "findutils"
+[[install]]
+method = "brew"
+platforms = ["darwin"]
+package = "findutils"
+
 [config]
 symlinks = []
 dependencies = []

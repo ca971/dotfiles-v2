@@ -39,6 +39,11 @@ method = "system"
 platforms = ["linux.fedora"]
 package = "vim"
 
+[[install]]
+method = "brew"
+platforms = ["darwin"]
+package = "vim"
+
 [config]
 symlinks = []
 dependencies = []

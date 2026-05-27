@@ -34,6 +34,11 @@ package = "procps-ng"
 method = "system"
 platforms = ["bsd"]
 package = "cmdwatch"
+[[install]]
+method = "brew"
+platforms = ["darwin"]
+package = "watch"
+
 [config]
 symlinks = []
 dependencies = []

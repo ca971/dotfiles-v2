@@ -39,6 +39,11 @@ method = "system"
 platforms = ["linux.fedora"]
 package = "docker-compose"
 
+[[install]]
+method = "brew"
+platforms = ["darwin"]
+package = "docker-compose"
+
 [config]
 symlinks = []
 dependencies = []

@@ -34,6 +34,11 @@ package = "zlib-devel"
 method = "system"
 platforms = ["bsd"]
 package = "zlib-ng"
+[[install]]
+method = "brew"
+platforms = ["darwin"]
+package = "zlib"
+
 [config]
 symlinks = []
 dependencies = []

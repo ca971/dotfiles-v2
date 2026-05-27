@@ -39,6 +39,11 @@ method = "system"
 platforms = ["linux.fedora"]
 package = "duf"
 
+[[install]]
+method = "brew"
+platforms = ["darwin"]
+package = "duf"
+
 [config]
 symlinks = []
 dependencies = []

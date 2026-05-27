@@ -29,6 +29,11 @@ method = "system"
 platforms = ["linux.arch"]
 package = "miller"
 
+[[install]]
+method = "brew"
+platforms = ["darwin"]
+package = "miller"
+
 [config]
 symlinks = []
 dependencies = []
