@@ -51,6 +51,36 @@ error()   { echo -e "${RED}[ERR]${RESET}  $*" >&2; }
 fatal()   { error "$*"; exit 1; }
 
 # ═══════════════════════════════════════════════════════════════════════════════
+# @description Ensure Xcode Command Line Tools are installed (macOS only)
+#           Required for git, compilers, and Homebrew itself
+# ═══════════════════════════════════════════════════════════════════════════════
+ensure_xcode_cli() {
+    if [[ "$(uname -s)" != "Darwin" ]]; then
+        return 0
+    fi
+
+    # Already installed?
+    if xcode-select -p &>/dev/null; then
+        info "Xcode Command Line Tools already installed"
+        return 0
+    fi
+
+    info "Installing Xcode Command Line Tools..."
+    info "A GUI dialog will appear — follow the prompts to complete installation."
+    xcode-select --install 2>/dev/null || true
+
+    info "Waiting for Xcode CLI tools installation to complete..."
+    info "Press Enter once the installation is finished..."
+    read -r
+
+    if xcode-select -p &>/dev/null; then
+        success "Xcode Command Line Tools installed"
+    else
+        warn "Xcode CLI tools may not be fully installed — git may be unavailable"
+    fi
+}
+
+# ═══════════════════════════════════════════════════════════════════════════════
 # @description Verify minimal system requirements before proceeding
 # ═══════════════════════════════════════════════════════════════════════════════
 preflight_check() {
@@ -120,6 +150,7 @@ main() {
 BANNER
     echo -e "${RESET}"
 
+    ensure_xcode_cli
     preflight_check
     clone_dotfiles
     run_bootstrap "$@"

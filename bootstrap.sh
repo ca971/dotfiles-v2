@@ -108,7 +108,7 @@ show_help() {
 # @description Ensure local vault directory structure exists
 # ═══════════════════════════════════════════════════════════════════════════════
 setup_local_vault() {
-    Logger::step 1 7 "Setting up local vault..."
+    Logger::step 1 8 "Setting up local vault..."
 
     FileSystem::mkdir "${DOTFILES_DIR}/local" "755"
     FileSystem::ensure_private_dir "${DOTFILES_DIR}/local/secrets"
@@ -126,10 +126,49 @@ setup_local_vault() {
 }
 
 # ═══════════════════════════════════════════════════════════════════════════════
+# @description Ensure Homebrew is available on macOS BEFORE hard deps
+#           (jq, and potentially other tools, need brew on Darwin)
+# ═══════════════════════════════════════════════════════════════════════════════
+ensure_homebrew() {
+    if ! Platform::is "darwin"; then
+        return 0
+    fi
+
+    Logger::step 2 8 "Ensuring Homebrew is installed..."
+
+    if command -v brew &>/dev/null; then
+        Logger::debug "Homebrew already installed at $(which brew)"
+        Logger::success "Homebrew ready"
+        return 0
+    fi
+
+    if [[ "${OPT_DRY_RUN}" -eq 1 ]]; then
+        Logger::info "[dry-run] Would install Homebrew"
+        Logger::success "Homebrew (dry-run)"
+        return 0
+    fi
+
+    Logger::info "Installing Homebrew..."
+    /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
+
+    # Add to current session PATH
+    if [[ -f /opt/homebrew/bin/brew ]]; then
+        eval "$(/opt/homebrew/bin/brew shellenv)"
+    elif [[ -f /usr/local/bin/brew ]]; then
+        eval "$(/usr/local/bin/brew shellenv)"
+    fi
+
+    # Opt out of analytics immediately
+    brew analytics off 2>/dev/null || true
+
+    Logger::success "Homebrew ready"
+}
+
+# ═══════════════════════════════════════════════════════════════════════════════
 # @description Install hard dependencies required before anything else
 # ═══════════════════════════════════════════════════════════════════════════════
 install_hard_deps() {
-    Logger::step 2 7 "Installing hard dependencies..."
+    Logger::step 3 8 "Installing hard dependencies..."
 
     # jq
     if ! Validator::command_exists "jq"; then
@@ -198,7 +237,7 @@ install_package() {
 # @description Run the SSOT generators to produce shell-specific configs
 # ═══════════════════════════════════════════════════════════════════════════════
 run_generators() {
-    Logger::step 3 7 "Running SSOT generators..."
+    Logger::step 4 8 "Running SSOT generators..."
 
     local gen_dir="${DOTFILES_DIR}/generators"
 
@@ -218,7 +257,7 @@ run_generators() {
 # @description Create symlinks for config files
 # ═══════════════════════════════════════════════════════════════════════════════
 setup_symlinks() {
-    Logger::step 4 7 "Setting up symlinks..."
+    Logger::step 5 8 "Setting up symlinks..."
 
     local xdg_config="${XDG_CONFIG_HOME:-${HOME}/.config}"
     FileSystem::mkdir "${xdg_config}"
@@ -259,7 +298,7 @@ setup_symlinks() {
 # @description Run platform-specific provisioning
 # ═══════════════════════════════════════════════════════════════════════════════
 setup_platform() {
-    Logger::step 5 7 "Running platform-specific setup..."
+    Logger::step 6 8 "Running platform-specific setup..."
 
     local -a scripts=()
 
@@ -304,7 +343,7 @@ setup_platform() {
 # @description Install tools via the hot-loading engine
 # ═══════════════════════════════════════════════════════════════════════════════
 install_tools() {
-    Logger::step 6 7 "Installing tools..."
+    Logger::step 7 8 "Installing tools..."
 
     local engine="${DOTFILES_DIR}/lib/hotload/engine.sh"
 
@@ -386,7 +425,7 @@ except Exception:
 # @description Final setup and verification
 # ═══════════════════════════════════════════════════════════════════════════════
 finalize() {
-    Logger::step 7 7 "Finalizing..."
+    Logger::step 8 8 "Finalizing..."
 
     Platform::summary
     ShellDetector::summary
@@ -519,6 +558,7 @@ main() {
     fi
 
     setup_local_vault
+    ensure_homebrew
     install_hard_deps
     run_generators
     setup_symlinks
