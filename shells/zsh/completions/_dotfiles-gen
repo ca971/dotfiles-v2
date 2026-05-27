@@ -1,0 +1,32 @@
+#compdef dotfiles-gen
+
+# ═══════════════════════════════════════════════════════════════════════════════
+# @file shells/zsh/completions/_dotfiles-gen
+# @description Zsh completion for dotfiles-gen
+# ═══════════════════════════════════════════════════════════════════════════════
+
+_dotfiles_gen() {
+    local -a commands
+    commands=(
+        'generate:Generate shell configs'
+        'validate:Validate definitions without generating'
+    )
+
+    _arguments -C \
+        '1: :_describe -t commands command commands' \
+        '*::arg:->args'
+
+    case "$state" in
+        args)
+            case "$words[1]" in
+                generate)
+                    _arguments \
+                        '--all[Generate for all shells]' \
+                        '--shell[Generate for specific shell]:shell:(bash zsh fish nushell)'
+                    ;;
+            esac
+            ;;
+    esac
+}
+
+_dotfiles_gen "$@"

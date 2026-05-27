@@ -1,0 +1,83 @@
+#compdef dotfiles
+
+# ═══════════════════════════════════════════════════════════════════════════════
+# @file shells/zsh/completions/_dotfiles
+# @description Zsh completion for dotfiles CLI
+# @since 1.0.0
+# ═══════════════════════════════════════════════════════════════════════════════
+
+_dotfiles_commands() {
+    local -a commands
+    commands=(
+        'install:Install a tool via hot-loading'
+        'uninstall:Uninstall a tool'
+        'status:Show all tools status'
+        'verify:Verify installed tools work'
+        'setup:Interactive first-time setup wizard'
+        'sync:Full idempotent sync'
+        'update:Pull latest + regenerate configs'
+        'upgrade:Update + upgrade all tools + health check'
+        'generate:Regenerate shell configs from SSOT'
+        'doctor:Run system health check'
+        'bench:Benchmark shell startup time'
+        'vault-init:Initialize local vault with permissions'
+        'vault-keygen:Generate age encryption key pair'
+        'vault-encrypt:Encrypt a file with age'
+        'vault-decrypt:Decrypt a file with age'
+        'snapshot:Save/restore dotfiles state'
+    )
+    _describe -t commands 'dotfiles command' commands
+}
+
+_dotfiles_snapshot_subcmd() {
+    local -a subcmds
+    subcmds=(
+        'create:Create a new snapshot'
+        'list:List all snapshots'
+        'rollback:Rollback to a previous snapshot'
+    )
+    _describe -t subcommands 'snapshot subcommand' subcmds
+}
+
+_dotfiles() {
+    local context curcontext="$curcontext" state line
+    typeset -A opt_args
+
+    _arguments -C \
+        '--help[Show help]' \
+        '--version[Show version]' \
+        '1: :_dotfiles_commands' \
+        '*::arg:->args'
+
+    case "$state" in
+        args)
+            case "$words[1]" in
+                install|uninstall)
+                    # Complete with available tools
+                    local -a tools
+                    tools=(${(f)"$(_dotfiles_list_tools)"})
+                    _describe -t tools 'tool' tools
+                    ;;
+                snapshot)
+                    _dotfiles_snapshot_subcmd
+                    ;;
+                sync)
+                    _arguments \
+                        '--dry-run[Show what would happen]' \
+                        '--force[Reinstall even if installed]'
+                    ;;
+            esac
+            ;;
+    esac
+}
+
+_dotfiles_list_tools() {
+    local tools_dir="${DOTFILES_DIR:-${HOME}/.dotfiles}/tools/available"
+    if [[ -d "$tools_dir" ]]; then
+        for f in "$tools_dir"/*.toml(N); do
+            basename "$f" .toml
+        done
+    fi
+}
+
+_dotfiles "$@"

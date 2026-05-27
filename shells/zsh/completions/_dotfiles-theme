@@ -1,0 +1,22 @@
+#compdef dotfiles-theme
+
+# ═══════════════════════════════════════════════════════════════════════════════
+# @file shells/zsh/completions/_dotfiles-theme
+# @description Zsh completion for dotfiles-theme
+# ═══════════════════════════════════════════════════════════════════════════════
+
+_dotfiles_theme() {
+    local -a themes
+    themes=(
+        'minimal:Clean, fast, no nerd fonts'
+        'full:All segments, Nerd Font icons'
+        'powerline:Colored segments with arrows'
+    )
+
+    _arguments -C \
+        '--list[Show available themes]' \
+        '--help[Show help]' \
+        '1: :_describe -t themes theme themes'
+}
+
+_dotfiles_theme "$@"
