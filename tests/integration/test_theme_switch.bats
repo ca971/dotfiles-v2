@@ -96,22 +96,22 @@ teardown() {
 # ═══════════════════════════════════════════════════════════════════════════════
 
 @test "git config exists and has core section" {
-    [[ -s "${DOTFILES_DIR}/config/git/config" ]]
-    grep -q "\[core\]" "${DOTFILES_DIR}/config/git/config"
+    [[ -s "${DOTFILES_DIR}/config/git/gitconfig" ]]
+    grep -q "\[core\]" "${DOTFILES_DIR}/config/git/gitconfig"
 }
 
 @test "git config uses delta as pager" {
-    grep -q "pager = delta" "${DOTFILES_DIR}/config/git/config"
+    grep -q "pager = delta" "${DOTFILES_DIR}/config/git/gitconfig"
 }
 
 @test "git config includes local overrides" {
-    grep -q "gitconfig.local" "${DOTFILES_DIR}/config/git/config"
+    grep -q "gitconfig.local" "${DOTFILES_DIR}/config/git/gitconfig"
 }
 
 @test "git ignore exists and covers OS artifacts" {
-    [[ -s "${DOTFILES_DIR}/config/git/ignore" ]]
-    grep -q ".DS_Store" "${DOTFILES_DIR}/config/git/ignore"
-    grep -q "node_modules" "${DOTFILES_DIR}/config/git/ignore"
+    [[ -s "${DOTFILES_DIR}/config/git/gitignore_global" ]]
+    grep -q ".DS_Store" "${DOTFILES_DIR}/config/git/gitignore_global"
+    grep -q "node_modules" "${DOTFILES_DIR}/config/git/gitignore_global"
 }
 
 @test "bat config exists and sets theme" {
