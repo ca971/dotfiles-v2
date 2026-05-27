@@ -1,0 +1,4 @@
+[meta]
+name = "elixir"
+description = "Elixir and Phoenix development environment"
+enabled = true

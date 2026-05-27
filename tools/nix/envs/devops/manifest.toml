@@ -1,17 +1,4 @@
 [meta]
 name = "devops"
-description = "DevOps and cloud infrastructure tools"
+description = "Cloud infrastructure and Kubernetes tools"
 enabled = true
-
-[packages]
-terraform = "Infrastructure as Code"
-kubectl = "Kubernetes CLI"
-helm = "Kubernetes package manager"
-awscli2 = "AWS CLI v2"
-google-cloud-sdk = "Google Cloud SDK"
-doctl = "DigitalOcean CLI"
-ansible = "Configuration management"
-k9s = "Kubernetes TUI"
-stern = "Multi-pod log tailing"
-kubectx = "Kube context/namespace switcher"
-trivy = "Container vulnerability scanner"

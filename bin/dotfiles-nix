@@ -218,7 +218,7 @@ show_help() {
 	  update [env]      Update flake.lock (all enabled or specific)
 
 	Environments:
-	  default, devops, go, node, python, rust, data, security
+	  default, devops, go, node, python, rust, data, security, elixir, zig, ruby
 
 	Examples:
 	  dotfiles-nix enter python

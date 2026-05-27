@@ -1,0 +1,21 @@
+[meta]
+name = "nix"
+description = "Nix package manager — reproducible builds and development environments"
+homepage = "https://nixos.org"
+category = "system"
+version = "latest"
+verify = "nix --version"
+
+[[install]]
+method = "curl"
+platforms = ["darwin", "linux", "wsl"]
+command = "curl -fsSL https://nixos.org/nix/install | sh"
+
+[[install]]
+method = "curl"
+platforms = ["darwin", "linux", "wsl"]
+command = "curl -fsSL https://install.determinate.systems/nix | sh -s -- install"
+
+[config]
+symlinks = [{ src = "config/nix/nix.conf", dst = "~/.config/nix/nix.conf" }]
+dependencies = []

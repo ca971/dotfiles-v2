@@ -1,11 +1,4 @@
 [meta]
 name = "python"
-description = "Python development environment"
+description = "Python 3.13 with uv, ruff, mypy, ipython"
 enabled = true
-
-[packages]
-python3 = "Python interpreter"
-uv = "Ultra-fast Python package manager"
-ruff = "Extremely fast Python linter/formatter"
-mypy = "Static type checker"
-python3Packages.ipython = "Enhanced Python REPL"

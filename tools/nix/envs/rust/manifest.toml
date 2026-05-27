@@ -1,13 +1,4 @@
 [meta]
 name = "rust"
-description = "Rust development environment"
+description = "Rust with rust-analyzer, cargo tools, and clippy"
 enabled = true
-
-[packages]
-rustc = "Rust compiler"
-cargo = "Rust package manager"
-clippy = "Rust linter"
-rustfmt = "Rust formatter"
-rust-analyzer = "Rust language server"
-cargo-watch = "File watcher for cargo"
-cargo-nextest = "Next-gen test runner"

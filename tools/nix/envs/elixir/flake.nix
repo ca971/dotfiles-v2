@@ -1,5 +1,5 @@
 {
-  description = "Node.js development environment";
+  description = "Elixir and Phoenix development environment";
 
   inputs = {
     nixpkgs.url = "github:NixOS/nixpkgs/nixpkgs-unstable";
@@ -13,17 +13,14 @@
       in
       {
         devShells.default = pkgs.mkShell {
-          name = "node";
+          name = "elixir";
           packages = with pkgs; [
-            nodejs_22
-            bun
-            pnpm
-            typescript
-            nodePackages.typescript-language-server
-            nodePackages.prettier
+            elixir
+            erlang
+            elixir_ls
           ];
           shellHook = ''
-            echo "  env: node ($(node --version 2>/dev/null))"
+            echo "  env: elixir ($(elixir --version 2>/dev/null | head -1))"
           '';
         };
       }

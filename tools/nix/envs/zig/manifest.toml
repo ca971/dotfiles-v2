@@ -1,0 +1,4 @@
+[meta]
+name = "zig"
+description = "Zig systems programming environment"
+enabled = true

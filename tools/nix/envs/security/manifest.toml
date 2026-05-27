@@ -1,11 +1,4 @@
 [meta]
 name = "security"
-description = "Security, encryption, and secrets management tools"
-enabled = false
-
-[packages]
-age = "Modern encryption tool"
-sops = "Secrets OPerationS (encrypted file editor)"
-gnupg = "GNU Privacy Guard"
-openssl = "TLS/SSL toolkit"
-cosign = "Container signing"
+description = "Security tools: age, sops, gnupg, openssl, cosign"
+enabled = true

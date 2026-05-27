@@ -1,5 +1,5 @@
 {
-  description = "Node.js development environment";
+  description = "Ruby development environment";
 
   inputs = {
     nixpkgs.url = "github:NixOS/nixpkgs/nixpkgs-unstable";
@@ -13,17 +13,14 @@
       in
       {
         devShells.default = pkgs.mkShell {
-          name = "node";
+          name = "ruby";
           packages = with pkgs; [
-            nodejs_22
-            bun
-            pnpm
-            typescript
-            nodePackages.typescript-language-server
-            nodePackages.prettier
+            ruby
+            rubyPackages.solargraph
+            rubyPackages.rubocop
           ];
           shellHook = ''
-            echo "  env: node ($(node --version 2>/dev/null))"
+            echo "  env: ruby ($(ruby --version 2>/dev/null))"
           '';
         };
       }

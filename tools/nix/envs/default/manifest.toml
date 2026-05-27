@@ -1,15 +1,4 @@
 [meta]
 name = "default"
-description = "Base utilities available in all Nix sessions"
+description = "Core development tools (git, jq, curl, make, etc.)"
 enabled = true
-
-[packages]
-coreutils = "GNU coreutils"
-findutils = "find, xargs"
-gnugrep = "GNU grep"
-gnused = "GNU sed"
-jq = "JSON processor"
-yq-go = "YAML processor"
-tree = "Directory tree viewer"
-curl = "URL transfer tool"
-wget = "Network downloader"

@@ -1,11 +1,4 @@
 [meta]
 name = "node"
-description = "Node.js development environment"
+description = "Node.js with TypeScript, biome, and Node tools"
 enabled = true
-
-[packages]
-nodejs = "Node.js runtime"
-pnpm = "Fast, disk-efficient package manager"
-typescript = "TypeScript compiler"
-nodePackages.typescript-language-server = "TypeScript LSP"
-nodePackages.prettier = "Code formatter"
