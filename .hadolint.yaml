@@ -1,0 +1,7 @@
+# Hadolint configuration for dotfiles test Docker image
+# The test image is used inside Docker only, sudo is acceptable
+ignored:
+  - DL3004  # sudo usage is fine in test container
+  - DL3008  # pinning apt versions not needed for test image
+  - DL3003  # cd before RUN is acceptable for test setup
+  - DL4006  # pipefail not needed in test utility RUN steps
