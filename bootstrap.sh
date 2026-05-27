@@ -54,6 +54,8 @@ declare OPT_NO_GUI=0
 declare OPT_DRY_RUN=0
 # shellcheck disable=SC2034
 declare OPT_VERBOSE=0
+# shellcheck disable=SC2034
+declare OPT_PROFILE="dev"
 
 # ═══════════════════════════════════════════════════════════════════════════════
 # @description Parse command-line arguments
@@ -67,6 +69,7 @@ parse_args() {
             --no-gui)    OPT_NO_GUI=1 ;;
             --dry-run)   OPT_DRY_RUN=1 ;;
             --verbose)   OPT_VERBOSE=1; Logger::set_level "debug" ;;
+            --profile)   OPT_PROFILE="${2:?Profile name required after --profile}"; shift ;;
             --help|-h)   show_help; exit 0 ;;
             *)           Logger::warn "Unknown option: ${1}" ;;
         esac
@@ -82,11 +85,12 @@ show_help() {
 	Usage: bootstrap.sh [OPTIONS]
 
 	Options:
-	  --minimal    Install core tools only (skip extras)
-	  --no-gui     Skip GUI applications
-	  --dry-run    Show what would be done without executing
-	  --verbose    Enable debug logging
-	  --help, -h   Show this help message
+	    --minimal    Install core tools only (skip extras)
+	    --no-gui     Skip GUI applications
+	    --dry-run    Show what would be done without executing
+	    --verbose    Enable debug logging
+	    --profile    Tool profile to install: minimal, dev, server, devops, data, full (default: dev)
+	    --help, -h   Show this help message
 
 	Environment:
 	  DOTFILES_DIR    Override dotfiles location (default: ~/.dotfiles)
@@ -303,11 +307,12 @@ install_tools() {
         return 0
     fi
 
-    # Determine profile: --minimal → minimal, otherwise read from state or default to dev
-    local profile="dev"
+    # Determine profile: --profile <name> → explicit, --minimal → minimal,
+    # otherwise read from state or default to dev
+    local profile="${OPT_PROFILE}"
     if [[ "${OPT_MINIMAL}" -eq 1 ]]; then
         profile="minimal"
-    elif [[ -f "${DOTFILES_DIR}/local/state.json" ]]; then
+    elif [[ "${profile}" = "dev" ]] && [[ -f "${DOTFILES_DIR}/local/state.json" ]]; then
         profile="$(jq -r '.profile // "dev"' "${DOTFILES_DIR}/local/state.json" 2>/dev/null || echo "dev")"
     fi
 
