@@ -87,7 +87,12 @@ def generate(shells: list[str], project_root: Path) -> int:
         output_dir = project_root / "shells" / shell / "generated"
         emitter = get_emitter(shell, output_dir)
 
-        ext = "fish" if shell == "fish" else "sh"
+        if shell == "fish":
+            ext = "fish"
+        elif shell == "nushell":
+            ext = "nu"
+        else:
+            ext = "sh"
         print(f"\nGenerating for {shell} -> {output_dir}")
 
         emitter.write(f"aliases.gen.{ext}", emitter.emit_aliases(aliases))
@@ -100,6 +105,7 @@ def generate(shells: list[str], project_root: Path) -> int:
         file_count = 6
         if shell == "zsh":
             from .emitters.zsh import ZshEmitter
+
             assert isinstance(emitter, ZshEmitter)
             emitter.write("plugins.gen.sh", emitter.emit_plugins(plugins))
             file_count = 7
@@ -149,10 +155,7 @@ def validate(project_root: Path) -> int:
 
     try:
         highlights = parser.parse_highlights()
-        print(
-            f"  highlights.toml: "
-            f"{sum(len(g) for g in highlights.highlights.values())} styles OK"
-        )
+        print(f"  highlights.toml: {sum(len(g) for g in highlights.highlights.values())} styles OK")
     except Exception as e:
         errors.append(f"  highlights.toml: FAILED - {e}")
 

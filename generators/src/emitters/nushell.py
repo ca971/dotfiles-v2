@@ -42,13 +42,24 @@ class NushellEmitter(ShellEmitter):
         )
 
     def emit_aliases(self, definitions: AliasDefinitions) -> str:
+        """Emit nushell aliases. Simple aliases use `alias`, ones with flags use `def`."""
         lines: list[str] = []
         for group_name, aliases in definitions.aliases.items():
             lines.append(f"\n# --- {group_name} ---")
             for name, alias in aliases.items():
                 if name.startswith(".") or name == "-" or name == "~":
                     continue
-                lines.append(f"alias {name} = {alias.command}")
+                cmd = alias.command
+                # Aliases containing flags/options need `def` for proper parsing
+                has_flags = any(
+                    token.startswith("-") or token.startswith("--") or "|" in cmd or ";" in cmd
+                    for token in cmd.split()
+                )
+                if has_flags:
+                    # Use def with rest args to capture additional arguments
+                    lines.append(f"def --wrapped {name} [...rest] {{ {cmd} ...$rest }}")
+                else:
+                    lines.append(f"alias {name} = {cmd}")
         return "\n".join(lines) + "\n"
 
     def emit_functions(self, definitions: FunctionDefinitions) -> str:
@@ -85,12 +96,8 @@ class NushellEmitter(ShellEmitter):
             return None
 
         # Variable substitutions
-        result = re.sub(
-            r"\$\{1:-([^}]*)\}", r'($args | first | default "\1")', result
-        )
-        result = re.sub(
-            r"\$\{2:-([^}]*)\}", r'(try { $args | get 1 } catch { "\1" })', result
-        )
+        result = re.sub(r"\$\{1:-([^}]*)\}", r'($args | first | default "\1")', result)
+        result = re.sub(r"\$\{2:-([^}]*)\}", r'(try { $args | get 1 } catch { "\1" })', result)
         result = re.sub(r"\$@", "$args", result)
         result = re.sub(r"\$2", "($args | get 1)", result)
         result = re.sub(r"\$1", "($args | first)", result)
@@ -109,9 +116,7 @@ class NushellEmitter(ShellEmitter):
             r"(not (\2 | path exists))",
             result,
         )
-        result = re.sub(
-            r"\[\[\s*-\s*(\w+)\s+(\S+)\s*\]\]", r"(\2 | path exists)", result
-        )
+        result = re.sub(r"\[\[\s*-\s*(\w+)\s+(\S+)\s*\]\]", r"(\2 | path exists)", result)
         result = re.sub(r'\[\[\s*-n\s+"\$(.+?)"', r"($1 != null", result)
         result = re.sub(r'\[\[\s*-z\s+"\$(.+?)"\s*\]\]', r"($1 == null)", result)
 
@@ -121,9 +126,7 @@ class NushellEmitter(ShellEmitter):
         result = re.sub(r"__ELIF_PROTECT__", "} else if", result)
 
         # case -> match
-        result = re.sub(
-            r'\bcase\s+"\$\(.+?\)\"\s+in\b', r"match ($args | first) {", result
-        )
+        result = re.sub(r'\bcase\s+"\$\(.+?\)\"\s+in\b', r"match ($args | first) {", result)
         result = re.sub(
             r"^(\s*)\*:([^:]*):\*\)\s*;;",
             r"\1$_\' => { null }",
@@ -161,9 +164,7 @@ class NushellEmitter(ShellEmitter):
         result = re.sub(r"\bdone\b", "", result)
 
         # return 1 -> error make
-        result = re.sub(
-            r"\breturn\s+1\b", 'error make {msg: "operation failed"}', result
-        )
+        result = re.sub(r"\breturn\s+1\b", 'error make {msg: "operation failed"}', result)
         result = re.sub(r"\breturn\s+0\b", "return", result)
 
         # Clean up double spaces / trailing semicolons
@@ -193,17 +194,11 @@ class NushellEmitter(ShellEmitter):
         for entry in definitions.path:
             path_val = entry.path.replace("$HOME", "($env.HOME)")
             path_val = path_val.replace("$GOPATH", "($env.GOPATH? | default '')")
-            path_val = path_val.replace(
-                "$CARGO_HOME", "($env.CARGO_HOME? | default '')"
-            )
+            path_val = path_val.replace("$CARGO_HOME", "($env.CARGO_HOME? | default '')")
             if entry.condition:
                 cond_path = entry.condition.replace("$HOME", "($env.HOME)")
-                cond_path = cond_path.replace(
-                    "$GOPATH", "($env.GOPATH? | default '')"
-                )
-                cond_path = cond_path.replace(
-                    "$CARGO_HOME", "($env.CARGO_HOME? | default '')"
-                )
+                cond_path = cond_path.replace("$GOPATH", "($env.GOPATH? | default '')")
+                cond_path = cond_path.replace("$CARGO_HOME", "($env.CARGO_HOME? | default '')")
                 if entry.prepend:
                     lines.append(
                         f'if ("{cond_path}" | path exists) {{ '
@@ -216,20 +211,13 @@ class NushellEmitter(ShellEmitter):
                     )
             else:
                 if entry.prepend:
-                    lines.append(
-                        f'$env.PATH = ("{path_val}" | prepend $env.PATH)'
-                    )
+                    lines.append(f'$env.PATH = ("{path_val}" | prepend $env.PATH)')
                 else:
-                    lines.append(
-                        f'$env.PATH = ($env.PATH | append "{path_val}")'
-                    )
+                    lines.append(f'$env.PATH = ($env.PATH | append "{path_val}")')
         return "\n".join(lines) + "\n"
 
     def emit_keybindings(self, definitions: KeybindingDefinitions) -> str:
         lines: list[str] = ["\n# --- Keybindings ---"]
-        lines.append(
-            "# Nushell keybindings are configured in config.nu"
-            " $env.config.keybindings"
-        )
+        lines.append("# Nushell keybindings are configured in config.nu $env.config.keybindings")
         lines.append("# See: https://www.nushell.sh/book/line_editor.html")
         return "\n".join(lines) + "\n"

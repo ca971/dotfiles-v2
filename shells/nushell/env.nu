@@ -45,10 +45,13 @@ let brew_path = "/opt/homebrew/bin"
 if ($brew_path | path exists) { $env.PATH = ($env.PATH | prepend $brew_path) }
 
 # ───────────────────────────────────────────────────────────────────────────────
-# Source generated env (SSOT → nushell)
+# Source generated configs (SSOT → nushell)
 # ───────────────────────────────────────────────────────────────────────────────
-let gen_env = ($gen_dir | path join "env.gen.sh")
-# Note: Generated nushell env is sourced manually as nu doesn't support glob source
+let gen_env = ($gen_dir | path join "env.gen.nu")
+if ($gen_env | path exists) { source $gen_env }
+
+let gen_path = ($gen_dir | path join "path.gen.nu")
+if ($gen_path | path exists) { source $gen_path }
 
 # ───────────────────────────────────────────────────────────────────────────────
 # Tool integrations (env phase)

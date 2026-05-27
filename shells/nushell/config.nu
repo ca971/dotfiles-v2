@@ -18,8 +18,14 @@
 # ───────────────────────────────────────────────────────────────────────────────
 let gen_dir = ($env.DOTFILES_DIR | path join "shells" "nushell" "generated")
 
-let gen_aliases = ($gen_dir | path join "aliases.gen.sh")
+let gen_aliases = ($gen_dir | path join "aliases.gen.nu")
 if ($gen_aliases | path exists) { source $gen_aliases }
+
+let gen_functions = ($gen_dir | path join "functions.gen.nu")
+if ($gen_functions | path exists) { source $gen_functions }
+
+let gen_init = ($gen_dir | path join "init.gen.nu")
+if ($gen_init | path exists) { source $gen_init }
 
 # ───────────────────────────────────────────────────────────────────────────────
 # Shell settings
