@@ -65,7 +65,12 @@ with open(README) as f:
     readme = f.read()
 
 for name, count in counts.items():
-    readme = re.sub(rf"\| `{name}` \| \d+ \|", f"| `{name}` | {count} |", readme)
+    # Handle both formats: "| `name` | N |" and "| `name`|   N  | ..."
+    readme = re.sub(
+        rf"\| *`{name}` *\| *\d+ *\|",
+        f"| `{name}`|   {count:<4} |",
+        readme,
+    )
 
 with open(README, "w") as f:
     f.write(readme)
