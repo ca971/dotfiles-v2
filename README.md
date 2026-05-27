@@ -20,7 +20,7 @@ all platforms, shells, and machine profiles.
 [![Tests](https://img.shields.io/badge/Tests-69%20passing-brightgreen?style=flat-square)](./generators/tests)
 [![SSOT](https://img.shields.io/badge/SSOT-TOML%20→%204%20Shells-orange?style=flat-square&logo=toml&logoColor=white)](#-ssot-architecture)
 [![Coverage](https://img.shields.io/badge/Coverage-100%25-success?style=flat-square)](#-profiles)
-[![Maintained](https://img.shields.io/badge/Status-Active-success?style=flat-square)](https://github.com/ca/dotfiles)
+[![Maintained](https://img.shields.io/badge/Status-Active-success?style=flat-square)](https://github.com/ca/dotfiles-v2)
 
 <br/>
 
@@ -189,7 +189,7 @@ all platforms, shells, and machine profiles.
 
 ```bash
 # Installs minimal profile (24 essential tools)
-curl -fsSL https://raw.githubusercontent.com/ca/dotfiles/main/install.sh | bash
+curl -fsSL https://raw.githubusercontent.com/ca/dotfiles-v2/main/install.sh | bash
 ```
 
 You land in a fully configured shell with **starship prompt**, **aliases**,
@@ -198,20 +198,20 @@ You land in a fully configured shell with **starship prompt**, **aliases**,
 ### With Custom Profile
 
 ```bash
-curl -fsSL https://raw.githubusercontent.com/ca/dotfiles/main/install.sh | bash -s -- --profile dev
-curl -fsSL https://raw.githubusercontent.com/ca/dotfiles/main/install.sh | bash -s -- --profile ai
+curl -fsSL https://raw.githubusercontent.com/ca/dotfiles-v2/main/install.sh | bash -s -- --profile dev
+curl -fsSL https://raw.githubusercontent.com/ca/dotfiles-v2/main/install.sh | bash -s -- --profile ai
 ```
 
 ### Dry-Run (preview)
 
 ```bash
-curl -fsSL https://raw.githubusercontent.com/ca/dotfiles/main/install.sh | bash -s -- --dry-run
+curl -fsSL https://raw.githubusercontent.com/ca/dotfiles-v2/main/install.sh | bash -s -- --dry-run
 ```
 
 ### Interactive Mode
 
 ```bash
-curl -fsSL https://raw.githubusercontent.com/ca/dotfiles/main/install.sh | bash -s -- --interactive
+curl -fsSL https://raw.githubusercontent.com/ca/dotfiles-v2/main/install.sh | bash -s -- --interactive
 ```
 
 Choose your shell, profile, and confirm — guided setup wizard.
@@ -219,7 +219,7 @@ Choose your shell, profile, and confirm — guided setup wizard.
 ### Manual Install
 
 ```bash
-git clone https://github.com/ca/dotfiles.git ~/.dotfiles
+git clone https://github.com/ca/dotfiles-v2.git ~/.dotfiles
 cd ~/.dotfiles
 ./bootstrap.sh --interactive
 ```
@@ -232,7 +232,7 @@ xcode-select --install
 
 # 2. One-liner handles the rest:
 #    → Homebrew → mise → uv → jq → generators → tools
-curl -fsSL https://raw.githubusercontent.com/ca/dotfiles/main/install.sh | bash
+curl -fsSL https://raw.githubusercontent.com/ca/dotfiles-v2/main/install.sh | bash
 ```
 
 ---

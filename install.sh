@@ -7,13 +7,13 @@
 # @see bootstrap.sh
 #
 # One-liner (installs minimal profile by default):
-#   curl -fsSL https://raw.githubusercontent.com/ca/dotfiles/main/install.sh | bash
+#   curl -fsSL https://raw.githubusercontent.com/ca/dotfiles-v2/main/install.sh | bash
 #
 # With custom profile:
-#   curl -fsSL https://raw.githubusercontent.com/ca/dotfiles/main/install.sh | bash -s -- --profile dev
+#   curl -fsSL https://raw.githubusercontent.com/ca/dotfiles-v2/main/install.sh | bash -s -- --profile dev
 #
 # Dry-run:
-#   curl -fsSL https://raw.githubusercontent.com/ca/dotfiles/main/install.sh | bash -s -- --dry-run
+#   curl -fsSL https://raw.githubusercontent.com/ca/dotfiles-v2/main/install.sh | bash -s -- --dry-run
 # ═══════════════════════════════════════════════════════════════════════════════
 
 set -euo pipefail
@@ -21,7 +21,7 @@ set -euo pipefail
 # ───────────────────────────────────────────────────────────────────────────────
 # Configuration
 # ───────────────────────────────────────────────────────────────────────────────
-readonly DOTFILES_REPO="${DOTFILES_REPO:-https://github.com/ca/dotfiles.git}"
+readonly DOTFILES_REPO="${DOTFILES_REPO:-https://github.com/ca/dotfiles-v2.git}"
 readonly DOTFILES_DIR="${DOTFILES_DIR:-${HOME}/.dotfiles}"
 readonly DOTFILES_BRANCH="${DOTFILES_BRANCH:-main}"
 
