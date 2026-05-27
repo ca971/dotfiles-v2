@@ -1,22 +1,32 @@
 # ═══════════════════════════════════════════════════════════════════════════════
 # @file tools/available/zsh.toml
-# @description Tool descriptor for zsh (Z shell with advanced scripting features)
+# @description Tool descriptor for zsh (Z shell)
 # @since 1.0.0
 # @version 1.0.0
 # ═══════════════════════════════════════════════════════════════════════════════
 
 [meta]
 name = "zsh"
-description = "Z shell with advanced scripting features"
-homepage = "https://www.zsh.org"
-category = "shell"
+description = "Z shell — powerful interactive shell with advanced features"
+homepage = "https://www.zsh.org/"
+category = "core"
 version = "latest"
 verify = "zsh --version"
 
+[[install]]
+method = "mise"
+platforms = ["darwin", "linux", "wsl", "bsd"]
+plugin = "zsh"
+version = "latest"
+
+[[install]]
+method = "brew"
+platforms = ["darwin"]
+package = "zsh"
 
 [[install]]
 method = "system"
-platforms = ["linux.debian"]
+platforms = ["linux.debian", "linux.ubuntu"]
 package = "zsh"
 
 [[install]]
@@ -29,11 +39,6 @@ method = "system"
 platforms = ["linux.fedora"]
 package = "zsh"
 
-
-[[install]]
-method = "system"
-platforms = ["bsd"]
-package = "zsh"
 [config]
 symlinks = []
 dependencies = []

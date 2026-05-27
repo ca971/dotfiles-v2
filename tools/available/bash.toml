@@ -1,22 +1,32 @@
 # ═══════════════════════════════════════════════════════════════════════════════
 # @file tools/available/bash.toml
-# @description Tool descriptor for bash (GNU Bourne Again SHell)
+# @description Tool descriptor for bash (modern GNU Bourne-Again Shell)
 # @since 1.0.0
 # @version 1.0.0
 # ═══════════════════════════════════════════════════════════════════════════════
 
 [meta]
 name = "bash"
-description = "GNU Bourne Again SHell"
-homepage = "https://www.gnu.org/software/bash"
-category = "shell"
+description = "GNU Bourne-Again SHell (modern version, replaces system bash)"
+homepage = "https://www.gnu.org/software/bash/"
+category = "core"
 version = "latest"
 verify = "bash --version"
 
+[[install]]
+method = "mise"
+platforms = ["darwin", "linux", "wsl", "bsd"]
+plugin = "bash"
+version = "latest"
+
+[[install]]
+method = "brew"
+platforms = ["darwin"]
+package = "bash"
 
 [[install]]
 method = "system"
-platforms = ["linux.debian"]
+platforms = ["linux.debian", "linux.ubuntu"]
 package = "bash"
 
 [[install]]
@@ -29,11 +39,6 @@ method = "system"
 platforms = ["linux.fedora"]
 package = "bash"
 
-
-[[install]]
-method = "system"
-platforms = ["bsd"]
-package = "bash"
 [config]
 symlinks = []
 dependencies = []

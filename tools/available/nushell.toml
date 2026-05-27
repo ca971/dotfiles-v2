@@ -1,17 +1,23 @@
 # ═══════════════════════════════════════════════════════════════════════════════
 # @file tools/available/nushell.toml
-# @description Tool descriptor for nushell (Modern structured shell)
+# @description Tool descriptor for nushell (modern data-oriented shell)
 # @since 1.0.0
 # @version 1.0.0
 # ═══════════════════════════════════════════════════════════════════════════════
 
 [meta]
 name = "nushell"
-description = "Modern structured shell"
-homepage = "https://www.nushell.sh"
+description = "Modern shell with structured data, pipelines, and cross-platform support"
+homepage = "https://www.nushell.sh/"
 category = "shell"
 version = "latest"
 verify = "nu --version"
+
+[[install]]
+method = "mise"
+platforms = ["darwin", "linux", "wsl"]
+plugin = "aqua:nushell/nushell"
+version = "latest"
 
 [[install]]
 method = "brew"
@@ -20,18 +26,8 @@ package = "nushell"
 
 [[install]]
 method = "cargo"
-platforms = ["darwin", "linux", "wsl", "bsd"]
+platforms = ["darwin", "linux", "wsl"]
 crate = "nu"
-
-[[install]]
-method = "system"
-platforms = ["linux.arch"]
-package = "nushell"
-
-[[install]]
-method = "system"
-platforms = ["bsd"]
-package = "nushell"
 
 [config]
 symlinks = []

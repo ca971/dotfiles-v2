@@ -19,7 +19,18 @@ description = "Machine profiles — tool sets by usage pattern"
 
 [profiles.minimal]
 description = "Essential CLI tools via mise"
-tools = ["starship", "eza", "neovim", "atuin", "fzf", "duf", "dfc", "btop"]
+tools = [
+  "starship",
+  "eza",
+  "neovim",
+  "atuin",
+  "fzf",
+  "duf",
+  "dfc",
+  "btop",
+  "bash",
+  "zsh",
+]
 
 # ───────────────────────────────────────────────────────────────────────────────
 # Dev — Developer workstation
@@ -64,10 +75,8 @@ tools = [
   "ripgrep",
   "zoxide",
   "jq",
-  "bash",
   "curl",
   "git",
-  "zsh",
   "tree",
   "wget",
   "rsync",
@@ -76,6 +85,7 @@ tools = [
   "unzip",
   "xz",
   "gzip",
+  "nushell",
 ]
 
 # ───────────────────────────────────────────────────────────────────────────────
