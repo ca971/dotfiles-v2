@@ -78,7 +78,7 @@ jobs:
       - uses: astral-sh/setup-uv@v5
         with:
           version: "latest"
-      - run: cd generators && uv sync --group dev
+      - run: cd generators && uv sync --extra dev
       - run: cd generators && uv run pytest tests/ -v
 
   bats:
@@ -94,6 +94,10 @@ jobs:
         run: |
           mkdir -p local
           echo '{"version":1,"tools":{},"nix_envs":{},"theme":"minimal"}'> local/state.json
+      - name: Generate shell configs
+        run: |
+          pip install tomli pydantic jinja2
+          cd generators && python -m src.cli generate --all
       - run: bats tests/unit/ --formatter tap
       - run: bats tests/integration/ --formatter tap
 
