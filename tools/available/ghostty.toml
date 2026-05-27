@@ -1,44 +1,34 @@
 # ═══════════════════════════════════════════════════════════════════════════════
-# @file tools/available/mutt.toml
-# @description Tool descriptor for mutt (Terminal-based email client)
+# @file tools/available/ghostty.toml
+# @description Tool descriptor for Ghostty (GPU-accelerated terminal emulator)
 # @since 1.0.0
 # @version 1.0.0
 # ═══════════════════════════════════════════════════════════════════════════════
 
 [meta]
-name = "mutt"
-description = "Terminal-based email client"
-homepage = "http://www.mutt.org"
-category = "net"
+name = "ghostty"
+description = "GPU-accelerated terminal emulator — native, fast, feature-rich"
+homepage = "https://ghostty.org"
+category = "terminal"
 version = "latest"
-verify = "mutt -v | head -1"
-
+verify = "ghostty --version"
 
 [[install]]
-method = "system"
-platforms = ["linux.debian"]
-package = "mutt"
+method = "mise"
+platforms = ["darwin", "linux"]
+plugin = "ghostty"
+version = "latest"
+
+[[install]]
+method = "brew"
+platforms = ["darwin"]
+package = "ghostty"
 
 [[install]]
 method = "system"
 platforms = ["linux.arch"]
-package = "mutt"
-
-[[install]]
-method = "system"
-platforms = ["linux.fedora"]
-package = "mutt"
-
-
-[[install]]
-method = "system"
-platforms = ["bsd"]
-package = "mutt"
-[[install]]
-method = "brew"
-platforms = ["darwin"]
-package = "mutt"
+package = "ghostty"
 
 [config]
-symlinks = [{ src = "config/mutt", dst = "~/.config/mutt" }]
+symlinks = [{ src = "config/ghostty", dst = "~/.config/ghostty" }]
 dependencies = []

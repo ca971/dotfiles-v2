@@ -40,5 +40,5 @@ platforms = ["darwin"]
 package = "htop"
 
 [config]
-symlinks = []
+symlinks = [{ src = "config/htop", dst = "~/.config/htop" }]
 dependencies = []

@@ -35,5 +35,5 @@ platforms = ["darwin"]
 package = "gh"
 
 [config]
-symlinks = []
+symlinks = [{ src = "config/gh", dst = "~/.config/gh" }]
 dependencies = []

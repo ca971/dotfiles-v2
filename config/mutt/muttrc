@@ -1,0 +1,17 @@
+# Mutt configuration — terminal email client
+# https://neomutt.org/guide/configuration.html
+
+set editor = "nvim"
+set pager = "less"
+set sort = "threads"
+set sort_aux = "last-date-received"
+set sort_alias = "alias"
+set sort_browser = "date"
+set auto_tag = yes
+set mark_old = no
+set timeout = 30
+set mail_check = 60
+set mailcap_path = "~/.config/mutt/mailcap"
+set header_cache = "~/.cache/mutt/headers"
+set message_cachedir = "~/.cache/mutt/bodies"
+set certificate_file = "~/.config/mutt/certificates"

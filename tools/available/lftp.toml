@@ -40,5 +40,5 @@ platforms = ["darwin"]
 package = "lftp"
 
 [config]
-symlinks = []
+symlinks = [{ src = "config/lftp", dst = "~/.config/lftp" }]
 dependencies = []
