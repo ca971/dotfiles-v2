@@ -48,10 +48,10 @@ ps      → procs                # human-readable processes
 | `minimal` | 24 | Essential CLI — perfect for servers, VMs, fresh installs |
 | `server` | 44 | Headless machines — monitoring, networking, security |
 | `dev` | 109 | Developer workstation — languages, linters, formatters, docker |
-| `data` | 124 | Data engineering — duckdb, sqlite, miller, visidata |
-| `ai` | 120 | AI agents & LLM tools — hermes, claude-code, codex, opencode, ollama |
-| `devops` | 143 | Cloud & K8s — kubectl, helm, terraform, awscli, colima |
-| `full` | 193 | Everything — devops + data + multimedia + AI tools |
+| `data` | 125 | Data engineering — duckdb, sqlite, miller, visidata |
+| `ai` | 122 | AI agents & LLM tools — hermes, claude-code, codex, opencode, ollama |
+| `devops` | 144 | Cloud & K8s — kubectl, helm, terraform, awscli, colima |
+| `full` | 194 | Everything — devops + data + multimedia + AI tools |
 
 ## Daily Usage
 

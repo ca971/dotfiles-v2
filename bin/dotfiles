@@ -111,6 +111,39 @@ cmd_snapshot() {
     esac
 }
 
+cmd_config() {
+    Logger::info "Reapplying config symlinks for all installed tools..."
+    local tools_dir="${DOTFILES_DIR}/tools/available"
+    local state_file="${DOTFILES_DIR}/local/state.json"
+    local count=0
+
+    source "${DOTFILES_DIR}/lib/hotload/engine.sh" 2>/dev/null || true
+
+    if [[ -f "${state_file}" ]]; then
+        local tool
+        while IFS= read -r tool; do
+            [[ -z "${tool}" ]] && continue
+            if [[ -f "${tools_dir}/${tool}.toml" ]]; then
+                ToolInstaller::setup_config "${tool}" 2>/dev/null && ((count++)) || true
+            fi
+        done < <(jq -r '.tools | to_entries[] | select(.value.installed == true) | .key' "${state_file}" 2>/dev/null)
+    fi
+
+    # Also fix any tool not in state but with a descriptor
+    if [[ "${count}" -eq 0 ]]; then
+        Logger::info "No installed tools found in state — applying all config symlinks..."
+        local f
+        for f in "${tools_dir}"/*.toml; do
+            [[ -f "${f}" ]] || continue
+            local t
+            t="$(basename "${f}" .toml)"
+            ToolInstaller::setup_config "${t}" 2>/dev/null && ((count++)) || true
+        done
+    fi
+
+    Logger::success "Config symlinks reapplied (${count} tools)"
+}
+
 cmd_sync() {
     local dry_run=false
     local force=false
@@ -396,6 +429,7 @@ main() {
         vault-encrypt)   cmd_vault_encrypt "${2:-}" ;;
         vault-decrypt)   cmd_vault_decrypt "${2:-}" ;;
         snapshot)        shift; cmd_snapshot "$@" ;;
+        config)          cmd_config ;;
         --version|-v)    echo "dotfiles 1.0.0" ;;
         --help|-h|"")    show_help ;;
         *)               Logger::error "Unknown command: ${1}"; show_help; exit 1 ;;

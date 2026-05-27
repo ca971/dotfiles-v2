@@ -321,4 +321,6 @@ tools = [
   "mods",
   "open-webui",
   "continue",
+  "free-claude-code",
+  "fabric",
 ]

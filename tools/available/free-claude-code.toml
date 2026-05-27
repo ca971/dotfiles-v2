@@ -1,0 +1,29 @@
+# ═══════════════════════════════════════════════════════════════════════════════
+# @file tools/available/free-claude-code.toml
+# @description Tool descriptor for free-claude-code (open-source Claude Code alternative)
+# @since 1.0.0
+# @version 1.0.0
+# ═══════════════════════════════════════════════════════════════════════════════
+
+[meta]
+name = "free-claude-code"
+description = "Free Claude Code — open-source AI coding agent compatible with Claude Code"
+homepage = "https://github.com/free-claude-code"
+category = "ai-agent"
+version = "latest"
+verify = "free-claude-code --version"
+
+[[install]]
+method = "mise"
+platforms = ["darwin", "linux", "wsl"]
+plugin = "npm:free-claude-code"
+version = "latest"
+
+[[install]]
+method = "curl"
+platforms = ["darwin", "linux", "wsl"]
+command = "npm install -g free-claude-code"
+
+[config]
+symlinks = []
+dependencies = ["nodejs"]

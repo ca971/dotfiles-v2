@@ -1,0 +1,34 @@
+# ═══════════════════════════════════════════════════════════════════════════════
+# @file tools/available/fabric.toml
+# @description Tool descriptor for Fabric (AI workflow automation framework)
+# @since 1.0.0
+# @version 1.0.0
+# ═══════════════════════════════════════════════════════════════════════════════
+
+[meta]
+name = "fabric"
+description = "Fabric — AI workflow automation with reusable patterns and multi-provider support"
+homepage = "https://github.com/danielmiessler/fabric"
+category = "ai-agent"
+version = "latest"
+verify = "fabric --version"
+
+[[install]]
+method = "mise"
+platforms = ["darwin", "linux", "wsl"]
+plugin = "fabric"
+version = "latest"
+
+[[install]]
+method = "brew"
+platforms = ["darwin"]
+package = "fabric"
+
+[[install]]
+method = "curl"
+platforms = ["darwin", "linux", "wsl"]
+command = "pip install fabric-ai"
+
+[config]
+symlinks = []
+dependencies = ["python"]

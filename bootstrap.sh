@@ -441,10 +441,10 @@ run_interactive() {
     select _profile_choice in "minimal (24 tools — essential CLI)" \
                        "dev (109 tools — developer workstation)" \
                        "server (44 tools — headless machine)" \
-                       "devops (143 tools — cloud & k8s)" \
-                       "data (124 tools — data engineering)" \
-                       "ai (120 tools — AI agents & LLM tools)" \
-                       "full (193 tools — everything)"; do
+                       "devops (144 tools — cloud & k8s)" \
+                       "data (125 tools — data engineering)" \
+                       "ai (122 tools — AI agents & LLM tools)" \
+                       "full (194 tools — everything)"; do
         case "${REPLY}" in
             1) OPT_PROFILE="minimal"; break ;;
             2) OPT_PROFILE="dev"; break ;;
