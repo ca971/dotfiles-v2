@@ -1,15 +1,16 @@
 #!/usr/bin/env bash
 # ═══════════════════════════════════════════════════════════════════════════════
 # @file bin/dotfiles-theme
-# @description Starship theme switcher (minimal, full, powerline)
+# @description Unified theme switcher — starship, bat, delta, btop
 # @since 1.0.0
-# @version 1.0.0
+# @version 1.1.0
 # @see config/starship/themes/
+# @see config/bat/themes/
 #
 # Usage:
-#   dotfiles-theme minimal    # Switch to minimal theme
-#   dotfiles-theme full       # Switch to full nerd font theme
-#   dotfiles-theme powerline  # Switch to powerline theme
+#   dotfiles-theme minimal    # Switch all tools to minimal theme
+#   dotfiles-theme full       # Switch all tools to full theme
+#   dotfiles-theme powerline  # Switch all tools to powerline theme
 #   dotfiles-theme            # Show current theme
 # ═══════════════════════════════════════════════════════════════════════════════
 
@@ -21,7 +22,9 @@ source "${DOTFILES_DIR}/lib/core/logger.sh"
 source "${DOTFILES_DIR}/lib/hotload/state.sh"
 
 readonly THEMES_DIR="${DOTFILES_DIR}/config/starship/themes"
+readonly BAT_THEMES_DIR="${DOTFILES_DIR}/config/bat/themes"
 readonly STARSHIP_TARGET="${XDG_CONFIG_HOME:-${HOME}/.config}/starship.toml"
+readonly BAT_CONFIG_TARGET="${XDG_CONFIG_HOME:-${HOME}/.config}/bat/config"
 readonly VALID_THEMES=("minimal" "full" "powerline")
 
 # ═══════════════════════════════════════════════════════════════════════════════
@@ -83,15 +86,36 @@ switch_theme() {
     local target_dir
     target_dir="$(dirname "${STARSHIP_TARGET}")"
     [[ -d "${target_dir}" ]] || mkdir -p "${target_dir}"
-
     rm -f "${STARSHIP_TARGET}"
     cp "${theme_file}" "${STARSHIP_TARGET}"
+    Logger::debug "Theme: starship → ${theme}"
+
+    # Apply bat theme
+    local bat_theme="${BAT_THEMES_DIR}/${theme}.conf"
+    if [[ -f "${bat_theme}" ]]; then
+        target_dir="$(dirname "${BAT_CONFIG_TARGET}")"
+        [[ -d "${target_dir}" ]] || mkdir -p "${target_dir}"
+        cp "${bat_theme}" "${BAT_CONFIG_TARGET}"
+        Logger::debug "Theme: bat → ${theme}"
+    fi
+
+    # Apply delta theme via gitconfig
+    local delta_features
+    case "${theme}" in
+        minimal)    delta_features="line-numbers decorations" ;;
+        full)       delta_features="line-numbers decorations side-by-side" ;;
+        powerline)  delta_features="line-numbers decorations" ;;
+    esac
+    if command -v git >/dev/null 2>&1; then
+        git config --global delta.features "${delta_features}" 2>/dev/null || true
+        Logger::debug "Theme: delta → ${theme} (${delta_features})"
+    fi
 
     # Update state
     StateManager::set_theme "${theme}"
 
-    Logger::success "Switched to '${theme}' theme"
-    Logger::info "Restart your shell or run: exec \$SHELL"
+    Logger::success "Switched to '${theme}' theme (starship, bat, delta)"
+    Logger::info "Run 'exec \$SHELL' or 'reload' to apply changes"
 }
 
 # ═══════════════════════════════════════════════════════════════════════════════
