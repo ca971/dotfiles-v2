@@ -28,6 +28,12 @@ path = "$DOTFILES_DIR/bin"
 description = "Dotfiles CLI tools"
 prepend = true
 
+[[path]]
+path = "$DOTFILES_DIR/config/git/bin"
+description = "Git helper scripts (cheatsheet)"
+condition = "$DOTFILES_DIR/config/git/bin"
+prepend = true
+
 # ───────────────────────────────────────────────────────────────────────────────
 # Language runtimes
 # ───────────────────────────────────────────────────────────────────────────────
