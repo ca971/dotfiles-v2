@@ -330,6 +330,55 @@ install_tools() {
 }
 
 # ═══════════════════════════════════════════════════════════════════════════════
+# @description Quick post-install verification
+# @return 0 if all checks pass, non-zero otherwise
+# ═══════════════════════════════════════════════════════════════════════════════
+_verify_installation() {
+    local issues=0
+
+    # Check generated files
+    local gen_dir="${DOTFILES_DIR}/shells/${SHELL_NAME}/generated"
+    if [[ -f "${gen_dir}/aliases.gen.sh" ]] && [[ -f "${gen_dir}/init.gen.sh" ]]; then
+        Logger::success "Shell configs generated for ${SHELL_NAME}"
+    else
+        Logger::warn "Shell configs missing — run: dotfiles-gen generate --all"
+        ((issues++))
+    fi
+
+    # Check starship config symlink
+    local starship_cfg="${XDG_CONFIG_HOME:-${HOME}/.config}/starship"
+    if [[ -d "${starship_cfg}" ]] || [[ -L "${starship_cfg}" ]]; then
+        Logger::success "Starship prompt configured"
+    else
+        Logger::info "Starship will activate after mise installs it + shell reload"
+    fi
+
+    # Determine final profile
+    local final_profile="${OPT_PROFILE}"
+    if [[ "${OPT_MINIMAL}" -eq 1 ]] && [[ "${OPT_PROFILE_EXPLICIT}" -eq 0 ]]; then
+        final_profile="minimal"
+    fi
+
+    # Count profile tools
+    local tools_count
+    tools_count=$(python3 -c "
+import sys
+sys.path.insert(0, '${DOTFILES_DIR}/generators/src')
+try:
+    from dotfiles_gen.profiles import resolve_profile_tools
+    tools = resolve_profile_tools('${final_profile}', '${DOTFILES_DIR}/definitions/profiles.toml')
+    print(len(tools))
+except Exception:
+    print(0)
+" 2>/dev/null || echo "?")
+
+    Logger::info "Profile '${final_profile}': ${tools_count} tools available (installed via mise)"
+    Logger::info "Run 'dotfiles status' to see what's installed"
+
+    return "${issues}"
+}
+
+# ═══════════════════════════════════════════════════════════════════════════════
 # @description Final setup and verification
 # ═══════════════════════════════════════════════════════════════════════════════
 finalize() {
@@ -339,8 +388,35 @@ finalize() {
     ShellDetector::summary
 
     echo ""
+
+    if [[ "${OPT_DRY_RUN}" -eq 0 ]]; then
+        _verify_installation
+    else
+        Logger::info "[dry-run] Would verify: shell configs, starship, profile tools"
+    fi
+
+    echo ""
     Logger::success "Bootstrap complete!"
-    Logger::info "Restart your shell or run: source ~/.${SHELL_NAME}rc"
+    echo ""
+
+    # For one-liner installs, auto-reload the shell so the user lands
+    # in a fully configured environment immediately
+    if [[ -n "${DOTFILES_ONE_LINER:-}" ]] && [[ "${OPT_DRY_RUN}" -eq 0 ]]; then
+        Logger::info "⟳  Reloading shell with new configuration..."
+        echo ""
+        sleep 1
+        # Unset to prevent recursive reloads
+        exec env -u DOTFILES_ONE_LINER "${SHELL}" -l
+    elif [[ "${OPT_DRY_RUN}" -eq 1 ]]; then
+        if [[ -n "${DOTFILES_ONE_LINER:-}" ]]; then
+            Logger::info "[dry-run] Would reload shell automatically (one-liner mode)"
+        else
+            Logger::info "[dry-run] Would prompt: run 'reload' to apply changes"
+        fi
+    else
+        Logger::info "Run 'reload' or 'exec \$SHELL -l' to apply changes"
+    fi
+
     Logger::info "Run 'dotfiles doctor' to verify installation"
 }
 

@@ -25,6 +25,9 @@ readonly DOTFILES_REPO="${DOTFILES_REPO:-https://github.com/ca/dotfiles.git}"
 readonly DOTFILES_DIR="${DOTFILES_DIR:-${HOME}/.dotfiles}"
 readonly DOTFILES_BRANCH="${DOTFILES_BRANCH:-main}"
 
+# Signal to bootstrap.sh that this is a one-liner install
+export DOTFILES_ONE_LINER=1
+
 # ───────────────────────────────────────────────────────────────────────────────
 # Colors (safe for non-interactive)
 # ───────────────────────────────────────────────────────────────────────────────
