@@ -1,0 +1,34 @@
+# ═══════════════════════════════════════════════════════════════════════════════
+# @file tools/available/open-webui.toml
+# @description Tool descriptor for Open WebUI (ChatGPT-like interface for local LLMs)
+# @since 1.0.0
+# @version 1.0.0
+# ═══════════════════════════════════════════════════════════════════════════════
+
+[meta]
+name = "open-webui"
+description = "Open WebUI — ChatGPT-like web interface for Ollama + OpenAI/Anthropic providers"
+homepage = "https://openwebui.com"
+category = "ai-agent"
+version = "latest"
+verify = "open-webui serve --help"
+
+[[install]]
+method = "uv"
+platforms = ["darwin", "linux", "wsl"]
+package = "open-webui"
+version = "latest"
+
+[[install]]
+method = "curl"
+platforms = ["darwin", "linux", "wsl"]
+command = "pip install open-webui"
+
+[[install]]
+method = "brew"
+platforms = ["darwin"]
+package = "open-webui"
+
+[config]
+symlinks = []
+dependencies = ["python", "ollama"]

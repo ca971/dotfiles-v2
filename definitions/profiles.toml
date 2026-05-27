@@ -319,4 +319,6 @@ tools = [
   "ollama",
   "llm",
   "mods",
+  "open-webui",
+  "continue",
 ]

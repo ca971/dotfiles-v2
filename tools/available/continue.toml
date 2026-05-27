@@ -1,0 +1,29 @@
+# ═══════════════════════════════════════════════════════════════════════════════
+# @file tools/available/continue.toml
+# @description Tool descriptor for Continue (open-source AI code assistant — IDE + CLI)
+# @since 1.0.0
+# @version 1.0.0
+# ═══════════════════════════════════════════════════════════════════════════════
+
+[meta]
+name = "continue"
+description = "Continue — open-source AI code assistant for VS Code and JetBrains with multi-provider support"
+homepage = "https://continue.dev"
+category = "ai-agent"
+version = "latest"
+verify = "continue --version"
+
+[[install]]
+method = "mise"
+platforms = ["darwin", "linux", "wsl"]
+plugin = "npm:@continuedev/continue"
+version = "latest"
+
+[[install]]
+method = "curl"
+platforms = ["darwin", "linux", "wsl"]
+command = "npm install -g @continuedev/continue"
+
+[config]
+symlinks = []
+dependencies = ["nodejs"]
