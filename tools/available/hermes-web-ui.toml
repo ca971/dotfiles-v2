@@ -1,0 +1,29 @@
+# ═══════════════════════════════════════════════════════════════════════════════
+# @file tools/available/hermes-web-ui.toml
+# @description Tool descriptor for Hermes Web UI (browser interface for Hermes Agent)
+# @since 1.0.0
+# @version 1.0.0
+# ═══════════════════════════════════════════════════════════════════════════════
+
+[meta]
+name = "hermes-web-ui"
+description = "Hermes Web UI — browser-based interface for managing Hermes Agent sessions"
+homepage = "https://github.com/nousresearch/hermes-agent"
+category = "ai-agent"
+version = "latest"
+verify = "hermes-web --version"
+
+[[install]]
+method = "mise"
+platforms = ["darwin", "linux", "wsl"]
+plugin = "npm:hermes-web-ui"
+version = "latest"
+
+[[install]]
+method = "curl"
+platforms = ["darwin", "linux", "wsl"]
+command = "npm install -g hermes-web-ui"
+
+[config]
+symlinks = []
+dependencies = ["nodejs", "hermes-agent"]

@@ -443,7 +443,7 @@ run_interactive() {
                        "server (44 tools — headless machine)" \
                        "devops (143 tools — cloud & k8s)" \
                        "data (124 tools — data engineering)" \
-                       "ai (117 tools — AI agents & LLM tools)" \
+                       "ai (118 tools — AI agents & LLM tools)" \
                        "full (193 tools — everything)"; do
         case "${REPLY}" in
             1) OPT_PROFILE="minimal"; break ;;

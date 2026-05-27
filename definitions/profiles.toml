@@ -311,6 +311,7 @@ description = "AI agents and LLM tools — coding assistants and language models
 extends = "dev"
 tools = [
   "hermes-agent",
+  "hermes-web-ui",
   "claude-code",
   "codex",
   "opencode",
