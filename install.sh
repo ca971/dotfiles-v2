@@ -3,13 +3,17 @@
 # @file install.sh
 # @description One-liner bootstrap entry point (curl-pipeable)
 # @since 1.0.0
-# @version 1.0.0
+# @version 1.1.0
 # @see bootstrap.sh
 #
-# Usage:
-#   curl -fsSL https://raw.githubusercontent.com/USER/dotfiles/main/install.sh | bash
-#   # or
-#   bash <(curl -fsSL https://raw.githubusercontent.com/USER/dotfiles/main/install.sh)
+# One-liner (installs minimal profile by default):
+#   curl -fsSL https://raw.githubusercontent.com/ca/dotfiles/main/install.sh | bash
+#
+# With custom profile:
+#   curl -fsSL https://raw.githubusercontent.com/ca/dotfiles/main/install.sh | bash -s -- --profile dev
+#
+# Dry-run:
+#   curl -fsSL https://raw.githubusercontent.com/ca/dotfiles/main/install.sh | bash -s -- --dry-run
 # ═══════════════════════════════════════════════════════════════════════════════
 
 set -euo pipefail
@@ -95,8 +99,9 @@ run_bootstrap() {
         fatal "Bootstrap script not found or not executable: ${bootstrap}"
     fi
 
-    info "Handing off to bootstrap.sh..."
-    exec "${bootstrap}" "$@"
+    info "Handing off to bootstrap.sh (default: minimal profile)..."
+    # Always prepend --minimal; explicit --profile <name> overrides it
+    exec "${bootstrap}" --minimal "$@"
 }
 
 # ═══════════════════════════════════════════════════════════════════════════════

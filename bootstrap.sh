@@ -56,6 +56,8 @@ declare OPT_DRY_RUN=0
 declare OPT_VERBOSE=0
 # shellcheck disable=SC2034
 declare OPT_PROFILE="dev"
+# shellcheck disable=SC2034
+declare OPT_PROFILE_EXPLICIT=0
 
 # ═══════════════════════════════════════════════════════════════════════════════
 # @description Parse command-line arguments
@@ -69,7 +71,7 @@ parse_args() {
             --no-gui)    OPT_NO_GUI=1 ;;
             --dry-run)   OPT_DRY_RUN=1 ;;
             --verbose)   OPT_VERBOSE=1; Logger::set_level "debug" ;;
-            --profile)   OPT_PROFILE="${2:?Profile name required after --profile}"; shift ;;
+            --profile)   OPT_PROFILE="${2:?Profile name required after --profile}"; OPT_PROFILE_EXPLICIT=1; shift ;;
             --help|-h)   show_help; exit 0 ;;
             *)           Logger::warn "Unknown option: ${1}" ;;
         esac
@@ -307,12 +309,12 @@ install_tools() {
         return 0
     fi
 
-    # Determine profile: --profile <name> → explicit, --minimal → minimal,
-    # otherwise read from state or default to dev
+    # Determine profile: --profile <name> takes priority over --minimal,
+    # then fall back to state.json or default "dev"
     local profile="${OPT_PROFILE}"
-    if [[ "${OPT_MINIMAL}" -eq 1 ]]; then
+    if [[ "${OPT_MINIMAL}" -eq 1 ]] && [[ "${OPT_PROFILE_EXPLICIT}" -eq 0 ]]; then
         profile="minimal"
-    elif [[ "${profile}" = "dev" ]] && [[ -f "${DOTFILES_DIR}/local/state.json" ]]; then
+    elif [[ "${OPT_PROFILE_EXPLICIT}" -eq 0 ]] && [[ -f "${DOTFILES_DIR}/local/state.json" ]]; then
         profile="$(jq -r '.profile // "dev"' "${DOTFILES_DIR}/local/state.json" 2>/dev/null || echo "dev")"
     fi
 
