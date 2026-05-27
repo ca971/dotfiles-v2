@@ -101,6 +101,16 @@ cmd_verify() {
     HotLoadEngine::verify
 }
 
+cmd_snapshot() {
+    source "${DOTFILES_DIR}/lib/modules/snapshot.sh"
+    case "${1:-}" in
+        create) Snapshot::create "${2:-}" ;;
+        list)   Snapshot::list ;;
+        rollback) Snapshot::rollback "${2:-}" ;;
+        *)      Logger::error "Usage: dotfiles snapshot <create|list|rollback> [args]" ;;
+    esac
+}
+
 cmd_sync() {
     local dry_run=false
     local force=false
@@ -353,6 +363,11 @@ show_help() {
 	  vault-encrypt <f>    Encrypt a file with age
 	  vault-decrypt <f>    Decrypt a file with age
 
+	Snapshots:
+	  snapshot create [label]  Save current state
+	  snapshot list            List all snapshots
+	  snapshot rollback <name> Restore a previous snapshot
+
 	Sync Flags:
 	  --dry-run            Show what would happen without making changes
 	  --force              Reinstall tools even if already installed
@@ -380,6 +395,7 @@ main() {
         vault-keygen)    cmd_vault_keygen ;;
         vault-encrypt)   cmd_vault_encrypt "${2:-}" ;;
         vault-decrypt)   cmd_vault_decrypt "${2:-}" ;;
+        snapshot)        shift; cmd_snapshot "$@" ;;
         --version|-v)    echo "dotfiles 1.0.0" ;;
         --help|-h|"")    show_help ;;
         *)               Logger::error "Unknown command: ${1}"; show_help; exit 1 ;;
