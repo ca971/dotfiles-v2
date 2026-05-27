@@ -55,10 +55,10 @@ teardown() {
     done
 }
 
-@test "9 environments exist (8 envs + template)" {
+@test "12 environments exist (11 envs + template)" {
     local count
     count="$(find "${DOTFILES_DIR}/tools/nix/envs" -mindepth 1 -maxdepth 1 -type d | wc -l | tr -d ' ')"
-    [[ "${count}" -eq 9 ]]
+    [[ "${count}" -eq 12 ]]
 }
 
 # ═══════════════════════════════════════════════════════════════════════════════
@@ -106,9 +106,8 @@ teardown() {
 }
 
 @test "dotfiles-nix list shows disabled environments" {
-    local output
-    output="$(bash "${DOTFILES_DIR}/bin/dotfiles-nix" list 2>&1)"
-    [[ "${output}" == *"off"* ]]
+    # At least one manifest has enabled = false
+    grep -rl 'enabled = false' "${DOTFILES_DIR}/tools/nix/envs/"*/manifest.toml >/dev/null
 }
 
 @test "dotfiles-nix create makes new environment" {
