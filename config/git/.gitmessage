@@ -1,0 +1,41 @@
+# <type>(<scope>): <description>    ← subject (imperative, max 72 chars)
+#
+# [optional body]                   ← explain WHAT and WHY (wrap at 72)
+#
+# [optional footer]                 ← Closes #123, BREAKING CHANGE:
+#
+# ── Types ────────────────────────────────────────────────
+# feat:     ✨ New feature
+# fix:      🐛 Bug fix
+# docs:     📚 Documentation only
+# style:    💄 Formatting (no code change)
+# refactor: ♻️  Code restructuring (no feat/fix)
+# test:     🧪 Adding/updating tests
+# chore:    🔧 Maintenance, tooling
+# ci:       🔄 CI/CD changes
+# perf:     ⚡ Performance improvement
+# build:    📦 Build system changes
+# revert:   ⏪ Revert a previous commit
+# release:  🚀 Release / version bump
+#
+# ── Rules ────────────────────────────────────────────────
+# • Subject: imperative mood ("add" not "added")
+# • Subject: no period at end
+# • Subject: max 72 characters
+# • Body: blank line between subject and body
+# • Body: wrap at 72 characters
+# • Footer: reference issues (Closes #42)
+# • Footer: BREAKING CHANGE: description
+#
+# ── Examples ─────────────────────────────────────────────
+# feat(auth): add OAuth2 login support
+#
+# fix(api): handle null response in user endpoint
+#
+# Closes #42
+#
+# release: v2.0.0
+#
+# chore!: drop Node.js 16 support
+#
+# BREAKING CHANGE: Minimum Node.js version is now 18.

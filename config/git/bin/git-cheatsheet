@@ -1,0 +1,419 @@
+#!/usr/bin/env bash
+# ============================================================================
+# @file        git-cheatsheet
+# @description Git Power User — Commands & Aliases Cheatsheet
+#              Interactive, colored, searchable via less/fzf.
+#
+# @usage       git cheatsheet          Full cheatsheet in pager
+#              git cheatsheet -s       Short (quick reference only)
+#              git cheatsheet -f       Search with fzf
+#              git cheatsheet <query>  Grep for matching aliases
+#
+#              Grep specific alias
+#              git cheatsheet stash
+#              git cheatsheet branch
+#              git cheatsheet log
+#
+# @requires    bash >= 4.0, less
+# @optional    fzf (for -f mode)
+# @author      ca971
+# @license     MIT
+# @version     2.0.0
+# @since       2025-06
+# ============================================================================
+
+set -euo pipefail
+
+export LESSCHARSET=utf-8
+export LANG="${LANG:-en_US.UTF-8}"
+export LC_ALL="${LC_ALL:-en_US.UTF-8}"
+
+# ── Palette ──────────────────────────────────────────────────────────────────
+readonly RST=$'\033[0m' B=$'\033[1m' D=$'\033[2m' IT=$'\033[3m'
+readonly GRN=$'\033[32m' YEL=$'\033[33m'
+readonly CYN=$'\033[36m' WHT=$'\033[97m'
+readonly ORA=$'\033[38;5;208m' GRY=$'\033[38;5;245m'
+readonly LIME=$'\033[38;5;150m' LAVR=$'\033[38;5;183m'
+
+# ── Layout constants ────────────────────────────────────────────────────────
+readonly WIDTH=78
+
+_hline=""
+_hline=$(printf '%0.s─' $(seq 1 $WIDTH))
+readonly HLINE="$_hline"
+
+_hline_heavy=""
+_hline_heavy=$(printf '%0.s━' $(seq 1 $WIDTH))
+readonly HLINE_HEAVY="$_hline_heavy"
+
+# ── Helpers ──────────────────────────────────────────────────────────────────
+
+_banner() {
+    cat << EOF
+
+  ${CYN}${B}┏${HLINE_HEAVY}┓${RST}
+  ${CYN}${B}┃${RST}${B}$(printf '%*s' $(((WIDTH - 48) / 2)) '')${WHT}🔀  Git Power User — Aliases & Commands${RST}$(printf '%*s' $(((WIDTH - 48 + 1) / 2 + 9)) '')${CYN}${B}┃${RST}
+  ${CYN}${B}┃${RST}${D}$(printf '%*s' $(((WIDTH - 40) / 2)) '')~/dotfiles/config/git/.gitconfig$(printf '%*s' $(((WIDTH - 40 + 1) / 2 + 8)) '')${RST}${CYN}${B}┃${RST}
+  ${CYN}${B}┃${RST}${D}$(printf '%*s' $(((WIDTH - 44) / 2)) '')v2.0 · 100+ aliases · 24 categories$(printf '%*s' $(((WIDTH - 44 + 1) / 2 + 9)) '')${RST}${CYN}${B}┃${RST}
+  ${CYN}${B}┗${HLINE_HEAVY}┛${RST}
+EOF
+}
+
+_section() {
+    local icon="$1" title="$2"
+    echo ""
+    echo -e "  ${B}${ORA}${icon}  ${title}${RST}"
+    echo -e "  ${GRY}${HLINE}${RST}"
+}
+
+_sub() {
+    echo ""
+    echo -e "    ${LAVR}${IT}── $1 ──${RST}"
+}
+
+_cmd() {
+    local command="$1" desc="$2"
+    printf "    ${LIME}%-40s${RST} ${GRY}%s${RST}\n" "$command" "$desc"
+}
+
+_note() {
+    echo -e "    ${D}${IT}$1${RST}"
+}
+
+_example() {
+    echo -e "      ${D}${GRN}$1${RST}"
+}
+
+_refline() {
+    local key="$1" val="$2"
+    printf "  ${CYN}│${RST}  ${YEL}%-22s${RST} ${WHT}%-50s${RST} ${CYN}│${RST}\n" "$key" "$val"
+}
+
+_footer() {
+    echo ""
+    echo -e "  ${D}${IT}  q quit  ·  / search  ·  n/N navigate matches${RST}"
+    echo ""
+}
+
+# ── Quick Reference ──────────────────────────────────────────────────────────
+
+_quickref() {
+    echo ""
+    echo -e "  ${CYN}┌${HLINE}┐${RST}"
+    echo -e "  ${CYN}│${RST}  ${B}${YEL}⚡ Quick Reference${RST}$(printf '%*s' 57 '')${CYN}│${RST}"
+    echo -e "  ${CYN}├${HLINE}┤${RST}"
+    echo -e "  ${CYN}│${RST}$(printf '%*s' $WIDTH '')${CYN}│${RST}"
+    _refline "Daily workflow" "git aa → git cm \"msg\" → git p"
+    _refline "Quick status" "git s"
+    _refline "Visual log" "git lg"
+    _refline "Morning standup" "git standup"
+    _refline "Weekly report" "git week"
+    _refline "Hot files" "git hot"
+    _refline "Repo overview" "git dashboard"
+    _refline "Full summary" "git summary"
+    _refline "Branch compare" "git diverge"
+    _refline "Fix last commit" "git amend"
+    _refline "Undo last commit" "git undo"
+    _refline "Safe force push" "git pf"
+    _refline "Create PR" "git pr"
+    _refline "Search aliases" "git alias-grep <word>"
+    echo -e "  ${CYN}│${RST}$(printf '%*s' $WIDTH '')${CYN}│${RST}"
+    echo -e "  ${CYN}└${HLINE}┘${RST}"
+}
+
+# ── Full Content ─────────────────────────────────────────────────────────────
+
+_full() {
+    _banner
+
+    # ── 1 ──
+    _section "ℹ️ " "META & HELP"
+    _cmd "git aliases" "List all aliases (formatted table)"
+    _cmd "git alias-grep <keyword>" "Search aliases by keyword"
+    _cmd "git help-all" "Browse all aliases in pager"
+    _cmd "git cheatsheet" "This cheatsheet"
+    _cmd "git cheatsheet -s" "Quick reference only"
+    _cmd "git cheatsheet -f" "Search with fzf"
+    _cmd "git cheatsheet <query>" "Grep for matching aliases"
+
+    # ── 2 ──
+    _section "📄" "STATUS & INFO"
+    _cmd "git s" "Short status with branch"
+    _cmd "git st" "Short status (compact)"
+    _cmd "git ss" "Full status"
+    _cmd "git info" "Remotes + branches overview"
+
+    # ── 3 ──
+    _section "➕" "STAGING"
+    _cmd "git a <file>" "Add file"
+    _cmd "git aa" "Add all files"
+    _cmd "git ap" "Add interactively (patch mode)"
+    _cmd "git ai" "Add interactive"
+
+    # ── 4 ──
+    _section "✏️ " "COMMIT"
+    _cmd "git c \"message\"" "Quick commit with message"
+    _cmd "git cm \"message\"" "Commit with message (alias)"
+    _cmd "git ci" "Open editor for commit"
+    _cmd "git ca" "Amend last commit (edit message)"
+    _cmd "git amend" "Amend last commit (keep message)"
+    _cmd "git cs \"message\"" "Signed commit (-s)"
+    _cmd "git empty \"msg\"" "Empty commit (CI trigger)"
+    _cmd "git fixup <hash>" "Fixup commit for autosquash"
+    _cmd "git wip" "Quick WIP commit (all files)"
+    _cmd "git unwip" "Undo last WIP commit"
+
+    # ── 5 ──
+    _section "🔄" "PUSH / PULL / SYNC"
+    _cmd "git p" "Push"
+    _cmd "git pf" "Force push (safe: --force-with-lease)"
+    _cmd "git pl" "Pull with rebase"
+    _cmd "git fa" "Fetch all remotes + prune + tags"
+    _cmd "git sync" "Pull rebase + push"
+    _cmd "git deploy" "Push main + watch CI"
+    _cmd "git ship" "Push branch + watch CI"
+
+    # ── 6 ──
+    _section "🌿" "BRANCH"
+    _cmd "git b" "List branches (verbose)"
+    _cmd "git ba" "List all branches (local + remote)"
+    _cmd "git bd <name>" "Delete branch (safe)"
+    _cmd "git bD <name>" "Delete branch (force)"
+    _cmd "git sw <name>" "Switch branch"
+    _cmd "git swc <name>" "Create + switch branch"
+    _cmd "git recent" "Branches by last commit date"
+    _cmd "git branches" "All branches with commit info"
+
+    # ── 7 ──
+    _section "📜" "LOG — GRAPH & HISTORY"
+
+    _sub "Compact"
+    _cmd "git l" "One-line graph (20 entries)"
+    _cmd "git lo" "One-line flat (20 entries)"
+    _cmd "git ll" "One-line graph (all)"
+
+    _sub "Detailed"
+    _cmd "git lg" "Graph + author + date (all)"
+    _cmd "git lg1" "Graph + date (20 entries)"
+    _cmd "git lg2" "Graph + full date (15, 2-line)"
+    _cmd "git lg3" "Graph + emoji (10, 3-line)"
+
+    _sub "Special"
+    _cmd "git lp <file>" "Patch log (follow renames)"
+    _cmd "git last" "Last commit with stats"
+
+    # ── 8 ──
+    _section "📈" "LOG — STATS PER COMMIT"
+    _cmd "git ls" "Files modified per commit (15)"
+    _cmd "git lss" "Short stat per commit (20)"
+    _cmd "git ln" "Numeric stat per file (10)"
+    _cmd "git ld" "Author + date + shortstat (15)"
+
+    # ── 9 ──
+    _section "🏆" "STATS — CONTRIBUTORS & IMPACT"
+    _cmd "git rank" "Authors ranked by commit count"
+    _cmd "git rank-email" "Authors ranked (with email)"
+    _cmd "git top10" "TOP 10 contributors"
+    _cmd "git top5" "TOP 5 contributors"
+    _cmd "git impact" "Lines +/- per author (all time)"
+    _cmd "git who" "Unique authors list"
+    _cmd "git contributors" "Contributors (current branch)"
+
+    # ── 10 ──
+    _section "📅" "STATS — TEMPORAL ACTIVITY"
+    _cmd "git activity" "Commits/day (last 30 days)"
+    _cmd "git weekly" "Commits/week (last 6 months)"
+    _cmd "git monthly" "Commits/month (full history)"
+    _cmd "git yearly" "Commits/year"
+    _cmd "git hours" "Commits by hour (when you code)"
+    _cmd "git days" "Commits by weekday"
+    _cmd "git today" "Today's commits (all authors)"
+    _cmd "git today-mine" "Today's commits (mine only)"
+
+    # ── 11 ──
+    _section "🔥" "STATS — HOT FILES & CHURN"
+    _cmd "git hot" "TOP 20 most modified files (all)"
+    _cmd "git hot-recent" "TOP 20 most modified (30 days)"
+    _cmd "git hot-quarter" "TOP 20 most modified (90 days)"
+    _cmd "git churn" "Highest churn (lines added+deleted)"
+    _cmd "git bloat" "Largest blobs in history"
+
+    # ── 12 ──
+    _section "📊" "STATS — DASHBOARD & SUMMARY"
+    _cmd "git dashboard" "Quick dashboard (recent+stats+top)"
+    _cmd "git summary" "Full repo summary"
+    _cmd "git stats" "One-line stats"
+    echo ""
+    _note "Example output of git summary:"
+    _example "Commits: 342  ·  Authors: 3  ·  Branches: 12  ·  Tags: 8"
+    _example "Files: 157  ·  Repo size: 45M"
+    _example "First: 6 months ago (2025-09-25)  ·  Latest: 2h ago"
+
+    # ── 13 ──
+    _section "🔀" "DIFF"
+    _cmd "git df" "Diff working tree"
+    _cmd "git ds" "Diff stat (summary)"
+    _cmd "git dc" "Diff cached (staged)"
+    _cmd "git dcs" "Diff cached stat"
+    _cmd "git dw" "Word-level diff"
+    _cmd "git dm" "Diff vs main branch"
+    _cmd "git dms" "Diff stat vs main"
+
+    # ── 14 ──
+    _section "📦" "STASH"
+    _cmd "git save \"message\"" "Stash with message"
+    _cmd "git stp" "Pop last stash"
+    _cmd "git stl" "List stashes"
+    _cmd "git sta" "Apply last stash (keep in list)"
+    _cmd "git sts" "Show stash patch"
+    _cmd "git std" "Drop last stash"
+
+    # ── 15 ──
+    _section "⏪" "RESET / UNDO / RECOVER"
+    _cmd "git undo" "Soft undo (keep staged)"
+    _cmd "git uncommit" "Mixed undo (keep unstaged)"
+    _cmd "git hard" "Hard reset to HEAD"
+    _cmd "git unstage <file>" "Unstage file"
+    _cmd "git discard <file>" "Discard working changes"
+    _cmd "git nuke" "Nuclear: reset --hard + clean"
+    _cmd "git nevermind" "Same as nuke"
+    _cmd "git recover" "Show reflog (last 20)"
+
+    # ── 16 ──
+    _section "🧹" "CLEAN & HOUSEKEEPING"
+    _cmd "git cleanup" "Delete merged branches"
+    _cmd "git gone" "Delete branches with gone upstream"
+    _cmd "git tidy" "cleanup + gone"
+    _cmd "git clean-all" "Remove untracked + reset"
+
+    # ── 17 ──
+    _section "🔍" "SEARCH & FIND"
+    _cmd "git search <text>" "Search code changes (pickaxe -S)"
+    _cmd "git find <text>" "Search commit messages (--grep)"
+    _cmd "git file-who <file>" "Who last modified a file"
+    _cmd "git file-history <file>" "Full file history with stats"
+
+    # ── 18 ──
+    _section "📐" "BRANCH ANALYSIS"
+    _cmd "git ahead" "Commits in branch not in main"
+    _cmd "git behind" "Commits in main not in branch"
+    _cmd "git branch-stat" "Diff stat vs main"
+    _cmd "git diverge" "How many commits ahead/behind"
+
+    # ── 19 ──
+    _section "📋" "CHANGELOG / STANDUP / RELEASE"
+    _cmd "git standup" "What I did yesterday"
+    _cmd "git week" "What I did this week"
+    _cmd "git changelog" "Changes since last tag"
+    _cmd "git changelog-grouped" "Changelog by commit type"
+    _cmd "git unreleased" "Commits count since last tag"
+
+    # ── 20 ──
+    _section "🌲" "WORKTREE"
+    _cmd "git wt" "List worktrees"
+    _cmd "git wta <path> <branch>" "Add worktree"
+    _cmd "git wtr <path>" "Remove worktree"
+
+    # ── 21 ──
+    _section "🚀" "PR & CI WORKFLOW  (gh CLI)"
+    _cmd "git pr" "Create PR (auto-fill)"
+    _cmd "git prs" "List open PRs"
+    _cmd "git prv" "View PR in browser"
+    _cmd "git prm" "Auto-merge PR (squash)"
+    _cmd "git release" "Create GitHub release"
+    _cmd "git runs" "List recent CI runs"
+    _cmd "git run-watch" "Watch current CI run"
+
+    # ── 22 ──
+    _section "🐛" "BISECT  (binary search for bugs)"
+    _cmd "git bisect-start" "Start bisect from HEAD"
+    _cmd "git bisect-good" "Mark current as good"
+    _cmd "git bisect-bad" "Mark current as bad"
+    _cmd "git bisect-reset" "End bisect session"
+
+    # ── 23 ──
+    _section "⚙️ " "MAINTENANCE & OPTIMIZATION"
+    _cmd "git optimize" "Aggressive GC + repack"
+    _cmd "git fsck-full" "Full filesystem check"
+    _cmd "git count" "Total commit count"
+    _cmd "git filecount" "Total tracked files"
+    _cmd "git linecount" "Total lines of code"
+
+    # ── 24 ──
+    _section "⌨️ " "SHORTCUTS & URL ALIASES"
+
+    _sub "Common shortcuts"
+    _cmd "git co <branch>" "checkout"
+    _cmd "git cb <name>" "checkout -b (create branch)"
+    _cmd "git cp <hash>" "cherry-pick"
+    _cmd "git ri <hash>" "rebase -i (interactive)"
+    _cmd "git mt" "mergetool (nvim)"
+    _cmd "git dt" "difftool (nvim)"
+
+    _sub "Clone URL shortcuts"
+    _cmd "git clone gh:user/repo" "GitHub  (SSH)"
+    _cmd "git clone gl:user/repo" "GitLab  (SSH)"
+    _cmd "git clone bb:user/repo" "Bitbucket (SSH)"
+    _note "gh: → git@github.com:  ·  gl: → git@gitlab.com:  ·  bb: → git@bitbucket.org:"
+
+    # ── Delta ──
+    _section "🎨" "DELTA  (diff pager)"
+    _cmd "n / N  (in delta)" "Navigate between files"
+    _cmd "Catppuccin Mocha" "Syntax theme"
+    _cmd "Line numbers" "Enabled by default"
+    _cmd "Hyperlinks" "Click to open in editor"
+    _note "Delta is auto-used for: git diff, git log -p, git show"
+
+    _quickref
+    _footer
+}
+
+# ── Modes ────────────────────────────────────────────────────────────────────
+
+_show_short() {
+    _banner
+    _quickref
+    _footer
+}
+
+_search_fzf() {
+    command -v fzf &> /dev/null || {
+        echo "fzf not found. Install: brew install fzf"
+        exit 1
+    }
+    _full | sed 's/\x1b\[[0-9;]*m//g' | fzf \
+        --header="Search Git aliases  ·  Enter → copy  ·  Esc → close" \
+        --preview-window=hidden \
+        --bind='enter:execute(echo {} | pbcopy)+abort'
+}
+
+_search_grep() {
+    local query="$1"
+    _full | grep -i --color=always "$query" || echo "  No matches for: $query"
+}
+
+# ── Main ─────────────────────────────────────────────────────────────────────
+
+main() {
+    case "${1:-}" in
+        -s | --short) _show_short | less -RXF --mouse ;;
+        -f | --fzf) _search_fzf ;;
+        -h | --help)
+            cat << 'HELP'
+Usage: git cheatsheet [-s|-f|-h|<query>]
+  (none)     Full cheatsheet in pager
+  -s         Short (quick reference only)
+  -f         Search with fzf
+  <query>    Grep for matching aliases
+HELP
+            ;;
+        "") _full | less -RXF --mouse ;;
+        *)
+            echo -e "\n  ${B}${CYN}Aliases matching: ${YEL}$1${RST}\n"
+            _search_grep "$1"
+            echo ""
+            ;;
+    esac
+}
+
+main "$@"
