@@ -2,8 +2,8 @@
 # @file Justfile
 # @description Primary task runner for dotfiles management
 # @since 1.0.0
-# @version 1.0.0
-# @see Makefile (fallback)
+# @version 1.1.0
+# @see Makefile (minimal fallback)
 # ═══════════════════════════════════════════════════════════════════════════════
 
 set dotenv-load := false
