@@ -1,93 +1,106 @@
 # Dotfiles
 
-Enterprise-grade, cross-platform, cross-shell dotfiles with a Single Source of Truth architecture.
+> Enterprise-grade, cross-platform, cross-shell dotfiles with Single Source of Truth architecture.
+> **210 tools · 4 shells · 6 profiles · 100% platform coverage**
 
-## Features
+[![CI](https://github.com/ca/dotfiles/actions/workflows/ci.yml/badge.svg)](https://github.com/ca/dotfiles/actions/workflows/ci.yml)
+![Platforms](https://img.shields.io/badge/platform-macOS%20|%20Linux%20|%20WSL%20|%20BSD-blue)
+![Shells](https://img.shields.io/badge/shell-bash%20|%20zsh%20|%20fish%20|%20nushell-green)
+![Tools](https://img.shields.io/badge/tools-210-orange)
+![Tests](https://img.shields.io/badge/tests-58%20passing-brightgreen)
 
-- **Cross-platform**: macOS, Linux (Debian, Arch, Fedora), WSL, BSD
-- **Cross-shell**: bash, zsh, fish, nushell — one definition, four outputs
-- **SSOT**: TOML definitions compiled to native shell syntax
-- **Hot-loading**: Install/uninstall tools without affecting the system
-- **Nix environments**: Reproducible dev shells (go, node, python, rust, devops)
-- **Starship themes**: Switch between minimal, full (nerd), and powerline
-- **Secure vault**: age-encrypted secrets, SSH keys, local overrides
+---
 
 ## Quick Start
 
 ```bash
-# One-liner install
-curl -fsSL https://raw.githubusercontent.com/USER/dotfiles/main/install.sh | bash
+# One-liner — installs minimal profile (starship, eza, neovim, fzf, fonts...)
+curl -fsSL https://raw.githubusercontent.com/ca/dotfiles/main/install.sh | bash
 
-# Or clone and bootstrap manually
-git clone https://github.com/USER/dotfiles.git ~/.dotfiles
-cd ~/.dotfiles && ./bootstrap.sh
+# With specific profile
+curl -fsSL https://raw.githubusercontent.com/ca/dotfiles/main/install.sh | bash -s -- --profile dev
+
+# Preview without installing
+curl -fsSL https://raw.githubusercontent.com/ca/dotfiles/main/install.sh | bash -s -- --dry-run
+```
+
+After installation, you land in a fully configured shell with **starship prompt**, **aliases**, **modern CLI tools**, and **Nerd Font icons** — instantly.
+
+## What You Get
+
+```bash
+# Modern replacements for everyday commands
+ls      → eza --icons          # beautiful file listing
+cat     → bat                  # syntax-highlighted cat
+grep    → rg                   # ripgrep, 10x faster
+find    → fd                   # user-friendly find
+cd      → zoxide               # smart directory jumper
+du      → dust                 # intuitive disk usage
+df      → duf                  # pretty disk free
+top     → btop                 # gorgeous system monitor
+ps      → procs                # human-readable processes
+```
+
+## Profiles
+
+| Profile | Tools | Use Case |
+|---------|-------|----------|
+| `minimal` | 24 | Essential CLI — perfect for servers, VMs, fresh installs |
+| `server` | 43 | Headless machines — monitoring, networking, security |
+| `dev` | 102 | Developer workstation — languages, linters, formatters, docker |
+| `data` | 118 | Data engineering — duckdb, sqlite, miller, visidata |
+| `devops` | 132 | Cloud & K8s — kubectl, helm, terraform, awscli, colima |
+| `full` | 181 | Everything — devops + data + multimedia + AI tools |
+
+## Daily Usage
+
+```bash
+# System
+dotfiles doctor               # Health check (9 checks)
+dotfiles upgrade              # Pull + regenerate + upgrade tools + doctor
+dotfiles update               # Quick pull + regenerate (lighter than upgrade)
+dotfiles status               # What's installed vs available
+
+# Tools
+dotfiles install <name>       # Install a tool via hot-loading
+dotfiles uninstall <name>     # Remove a tool
+
+# Theme
+dotfiles-theme minimal        # Clean prompt
+dotfiles-theme full           # Rich prompt with icons
+dotfiles-theme powerline      # Powerline style
+
+# Nix
+dotfiles-nix enter python     # Reproducible dev environment
+dotfiles-nix list             # Available environments
+
+# Just (task runner)
+just generate                 # Regenerate all shell configs
+just test                     # Run all tests
+just lint                     # ShellCheck all scripts
 ```
 
 ## Architecture
 
 ```
-definitions/*.toml  -->  generators/ (Python)  -->  shells/<shell>/generated/
-tools/available/*.toml  -->  lib/hotload/engine.sh  -->  local/state.json
+definitions/*.toml     →  generators/ (Python)    →  shells/<shell>/generated/
+tools/available/       →  lib/hotload/engine.sh   →  local/state.json
 ```
 
-| Directory | Purpose |
-|-----------|---------|
-| `bin/` | CLI entry points (`dotfiles`, `dotfiles-gen`, `dotfiles-theme`, `dotfiles-nix`) |
-| `definitions/` | SSOT TOML files (aliases, env, functions, path, colors, icons, init) |
-| `generators/` | Python transpiler (TOML to bash/zsh/fish/nushell) |
-| `shells/` | Shell-specific configs + generated output |
-| `lib/core/` | Low-level primitives (platform, logger, validator, fs, net) |
-| `lib/hotload/` | Hot-loading engine + installer adapters |
-| `tools/available/` | Tool descriptors (one TOML per tool, multi-install strategy) |
-| `tools/nix/` | Nix flake environments |
-| `config/` | XDG tool configurations (starship, git, tmux, bat, etc.) |
-| `platform/` | Platform-specific provisioning scripts |
-| `local/` | Machine-specific vault (gitignored, encrypted) |
-| `tests/` | bats-core unit + integration + Docker e2e |
+**Single Source of Truth** — define aliases, env vars, functions, and tool specs once in TOML. The Python generator compiles them to native syntax for bash, zsh, fish, and nushell.
 
-## CLI Usage
-
-```bash
-# Tool management
-dotfiles install bat          # Install a tool
-dotfiles uninstall bat        # Remove a tool
-dotfiles status               # Show all tools
-dotfiles verify               # Check installed tools work
-
-# System
-dotfiles doctor               # Health check
-dotfiles generate             # Regenerate shell configs from SSOT
-dotfiles update               # Git pull + regenerate
-
-# Vault
-dotfiles vault-init           # Initialize secure vault
-dotfiles vault-keygen         # Generate age encryption key
-dotfiles vault-encrypt FILE   # Encrypt a file
-dotfiles vault-decrypt FILE   # Decrypt a file
-
-# Theme
-dotfiles-theme minimal        # Switch to minimal prompt
-dotfiles-theme full           # Switch to full nerd font prompt
-dotfiles-theme powerline      # Switch to powerline prompt
-
-# Nix environments
-dotfiles-nix list             # List environments
-dotfiles-nix enter python     # Enter Python dev shell
-dotfiles-nix create elixir    # Create new environment
-```
+**Hot-Load Engine** — each tool has a TOML descriptor with prioritized install methods (`mise` → `uv` → `curl` → `cargo` → `brew` → `system`). Tools are installed, tracked, and verified without touching the OS package manager.
 
 ## Installation Priority
 
-Tools use the first compatible method (highest priority first):
-
-| Priority | Method | Scope |
-|----------|--------|-------|
-| 1 | `mise` | Cross-platform binaries + runtimes (~63 tools) |
-| 2 | `uv` | Python tools in isolated envs (~23 tools) |
+| Priority | Method | Coverage |
+|----------|--------|----------|
+| 1 | `mise` | Cross-platform binary manager (~63 tools) |
+| 2 | `uv` | Python tools in isolated environments (~23 tools) |
 | 3 | `curl` | Static binaries / install scripts |
-| 4 | `cargo` | Rust tools not in mise |
-| 5 | `brew` | macOS-only fallback |
-| 6 | `system` | apt/dnf/pacman last resort |
+| 4 | `cargo` | Rust ecosystem |
+| 5 | `brew` | macOS Homebrew |
+| 6 | `system` | Native package manager (apt/dnf/pacman) |
 
 ## Adding a Tool
 
@@ -97,6 +110,7 @@ Create `tools/available/mytool.toml`:
 [meta]
 name = "mytool"
 description = "What it does"
+homepage = "https://example.com"
 category = "core"
 verify = "mytool --version"
 
@@ -112,28 +126,25 @@ platforms = ["darwin"]
 package = "mytool"
 ```
 
-Then run: `dotfiles install mytool`
-
-## Requirements
-
-- bash >= 4.0
-- curl
-- git
-- jq
-- mise (installed by bootstrap)
-- uv (installed by bootstrap)
-- python3
+Add it to a profile in `definitions/profiles.toml`, then run `dotfiles install mytool`.
 
 ## Testing
 
 ```bash
-just test              # All tests
+just test              # All tests (58 emitter + 20 parser + 136 bats)
 just test-unit         # bats unit tests
 just test-integration  # bats integration tests
 just test-generators   # pytest generator tests
-just lint              # shellcheck
-just test-e2e          # Docker multi-distro
+just lint              # ShellCheck all scripts
+just test-e2e          # Docker multi-distro E2E
 ```
+
+## Requirements
+
+- bash ≥ 4.0 · curl · git · jq
+- mise (auto-installed by bootstrap)
+- uv (auto-installed by bootstrap)
+- python3
 
 ## License
 
