@@ -1,0 +1,37 @@
+[meta]
+name = "restic"
+description = "Fast, secure, deduplicated backup tool — local or cloud (S3, SFTP, Backblaze, etc.)"
+homepage = "https://restic.net"
+category = "devops"
+version = "latest"
+verify = "restic version"
+
+[[install]]
+method = "mise"
+platforms = ["darwin", "linux", "wsl", "bsd"]
+plugin = "restic"
+version = "latest"
+
+[[install]]
+method = "brew"
+platforms = ["darwin"]
+package = "restic"
+
+[[install]]
+method = "system"
+platforms = ["linux.debian", "linux.ubuntu"]
+package = "restic"
+
+[[install]]
+method = "system"
+platforms = ["linux.arch"]
+package = "restic"
+
+[[install]]
+method = "system"
+platforms = ["linux.fedora"]
+package = "restic"
+
+[config]
+symlinks = []
+dependencies = []

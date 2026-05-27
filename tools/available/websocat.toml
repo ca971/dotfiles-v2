@@ -1,0 +1,27 @@
+[meta]
+name = "websocat"
+description = "Netcat for WebSockets — connect, pipe, and debug WebSocket servers from CLI"
+homepage = "https://github.com/vi/websocat"
+category = "network"
+version = "latest"
+verify = "websocat --version"
+
+[[install]]
+method = "mise"
+platforms = ["darwin", "linux", "wsl", "bsd"]
+plugin = "websocat"
+version = "latest"
+
+[[install]]
+method = "brew"
+platforms = ["darwin"]
+package = "websocat"
+
+[[install]]
+method = "cargo"
+platforms = ["darwin", "linux", "wsl", "bsd"]
+crate = "websocat"
+
+[config]
+symlinks = []
+dependencies = []

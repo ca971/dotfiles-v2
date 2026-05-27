@@ -1,0 +1,37 @@
+[meta]
+name = "mpv"
+description = "Minimal, scriptable, GPU-accelerated media player — video, audio, streaming"
+homepage = "https://mpv.io"
+category = "media"
+version = "latest"
+verify = "mpv --version"
+
+[[install]]
+method = "mise"
+platforms = ["darwin", "linux", "wsl", "bsd"]
+plugin = "mpv"
+version = "latest"
+
+[[install]]
+method = "brew"
+platforms = ["darwin"]
+package = "mpv"
+
+[[install]]
+method = "system"
+platforms = ["linux.debian", "linux.ubuntu"]
+package = "mpv"
+
+[[install]]
+method = "system"
+platforms = ["linux.arch"]
+package = "mpv"
+
+[[install]]
+method = "system"
+platforms = ["linux.fedora"]
+package = "mpv"
+
+[config]
+symlinks = []
+dependencies = []

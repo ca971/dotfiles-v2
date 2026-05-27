@@ -1,0 +1,27 @@
+[meta]
+name = "dasel"
+description = "Query and modify JSON, YAML, TOML, XML, and CSV with a single tool (like jq for everything)"
+homepage = "https://daseldocs.tomwright.me"
+category = "data"
+version = "latest"
+verify = "dasel --version"
+
+[[install]]
+method = "mise"
+platforms = ["darwin", "linux", "wsl", "bsd"]
+plugin = "dasel"
+version = "latest"
+
+[[install]]
+method = "brew"
+platforms = ["darwin"]
+package = "dasel"
+
+[[install]]
+method = "system"
+platforms = ["linux.arch"]
+package = "dasel"
+
+[config]
+symlinks = []
+dependencies = []

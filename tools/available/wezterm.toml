@@ -1,0 +1,37 @@
+[meta]
+name = "wezterm"
+description = "GPU-accelerated cross-platform terminal emulator with multiplexer and Lua config"
+homepage = "https://wezfurlong.org/wezterm/"
+category = "terminal"
+version = "latest"
+verify = "wezterm --version"
+
+[[install]]
+method = "mise"
+platforms = ["darwin", "linux", "wsl", "bsd"]
+plugin = "wezterm"
+version = "latest"
+
+[[install]]
+method = "brew"
+platforms = ["darwin"]
+package = "wezterm"
+
+[[install]]
+method = "system"
+platforms = ["linux.debian", "linux.ubuntu"]
+package = "wezterm"
+
+[[install]]
+method = "system"
+platforms = ["linux.arch"]
+package = "wezterm"
+
+[[install]]
+method = "system"
+platforms = ["linux.fedora"]
+package = "wezterm"
+
+[config]
+symlinks = [{ src = "config/wezterm", dst = "~/.config/wezterm" }]
+dependencies = []

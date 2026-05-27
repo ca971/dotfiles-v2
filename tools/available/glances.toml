@@ -1,0 +1,42 @@
+[meta]
+name = "glances"
+description = "Cross-platform system monitoring — CPU, memory, disk, network, containers, with API and web UI"
+homepage = "https://nicolargo.github.io/glances/"
+category = "monitoring"
+version = "latest"
+verify = "glances --version"
+
+[[install]]
+method = "mise"
+platforms = ["darwin", "linux", "wsl", "bsd"]
+plugin = "glances"
+version = "latest"
+
+[[install]]
+method = "brew"
+platforms = ["darwin"]
+package = "glances"
+
+[[install]]
+method = "system"
+platforms = ["linux.debian", "linux.ubuntu"]
+package = "glances"
+
+[[install]]
+method = "system"
+platforms = ["linux.arch"]
+package = "glances"
+
+[[install]]
+method = "system"
+platforms = ["linux.fedora"]
+package = "glances"
+
+[[install]]
+method = "uv"
+platforms = ["darwin", "linux", "wsl", "bsd"]
+package = "glances"
+
+[config]
+symlinks = []
+dependencies = ["python"]

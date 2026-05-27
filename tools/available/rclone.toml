@@ -1,0 +1,42 @@
+[meta]
+name = "rclone"
+description = "Rsync for cloud storage — sync files to/from S3, GCS, Dropbox, SFTP, and 40+ providers"
+homepage = "https://rclone.org"
+category = "network"
+version = "latest"
+verify = "rclone version"
+
+[[install]]
+method = "mise"
+platforms = ["darwin", "linux", "wsl", "bsd"]
+plugin = "rclone"
+version = "latest"
+
+[[install]]
+method = "brew"
+platforms = ["darwin"]
+package = "rclone"
+
+[[install]]
+method = "system"
+platforms = ["linux.debian", "linux.ubuntu"]
+package = "rclone"
+
+[[install]]
+method = "system"
+platforms = ["linux.arch"]
+package = "rclone"
+
+[[install]]
+method = "system"
+platforms = ["linux.fedora"]
+package = "rclone"
+
+[[install]]
+method = "curl"
+platforms = ["darwin", "linux", "wsl", "bsd"]
+command = "curl -fsSL https://rclone.org/install.sh | bash"
+
+[config]
+symlinks = []
+dependencies = []

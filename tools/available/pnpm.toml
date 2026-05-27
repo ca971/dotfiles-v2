@@ -1,0 +1,32 @@
+[meta]
+name = "pnpm"
+description = "Fast, disk-efficient JavaScript package manager with hard links and strict mode"
+homepage = "https://pnpm.io"
+category = "language"
+version = "latest"
+verify = "pnpm --version"
+
+[[install]]
+method = "mise"
+platforms = ["darwin", "linux", "wsl", "bsd"]
+plugin = "pnpm"
+version = "latest"
+
+[[install]]
+method = "curl"
+platforms = ["darwin", "linux", "wsl", "bsd"]
+command = "curl -fsSL https://get.pnpm.io/install.sh | sh -"
+
+[[install]]
+method = "brew"
+platforms = ["darwin"]
+package = "pnpm"
+
+[[install]]
+method = "system"
+platforms = ["linux.arch"]
+package = "pnpm"
+
+[config]
+symlinks = []
+dependencies = ["nodejs"]

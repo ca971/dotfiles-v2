@@ -1,0 +1,27 @@
+[meta]
+name = "bun"
+description = "Fast all-in-one JavaScript runtime — runtime, bundler, transpiler, and test runner"
+homepage = "https://bun.sh"
+category = "language"
+version = "latest"
+verify = "bun --version"
+
+[[install]]
+method = "mise"
+platforms = ["darwin", "linux", "wsl"]
+plugin = "bun"
+version = "latest"
+
+[[install]]
+method = "curl"
+platforms = ["darwin", "linux", "wsl"]
+command = "curl -fsSL https://bun.sh/install | bash"
+
+[[install]]
+method = "brew"
+platforms = ["darwin"]
+package = "bun"
+
+[config]
+symlinks = []
+dependencies = []

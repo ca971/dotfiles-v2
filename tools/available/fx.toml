@@ -1,0 +1,22 @@
+[meta]
+name = "fx"
+description = "Interactive JSON viewer and explorer — real-time jq with terminal UI"
+homepage = "https://github.com/antonmedv/fx"
+category = "data"
+version = "latest"
+verify = "fx --version"
+
+[[install]]
+method = "mise"
+platforms = ["darwin", "linux", "wsl", "bsd"]
+plugin = "fx"
+version = "latest"
+
+[[install]]
+method = "brew"
+platforms = ["darwin"]
+package = "fx"
+
+[config]
+symlinks = []
+dependencies = []
