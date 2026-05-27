@@ -13,10 +13,9 @@ ENV DEBIAN_FRONTEND=noninteractive
 ENV HOME=/home/testuser
 ENV DOTFILES_DIR=/home/testuser/.dotfiles
 ENV TERM=xterm-256color
-ENV LANG=en_US.UTF-8
 ENV LOG_COLOR=1
 
-# Install base system
+# Install base system + generate locale
 RUN apt-get update -qq && \
     apt-get install -y --no-install-recommends \
         bash \
@@ -32,8 +31,13 @@ RUN apt-get update -qq && \
         build-essential \
         pkg-config \
         libssl-dev \
-    && rm -rf /var/lib/apt/lists/* \
-    && locale-gen en_US.UTF-8
+    && sed -i '/en_US.UTF-8/s/^# //g' /etc/locale.gen \
+    && locale-gen \
+    && rm -rf /var/lib/apt/lists/*
+
+ENV LANG=en_US.UTF-8 \
+    LANGUAGE=en_US:en \
+    LC_ALL=en_US.UTF-8
 
 # Install bats-core
 RUN git clone https://github.com/bats-core/bats-core.git /tmp/bats && \
@@ -55,8 +59,11 @@ ENV PATH="${HOME}/.local/bin:${PATH}"
 # Install uv
 RUN curl -LsSf https://astral.sh/uv/install.sh | sh
 
-# Install taplo via mise
-RUN mise install taplo@latest && mise use --global taplo@latest
+# Install taplo (TOML CLI) — direct binary, avoids mise GitHub rate limit
+RUN curl -fsSL https://github.com/tamasfe/taplo/releases/download/0.9.3/taplo-linux-aarch64.gz -o /tmp/taplo.gz && \
+    gunzip /tmp/taplo.gz && \
+    chmod +x /tmp/taplo && \
+    mv /tmp/taplo ${HOME}/.local/bin/taplo
 
 # Copy dotfiles
 COPY --chown=testuser:testuser . ${DOTFILES_DIR}
@@ -84,8 +91,8 @@ RUN printf 'export ZDOTDIR="${HOME}/.dotfiles/shells/zsh"\nsource "${ZDOTDIR}/.z
 RUN mkdir -p "${HOME}/.config" && \
     ln -sf "${DOTFILES_DIR}/shells/fish" "${HOME}/.config/fish"
 
-# Install nushell via mise (aqua backend)
-RUN mise install aqua:nushell/nushell@latest && mise use --global aqua:nushell/nushell@latest
+# Install nushell via mise (non-fatal — may fail due to GitHub rate limits)
+RUN mise install aqua:nushell/nushell@latest && mise use --global aqua:nushell/nushell@latest || true
 
 # Add mise shims and dotfiles bin to PATH
 ENV PATH="${HOME}/.local/share/mise/shims:${DOTFILES_DIR}/bin:${PATH}"
