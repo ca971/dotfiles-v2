@@ -1,0 +1,34 @@
+# ═══════════════════════════════════════════════════════════════════════════════
+# @file tools/available/codex.toml
+# @description Tool descriptor for OpenAI Codex CLI (coding agent)
+# @since 1.0.0
+# @version 1.0.0
+# ═══════════════════════════════════════════════════════════════════════════════
+
+[meta]
+name = "codex"
+description = "OpenAI Codex CLI — AI coding agent with terminal-native interface"
+homepage = "https://github.com/openai/codex"
+category = "ai-agent"
+version = "latest"
+verify = "codex --version"
+
+[[install]]
+method = "mise"
+platforms = ["darwin", "linux", "wsl"]
+plugin = "npm:@openai/codex"
+version = "latest"
+
+[[install]]
+method = "curl"
+platforms = ["darwin", "linux", "wsl"]
+command = "npm install -g @openai/codex"
+
+[[install]]
+method = "brew"
+platforms = ["darwin"]
+package = "codex"
+
+[config]
+symlinks = [{ src = "config/ai/codex", dst = "~/.codex" }]
+dependencies = ["nodejs"]

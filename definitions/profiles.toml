@@ -301,3 +301,21 @@ tools = [
   "statix",
   "mpv",
 ]
+
+# ───────────────────────────────────────────────────────────────────────────────
+# AI — AI agents and LLM tools
+# ───────────────────────────────────────────────────────────────────────────────
+
+[profiles.ai]
+description = "AI agents and LLM tools — coding assistants and language models"
+extends = "dev"
+tools = [
+  "hermes-agent",
+  "claude-code",
+  "codex",
+  "opencode",
+  "aichat",
+  "ollama",
+  "llm",
+  "mods",
+]

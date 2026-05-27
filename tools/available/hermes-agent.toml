@@ -1,0 +1,29 @@
+# ═══════════════════════════════════════════════════════════════════════════════
+# @file tools/available/hermes-agent.toml
+# @description Tool descriptor for Hermes Agent (Nous Research AI coding agent)
+# @since 1.0.0
+# @version 1.0.0
+# ═══════════════════════════════════════════════════════════════════════════════
+
+[meta]
+name = "hermes-agent"
+description = "Hermes Agent — local AI coding agent with MCP, cron, delegation, and multi-provider support"
+homepage = "https://github.com/nousresearch/hermes-agent"
+category = "ai-agent"
+version = "latest"
+verify = "hermes --version"
+
+[[install]]
+method = "mise"
+platforms = ["darwin", "linux", "wsl"]
+plugin = "npm:hermes-agent"
+version = "latest"
+
+[[install]]
+method = "curl"
+platforms = ["darwin", "linux", "wsl"]
+command = "npm install -g hermes-agent"
+
+[config]
+symlinks = [{ src = "config/ai/hermes", dst = "~/.hermes" }]
+dependencies = ["nodejs"]

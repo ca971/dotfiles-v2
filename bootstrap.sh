@@ -94,7 +94,7 @@ show_help() {
 	    --no-gui     Skip GUI applications
 	    --dry-run    Show what would be done without executing
 	    --verbose    Enable debug logging
-	    --profile    Tool profile to install: minimal, dev, server, devops, data, full (default: dev)
+	    --profile    Tool profile to install: minimal, dev, server, devops, data, ai, full (default: dev)
 	    --interactive  Interactive mode: choose shell, profile, and confirm
 	    --help, -h   Show this help message
 
@@ -437,21 +437,23 @@ run_interactive() {
     # ── Step 1: Choose profile ──
     echo "  Choose a profile:"
     echo ""
-    PS3="  Profile [1-6]: "
+    PS3="  Profile [1-7]: "
     select _profile_choice in "minimal (24 tools — essential CLI)" \
-                       "dev (102 tools — developer workstation)" \
-                       "server (43 tools — headless machine)" \
-                       "devops (132 tools — cloud & k8s)" \
-                       "data (118 tools — data engineering)" \
-                       "full (181 tools — everything)"; do
+                       "dev (109 tools — developer workstation)" \
+                       "server (44 tools — headless machine)" \
+                       "devops (143 tools — cloud & k8s)" \
+                       "data (124 tools — data engineering)" \
+                       "ai (117 tools — AI agents & LLM tools)" \
+                       "full (193 tools — everything)"; do
         case "${REPLY}" in
             1) OPT_PROFILE="minimal"; break ;;
             2) OPT_PROFILE="dev"; break ;;
             3) OPT_PROFILE="server"; break ;;
             4) OPT_PROFILE="devops"; break ;;
             5) OPT_PROFILE="data"; break ;;
-            6) OPT_PROFILE="full"; break ;;
-            *) echo "  Please pick 1-6" ;;
+            6) OPT_PROFILE="ai"; break ;;
+            7) OPT_PROFILE="full"; break ;;
+            *) echo "  Please pick 1-7" ;;
         esac
     done
     OPT_PROFILE_EXPLICIT=1

@@ -1,0 +1,34 @@
+# ═══════════════════════════════════════════════════════════════════════════════
+# @file tools/available/claude-code.toml
+# @description Tool descriptor for Claude Code (Anthropic CLI coding agent)
+# @since 1.0.0
+# @version 1.0.0
+# ═══════════════════════════════════════════════════════════════════════════════
+
+[meta]
+name = "claude-code"
+description = "Claude Code — Anthropic AI coding agent with terminal-native interface"
+homepage = "https://docs.anthropic.com/en/docs/claude-code"
+category = "ai-agent"
+version = "latest"
+verify = "claude --version"
+
+[[install]]
+method = "mise"
+platforms = ["darwin", "linux", "wsl"]
+plugin = "npm:@anthropic-ai/claude-code"
+version = "latest"
+
+[[install]]
+method = "curl"
+platforms = ["darwin", "linux", "wsl"]
+command = "npm install -g @anthropic-ai/claude-code"
+
+[[install]]
+method = "brew"
+platforms = ["darwin"]
+package = "claude-code"
+
+[config]
+symlinks = [{ src = "config/ai/claude", dst = "~/.claude" }]
+dependencies = ["nodejs"]

@@ -1,0 +1,29 @@
+# ═══════════════════════════════════════════════════════════════════════════════
+# @file tools/available/opencode.toml
+# @description Tool descriptor for OpenCode CLI (AI coding agent)
+# @since 1.0.0
+# @version 1.0.0
+# ═══════════════════════════════════════════════════════════════════════════════
+
+[meta]
+name = "opencode"
+description = "OpenCode CLI — AI coding agent with multi-provider support"
+homepage = "https://github.com/opencode-ai/opencode"
+category = "ai-agent"
+version = "latest"
+verify = "opencode --version"
+
+[[install]]
+method = "mise"
+platforms = ["darwin", "linux", "wsl"]
+plugin = "npm:opencode"
+version = "latest"
+
+[[install]]
+method = "curl"
+platforms = ["darwin", "linux", "wsl"]
+command = "npm install -g opencode"
+
+[config]
+symlinks = [{ src = "config/ai/opencode", dst = "~/.opencode" }]
+dependencies = ["nodejs"]
