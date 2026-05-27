@@ -45,5 +45,5 @@ platforms = ["darwin"]
 package = "btop"
 
 [config]
-symlinks = []
+symlinks = [{ src = "config/btop", dst = "~/.config/btop" }]
 dependencies = []

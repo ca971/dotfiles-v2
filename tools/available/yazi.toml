@@ -30,5 +30,5 @@ platforms = ["darwin"]
 package = "yazi"
 
 [config]
-symlinks = []
+symlinks = [{ src = "config/yazi", dst = "~/.config/yazi" }]
 dependencies = []

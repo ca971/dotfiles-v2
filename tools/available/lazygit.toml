@@ -25,5 +25,5 @@ platforms = ["darwin"]
 package = "lazygit"
 
 [config]
-symlinks = []
+symlinks = [{ src = "config/lazygit", dst = "~/.config/lazygit" }]
 dependencies = []

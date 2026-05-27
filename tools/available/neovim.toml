@@ -45,5 +45,5 @@ platforms = ["darwin"]
 package = "neovim"
 
 [config]
-symlinks = []
+symlinks = [{ src = "config/nvim", dst = "~/.config/nvim" }]
 dependencies = []

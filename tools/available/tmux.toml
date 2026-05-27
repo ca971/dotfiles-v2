@@ -45,5 +45,5 @@ platforms = ["darwin"]
 package = "tmux"
 
 [config]
-symlinks = []
+symlinks = [{ src = "config/tmux", dst = "~/.config/tmux" }]
 dependencies = []

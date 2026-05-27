@@ -30,5 +30,5 @@ platforms = ["darwin"]
 package = "zellij"
 
 [config]
-symlinks = []
+symlinks = [{ src = "config/zellij", dst = "~/.config/zellij" }]
 dependencies = []

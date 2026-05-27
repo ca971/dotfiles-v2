@@ -19,5 +19,5 @@ platforms = ["darwin", "linux", "wsl", "bsd"]
 command = "curl -fsSL https://mise.run | sh"
 
 [config]
-symlinks = []
+symlinks = [{ src = "config/mise", dst = "~/.config/mise" }]
 dependencies = []

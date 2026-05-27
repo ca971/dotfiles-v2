@@ -45,5 +45,5 @@ platforms = ["darwin"]
 package = "direnv"
 
 [config]
-symlinks = []
+symlinks = [{ src = "config/direnv", dst = "~/.config/direnv" }]
 dependencies = []

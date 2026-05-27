@@ -40,5 +40,5 @@ platforms = ["darwin"]
 package = "git"
 
 [config]
-symlinks = []
+symlinks = [{ src = "config/git", dst = "~/.config/git" }]
 dependencies = []

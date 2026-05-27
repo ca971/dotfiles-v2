@@ -30,5 +30,5 @@ platforms = ["darwin"]
 package = "atuin"
 
 [config]
-symlinks = []
+symlinks = [{ src = "config/atuin", dst = "~/.config/atuin" }]
 dependencies = []
