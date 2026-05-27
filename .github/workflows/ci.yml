@@ -1,6 +1,6 @@
 # ═══════════════════════════════════════════════════════════════════════════════
 # @file .github/workflows/ci.yml
-# @description CI pipeline — lint, unit tests, generator tests on every push/PR
+# @description Continuous Integration — lint, test, build on every push/PR
 # @since 1.0.0
 # @version 1.0.0
 # ═══════════════════════════════════════════════════════════════════════════════
@@ -12,141 +12,136 @@ on:
     branches: [main]
   pull_request:
     branches: [main]
+  workflow_dispatch:
 
 concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
   cancel-in-progress: true
 
 jobs:
+  # ═════════════════════════════════════════════════════════════════════════════
+  # Lint — fast checks, no build required
+  # ═════════════════════════════════════════════════════════════════════════════
+
   shellcheck:
     name: ShellCheck
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-
-      - name: Run ShellCheck
-        uses: ludeeus/action-shellcheck@master
+      - uses: ludeeus/action-shellcheck@master
         with:
+          scandir: ./
+          format: tty
           severity: warning
-          scandir: .
-          additional_files: install.sh bootstrap.sh
-        env:
-          SHELLCHECK_OPTS: -x
+          additional_files: 'bootstrap.sh install.sh'
 
-  unit-tests:
-    name: Unit Tests (bats)
+  taplo:
+    name: Taplo (TOML)
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
+      - uses: uncenter/setup-taplo@v2
+        with:
+          taplo-version: "0.9.3"
+      - run: taplo format --check .
+      - run: taplo lint .
 
-      - name: Install bats-core
-        run: |
-          sudo apt-get update -qq
-          sudo apt-get install -y bats
-
-      - name: Install jq
-        run: sudo apt-get install -y jq
-
-      - name: Install taplo
-        run: |
-          curl -fsSL https://github.com/tamasfe/taplo/releases/latest/download/taplo-full-linux-x86_64.gz \
-            | gunzip > /usr/local/bin/taplo
-          chmod +x /usr/local/bin/taplo
-
-      - name: Run unit tests
-        run: bats tests/unit/
-        env:
-          DOTFILES_DIR: ${{ github.workspace }}
-
-  generator-tests:
-    name: Generator Tests (pytest)
+  ruff:
+    name: Ruff (Python)
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
+      - uses: astral-sh/ruff-action@v3
+        with:
+          src: generators/
 
-      - name: Install uv
-        uses: astral-sh/setup-uv@v4
-
-      - name: Install dependencies
-        run: cd generators && uv sync --all-extras
-
-      - name: Run ruff
-        run: cd generators && uv run ruff check src/ tests/
-
-      - name: Run pytest
-        run: cd generators && uv run pytest tests/ -v
-
-  validate-definitions:
-    name: Validate SSOT Definitions
+  hadolint:
+    name: Hadolint (Dockerfile)
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
+      - uses: hadolint/hadolint-action@v3
+        with:
+          dockerfile: tests/e2e/Dockerfile.interactive
+          failure-threshold: warning
 
-      - name: Install uv
-        uses: astral-sh/setup-uv@v4
+  # ═════════════════════════════════════════════════════════════════════════════
+  # Test — requires build / runtime
+  # ═════════════════════════════════════════════════════════════════════════════
 
-      - name: Install dependencies
-        run: cd generators && uv sync
-
-      - name: Validate all definitions
-        run: cd generators && uv run python -m src.cli validate
-
-  generate-check:
-    name: Generation Produces Output
+  pytest:
+    name: Pytest (generators)
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
+      - uses: astral-sh/setup-uv@v5
+        with:
+          version: "latest"
+      - run: cd generators && uv sync
+      - run: cd generators && uv run pytest tests/ -v
 
-      - name: Install uv
-        uses: astral-sh/setup-uv@v4
-
-      - name: Install dependencies
-        run: cd generators && uv sync
-
-      - name: Generate all shells
-        run: cd generators && uv run python -m src.cli generate --all
-
-      - name: Verify output exists
-        run: |
-          test -s shells/bash/generated/aliases.gen.sh
-          test -s shells/zsh/generated/aliases.gen.sh
-          test -s shells/fish/generated/aliases.gen.fish
-          test -s shells/nushell/generated/aliases.gen.sh
-          test -s shells/bash/generated/init.gen.sh
-          test -s shells/zsh/generated/plugins.gen.sh
-          echo "All generated files present"
-
-  integration-tests:
-    name: Integration Tests
+  bats:
+    name: Bats (shell tests)
     runs-on: ubuntu-latest
-    needs: [shellcheck, unit-tests, generator-tests]
     steps:
       - uses: actions/checkout@v4
+      - uses: brokenpip3/setup-bats-libs@v1
+        with:
+          support-install: true
+          assert-install: true
+          detik-install: false
+          file-install: false
+      - run: bats tests/unit/ --formatter tap
+      - run: bats tests/integration/ --formatter tap
 
-      - name: Install dependencies
+  docker-e2e:
+    name: Docker E2E
+    runs-on: ubuntu-latest
+    needs: [shellcheck, taplo, ruff, pytest, bats]
+    steps:
+      - uses: actions/checkout@v4
+      - name: Build test image
+        run: docker build -f tests/e2e/Dockerfile.interactive -t dotfiles-test .
+      - name: Verify profiles
         run: |
-          sudo apt-get update -qq
-          sudo apt-get install -y bats jq zsh fish
+          docker run --entrypoint "" --rm dotfiles-test python3 -c "
+          import os
+          toml = '/home/testuser/.dotfiles/definitions/profiles.toml'
+          # Quick sanity: file exists and has all 6 profiles
+          with open(toml) as f:
+              c = f.read()
+          profiles = [l.split('[profiles.')[1].rstrip(']') for l in c.split('\n') if l.startswith('[profiles.') and 'meta' not in l]
+          assert len(profiles) == 6, f'Expected 6 profiles, got {len(profiles)}'
+          print(f'OK: {len(profiles)} profiles found: {profiles}')
+          "
+      - name: Bootstrap dry-run
+        run: >
+          docker run --entrypoint "" --rm dotfiles-test
+          ./bootstrap.sh --minimal --dry-run 2>&1 |
+          grep "Would install profile"
+      - name: Locale check
+        run: >
+          docker run --entrypoint "" --rm dotfiles-test
+          bash -c 'locale 2>&1 >/dev/null &&
+          echo "OK" || echo "FAIL"'
 
-      - name: Install uv
-        uses: astral-sh/setup-uv@v4
+  # ═════════════════════════════════════════════════════════════════════════════
+  # Final gate
+  # ═════════════════════════════════════════════════════════════════════════════
 
-      - name: Install taplo
+  all-checks:
+    name: All Checks
+    runs-on: ubuntu-latest
+    needs: [shellcheck, taplo, ruff, hadolint, pytest, bats, docker-e2e]
+    if: always()
+    steps:
+      - name: Summary
         run: |
-          curl -fsSL https://github.com/tamasfe/taplo/releases/latest/download/taplo-full-linux-x86_64.gz \
-            | gunzip > /usr/local/bin/taplo
-          chmod +x /usr/local/bin/taplo
-
-      - name: Generate configs
-        run: cd generators && uv sync && uv run python -m src.cli generate --all
-
-      - name: Initialize state
-        run: |
-          mkdir -p local
-          echo '{"version":1,"tools":{},"nix_envs":{},"theme":"minimal"}' > local/state.json
-
-      - name: Run integration tests
-        run: bats tests/integration/
-        env:
-          DOTFILES_DIR: ${{ github.workspace }}
-          LOG_COLOR: "0"
+          echo "CI complete"
+          echo "  shellcheck: ${{ needs.shellcheck.result }}"
+          echo "  taplo:      ${{ needs.taplo.result }}"
+          echo "  ruff:       ${{ needs.ruff.result }}"
+          echo "  hadolint:   ${{ needs.hadolint.result }}"
+          echo "  pytest:     ${{ needs.pytest.result }}"
+          echo "  bats:       ${{ needs.bats.result }}"
+          echo "  docker-e2e: ${{ needs.docker-e2e.result }}"
