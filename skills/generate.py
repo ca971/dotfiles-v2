@@ -1,134 +1,176 @@
 #!/usr/bin/env python3
 """
 @file skills/generate.py
-@description SSOT skill generator — TOML → agent-specific formats (Hermes, Claude, OpenCode)
+@description SSOT skill generator — TOML → agent-specific formats (Markdown, YAML, etc.)
 @since 1.0.0
-@version 1.0.0
+@version 1.1.0
+
+Skill TOML schema:
+  [meta]
+  name = "..."
+  description = "..."
+  triggers = ["...", "..."]
+
+  [content]
+  markdown = \"\"\"...\"\"\"          # Default format (required)
+
+  [content.<agent>]                # Per-agent override (optional)
+  markdown = \"\"\"...\"\"\"           # Agent-specific markdown
+  yaml = \"\"\"...\"\"\"               # Alternative format
 
 Usage:
-  python skills/generate.py --all          # Generate for all agents
-  python skills/generate.py --agent hermes # Generate for specific agent
+  python skills/generate.py --all
+  python skills/generate.py --agent hermes
 """
 
 import sys
+import tomllib
 from pathlib import Path
 
 PROJECT_ROOT = Path(__file__).resolve().parent.parent
 SKILLS_DIR = PROJECT_ROOT / "skills" / "available"
 OUTPUT_DIR = PROJECT_ROOT / "skills" / "generated"
 
-
-def parse_skill_toml(path: Path) -> dict:
-    """Parse a skill TOML file into a dict."""
-    import re
-
-    with open(path) as f:
-        content = f.read()
-
-    skill = {"meta": {}, "content": {}}
-    section = None
-
-    for line in content.split("\n"):
-        s = line.strip()
-        if s.startswith("[meta]"):
-            section = "meta"
-        elif s.startswith("[content]"):
-            section = "content"
-        elif "=" in s and section:
-            key, _, val = s.partition("=")
-            key = key.strip()
-            val = val.strip().strip('"')
-            skill[section][key] = val
-
-    # Fix multi-line prompt
-    if "prompt" in skill["content"]:
-        m = re.search(r'prompt\s*=\s*"""\s*(.*?)\s*"""', content, re.DOTALL)
-        if m:
-            skill["content"]["prompt"] = m.group(1).strip()
-
-    return skill
+# Supported output formats per agent
+# Each agent has a default format and a list of acceptable formats
+AGENT_FORMATS = {
+    "hermes": {
+        "default": "markdown",
+        "accepted": ["markdown", "yaml"],
+        "header": True,  # YAML frontmatter
+    },
+    "claude": {
+        "default": "markdown",
+        "accepted": ["markdown"],
+        "header": False,
+    },
+    "opencode": {
+        "default": "markdown",
+        "accepted": ["markdown"],
+        "header": False,
+    },
+    "codex": {
+        "default": "markdown",
+        "accepted": ["markdown", "yaml", "toml"],
+        "header": False,
+    },
+}
 
 
-def emit_hermes(skill: dict) -> str:
-    """Generate Hermes SKILL.md format."""
-    meta = skill["meta"]
+def parse_skill(path: Path) -> dict:
+    """Parse a skill TOML file, return structured dict."""
+    with open(path, "rb") as f:
+        data = tomllib.load(f)
+
+    result = {
+        "meta": data.get("meta", {}),
+        "content": {},
+        "overrides": {},
+    }
+
+    # Content section may contain format strings AND agent overrides
+    raw_content = data.get("content", {})
+    for key, value in raw_content.items():
+        if isinstance(value, dict):
+            # Nested dict → agent override: [content.<agent>]
+            result["overrides"][key] = dict(value)
+        else:
+            # Plain string → format: markdown = "..."
+            result["content"][key] = value
+
+    return result
+
+
+def get_content_for_agent(skill: dict, agent: str) -> tuple[str, str]:
+    """
+    Get the (format, body) for an agent.
+    Falls back to default content.markdown if no agent override.
+    """
+    # Check for agent override
+    if agent in skill["overrides"]:
+        override = skill["overrides"][agent]
+        info = AGENT_FORMATS[agent]
+        # Try each accepted format in priority order
+        for fmt in info["accepted"]:
+            if fmt in override:
+                return fmt, override[fmt]
+
+    # Fall back to default content
     content = skill["content"]
+    info = AGENT_FORMATS[agent]
+    for fmt in info["accepted"]:
+        if fmt in content:
+            return fmt, content[fmt]
 
-    triggers = meta.get("triggers", "").strip("[]").replace('"', "").replace(" ", "")
+    # Absolute fallback: use whatever is in default content first key
+    if content:
+        first_fmt = next(iter(content))
+        return first_fmt, content[first_fmt]
 
-    return f"""---
+    return "markdown", ""
+
+
+def emit_skill(agent: str, skill: dict) -> str:
+    """Generate agent-specific skill file content."""
+    meta = skill["meta"]
+    fmt, body = get_content_for_agent(skill, agent)
+    info = AGENT_FORMATS[agent]
+
+    triggers = ", ".join(meta.get("triggers", []))
+
+    if info["header"]:
+        # YAML frontmatter (Hermes format)
+        return f"""---
 name: {meta["name"]}
 description: {meta["description"]}
 category: {meta.get("category", "general")}
 triggers: [{triggers}]
+format: {fmt}
 ---
 
-{content.get("prompt", "")}
+{body}
 """
 
-
-def emit_claude(skill: dict) -> str:
-    """Generate Claude Code skill format (markdown)."""
-    meta = skill["meta"]
-    content = skill["content"]
-
+    # Plain format header (Claude, OpenCode, Codex)
     return f"""# {meta["name"]}
 
 > {meta["description"]}
-
-**Triggers:** {meta.get("triggers", "")}
+> Format: {fmt} | Triggers: {triggers}
 
 ---
 
-{content.get("prompt", "")}
+{body}
 """
-
-
-def emit_opencode(skill: dict) -> str:
-    """Generate OpenCode skill format (markdown, same as Claude)."""
-    return emit_claude(skill)
-
-
-def emit_codex(skill: dict) -> str:
-    """Generate Codex instruction format."""
-    meta = skill["meta"]
-    content = skill["content"]
-
-    return f"""# {meta["description"]}
-
-{content.get("prompt", "")}
-"""
-
-
-EMITTERS = {
-    "hermes": ("SKILL.md", emit_hermes),
-    "claude": ("skill.md", emit_claude),
-    "opencode": ("skill.md", emit_opencode),
-    "codex": ("instruction.md", emit_codex),
-}
 
 
 def generate_for_agent(agent: str) -> int:
-    """Generate skills for one agent. Returns count of skills generated."""
-    ext, emitter = EMITTERS[agent]
+    """Generate all skills for one agent. Returns count."""
     out_dir = OUTPUT_DIR / agent
     out_dir.mkdir(parents=True, exist_ok=True)
 
+    # Determine file extension based on default format
+    _fmt = AGENT_FORMATS[agent]["default"]
+    ext_map = {"markdown": ".md", "yaml": ".yaml", "toml": ".toml"}
+
     count = 0
     for toml_file in sorted(SKILLS_DIR.glob("*.toml")):
-        skill = parse_skill_toml(toml_file)
+        skill = parse_skill(toml_file)
         name = skill["meta"]["name"]
 
-        # Create skill subdirectory
+        # Get the actual format that will be used for this skill/agent combo
+        actual_fmt, _ = get_content_for_agent(skill, agent)
+        ext = ext_map.get(actual_fmt, ".md")
+
         skill_dir = out_dir / name
         skill_dir.mkdir(parents=True, exist_ok=True)
 
-        output = emitter(skill)
-        output_path = skill_dir / ext
+        output = emit_skill(agent, skill)
+        output_path = skill_dir / f"skill{ext}"
+
         with open(output_path, "w") as f:
             f.write(output)
 
-        print(f"  {agent}/{name}/{ext}")
+        print(f"  {agent}/{name}/skill{ext} ({actual_fmt})")
         count += 1
 
     return count
@@ -138,26 +180,22 @@ def main() -> int:
     import argparse
 
     parser = argparse.ArgumentParser(description="Generate skills for AI agents")
-    parser.add_argument("--all", action="store_true", help="Generate for all agents")
-    parser.add_argument(
-        "--agent",
-        choices=list(EMITTERS.keys()),
-        help="Generate for specific agent",
-    )
+    parser.add_argument("--all", action="store_true")
+    parser.add_argument("--agent", choices=list(AGENT_FORMATS.keys()))
     args = parser.parse_args()
 
     if not args.all and not args.agent:
         parser.error("Either --all or --agent required")
 
-    agents = list(EMITTERS.keys()) if args.all else [args.agent]
+    agents = list(AGENT_FORMATS.keys()) if args.all else [args.agent]
 
     print(f"Generating skills from {SKILLS_DIR}")
     total = 0
     for agent in agents:
-        count = generate_for_agent(agent)
-        total += count
+        n = generate_for_agent(agent)
+        total += n
 
-    print(f"\nDone: {total} skills generated for {len(agents)} agent(s)")
+    print(f"\nDone: {total} skills → {len(agents)} agent(s)")
     return 0
 
 

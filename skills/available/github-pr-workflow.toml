@@ -11,7 +11,7 @@ category = "github"
 triggers = ["pr", "pull request", "merge", "branch", "commit", "review"]
 
 [content]
-prompt = """
+markdown = """
 # GitHub Pull Request Workflow
 
 ## 1. Start a feature

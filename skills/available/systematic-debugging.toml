@@ -11,7 +11,7 @@ category = "software-development"
 triggers = ["debug", "traceback", "error", "bug", "broken", "crash"]
 
 [content]
-prompt = """
+markdown = """
 # Systematic Debugging — 4-Phase Root Cause Analysis
 
 ## Phase 1: Reproduce

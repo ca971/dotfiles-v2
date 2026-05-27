@@ -11,7 +11,7 @@ category = "software-development"
 triggers = ["test", "tdd", "testing", "pytest", "bats", "shellcheck"]
 
 [content]
-prompt = """
+markdown = """
 # Test-Driven Development — RED → GREEN → REFACTOR
 
 ## For Python (generators/)

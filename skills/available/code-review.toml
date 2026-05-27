@@ -11,7 +11,7 @@ category = "github"
 triggers = ["review", "code review", "pr review", "code quality"]
 
 [content]
-prompt = """
+markdown = """
 # Code Review Standards
 
 ## Pre-commit checklist (run before pushing)

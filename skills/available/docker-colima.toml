@@ -11,7 +11,7 @@ category = "devops"
 triggers = ["docker", "colima", "container", "build", "compose"]
 
 [content]
-prompt = """
+markdown = """
 # Docker Workflow with Colima (macOS)
 
 ## Start/Stop
@@ -40,4 +40,22 @@ prompt = """
 - Apple Silicon (arm64) images vs x86 — use `--platform linux/arm64` if needed
 - Disk space: Colima VM default is 100GB, check with `colima list`
 - Rate limiting: GitHub API in Docker builds (use GITHUB_TOKEN or direct downloads)
+"""
+
+[content.codex]
+yaml = """
+steps:
+  - name: "Start Colima"
+    check: "colima status"
+    command: "colima start"
+  - name: "Build image"
+    command: "DOCKER_BUILDKIT=0 docker build -f tests/e2e/Dockerfile.interactive -t dotfiles-test ."
+    timeout: 300
+  - name: "Test"
+    command: "docker run --rm dotfiles-test ./bootstrap.sh --minimal --dry-run"
+  - name: "Cleanup"
+    command: "docker system prune -f"
+platforms:
+  - darwin
+  - linux
 """
