@@ -1,0 +1,26 @@
+# Delta configuration — syntax-highlighting git diff pager
+# https://github.com/dandavison/delta
+
+# Theme: use Catppuccin-inspired colors
+[delta]
+features = "line-numbers decorations"
+syntax-theme = "Catppuccin-mocha"
+plus-style = "syntax #003300"
+minus-style = "syntax #330000"
+line-numbers = true
+side-by-side = false
+hyperlinks = true
+hyperlinks-file-link-format = "vscode://file/{path}:{line}"
+
+[delta "decorations"]
+commit-decoration-style = "bold yellow box ul"
+file-style = "bold yellow ul"
+file-decoration-style = "none"
+hunk-header-decoration-style = "cyan box ul"
+
+[delta "line-numbers"]
+line-numbers-left-style = "cyan"
+line-numbers-right-style = "cyan"
+line-numbers-minus-style = "red"
+line-numbers-plus-style = "green"
+line-numbers-zero-style = "#444444"

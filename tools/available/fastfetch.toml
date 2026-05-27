@@ -25,5 +25,5 @@ platforms = ["darwin"]
 package = "fastfetch"
 
 [config]
-symlinks = []
+symlinks = [{ src = "config/fastfetch", dst = "~/.config/fastfetch" }]
 dependencies = []

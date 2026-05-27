@@ -34,5 +34,5 @@ platforms = ["darwin"]
 package = "git-delta"
 
 [config]
-symlinks = []
+symlinks = [{ src = "config/delta", dst = "~/.config/delta" }]
 dependencies = []

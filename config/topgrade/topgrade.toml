@@ -1,0 +1,25 @@
+# Topgrade configuration
+# https://github.com/topgrade-rs/topgrade
+
+# Commands to run during upgrade (in order)
+[pre_commands]
+
+[commands]
+# Skip self-update (managed by mise)
+self_update = false
+
+# Cleanup after upgrade
+cleanup = true
+
+# Show summary at the end
+summary = true
+
+# Run these package managers
+[packages]
+mise = true
+brew = true
+cargo = true
+uv = true
+
+# Excluded steps (no need for system package manager if using mise)
+[exclude]

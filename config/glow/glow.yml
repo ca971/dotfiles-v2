@@ -1,0 +1,11 @@
+# Glow configuration — terminal markdown renderer
+# https://github.com/charmbracelet/glow
+
+# Use Catppuccin-inspired dark theme
+style: "dark"
+
+# Show local images
+local: true
+
+# Max width in columns (0 = auto)
+width: 0

@@ -30,5 +30,5 @@ platforms = ["darwin"]
 package = "topgrade"
 
 [config]
-symlinks = []
+symlinks = [{ src = "config/topgrade", dst = "~/.config/topgrade" }]
 dependencies = []

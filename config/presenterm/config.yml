@@ -1,0 +1,17 @@
+# Presenterm configuration — terminal presentation tool
+# https://github.com/mfontanini/presenterm
+
+# Default theme
+theme: dark
+
+# Default font size
+font_size: 28
+
+# Enable syntax highlighting in code blocks
+syntax_highlight: true
+
+# Image protocol (kitty, iterm2, or none)
+image_protocol: kitty
+
+# Footer with slide number
+show_footer: true

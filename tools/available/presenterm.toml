@@ -19,5 +19,5 @@ platforms = ["darwin", "linux", "wsl", "bsd"]
 crate = "presenterm"
 
 [config]
-symlinks = []
+symlinks = [{ src = "config/presenterm", dst = "~/.config/presenterm" }]
 dependencies = []

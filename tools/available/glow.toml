@@ -25,5 +25,5 @@ platforms = ["darwin"]
 package = "glow"
 
 [config]
-symlinks = []
+symlinks = [{ src = "config/glow", dst = "~/.config/glow" }]
 dependencies = []
