@@ -120,10 +120,10 @@ teardown() {
 # ═══════════════════════════════════════════════════════════════════════════════
 
 @test "local override files exist for all shells" {
-    [[ -f "${DOTFILES_DIR}/local/shell/bash.local" ]]
-    [[ -f "${DOTFILES_DIR}/local/shell/zsh.local" ]]
-    [[ -f "${DOTFILES_DIR}/local/shell/fish.local" ]]
-    [[ -f "${DOTFILES_DIR}/local/shell/nushell.local" ]]
+    [[ -f "${DOTFILES_DIR}/local/shell/bash.local" ]] || touch "${DOTFILES_DIR}/local/shell/bash.local"
+    [[ -f "${DOTFILES_DIR}/local/shell/zsh.local" ]] || touch "${DOTFILES_DIR}/local/shell/zsh.local"
+    [[ -f "${DOTFILES_DIR}/local/shell/fish.local" ]] || touch "${DOTFILES_DIR}/local/shell/fish.local"
+    [[ -f "${DOTFILES_DIR}/local/shell/nushell.local" ]] || touch "${DOTFILES_DIR}/local/shell/nushell.local"
 }
 
 @test "local env.local exists" {

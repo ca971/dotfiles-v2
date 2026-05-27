@@ -128,7 +128,9 @@ setup() {
 # ═══════════════════════════════════════════════════════════════════════════════
 
 @test "nushell: generated aliases file exists and is non-empty" {
+    [[ -f "${DOTFILES_DIR}/shells/nushell/generated/aliases.gen.nu" ]] || \
     [[ -f "${DOTFILES_DIR}/shells/nushell/generated/aliases.gen.sh" ]]
+    [[ -s "${DOTFILES_DIR}/shells/nushell/generated/aliases.gen.nu" ]] || \
     [[ -s "${DOTFILES_DIR}/shells/nushell/generated/aliases.gen.sh" ]]
 }
 
@@ -140,6 +142,7 @@ setup() {
     [[ -s "${DOTFILES_DIR}/shells/bash/generated/aliases.gen.sh" ]]
     [[ -s "${DOTFILES_DIR}/shells/zsh/generated/aliases.gen.sh" ]]
     [[ -s "${DOTFILES_DIR}/shells/fish/generated/aliases.gen.fish" ]]
+    [[ -s "${DOTFILES_DIR}/shells/nushell/generated/aliases.gen.nu" ]] || \
     [[ -s "${DOTFILES_DIR}/shells/nushell/generated/aliases.gen.sh" ]]
 }
 
@@ -147,6 +150,7 @@ setup() {
     [[ -s "${DOTFILES_DIR}/shells/bash/generated/env.gen.sh" ]]
     [[ -s "${DOTFILES_DIR}/shells/zsh/generated/env.gen.sh" ]]
     [[ -s "${DOTFILES_DIR}/shells/fish/generated/env.gen.fish" ]]
+    [[ -s "${DOTFILES_DIR}/shells/nushell/generated/env.gen.nu" ]] || \
     [[ -s "${DOTFILES_DIR}/shells/nushell/generated/env.gen.sh" ]]
 }
 
@@ -154,6 +158,7 @@ setup() {
     [[ -s "${DOTFILES_DIR}/shells/bash/generated/path.gen.sh" ]]
     [[ -s "${DOTFILES_DIR}/shells/zsh/generated/path.gen.sh" ]]
     [[ -s "${DOTFILES_DIR}/shells/fish/generated/path.gen.fish" ]]
+    [[ -s "${DOTFILES_DIR}/shells/nushell/generated/path.gen.nu" ]] || \
     [[ -s "${DOTFILES_DIR}/shells/nushell/generated/path.gen.sh" ]]
 }
 
@@ -161,6 +166,7 @@ setup() {
     grep -q "AUTO-GENERATED" "${DOTFILES_DIR}/shells/bash/generated/aliases.gen.sh"
     grep -q "AUTO-GENERATED" "${DOTFILES_DIR}/shells/zsh/generated/aliases.gen.sh"
     grep -q "AUTO-GENERATED" "${DOTFILES_DIR}/shells/fish/generated/aliases.gen.fish"
+    grep -q "AUTO-GENERATED" "${DOTFILES_DIR}/shells/nushell/generated/aliases.gen.nu" || \
     grep -q "AUTO-GENERATED" "${DOTFILES_DIR}/shells/nushell/generated/aliases.gen.sh"
 }
 
