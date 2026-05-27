@@ -57,7 +57,7 @@ class BashEmitter(ShellEmitter):
             lines.append(f"\n# --- {group_name} ---")
             for name, var in env_vars.items():
                 if var.condition:
-                    lines.append(f'if {var.condition} >/dev/null 2>&1; then')
+                    lines.append(f"if {var.condition} >/dev/null 2>&1; then")
                     lines.append(f'    export {name}="{var.value}"')
                     lines.append("fi")
                 else:

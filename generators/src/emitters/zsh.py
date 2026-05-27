@@ -57,7 +57,7 @@ class ZshEmitter(ShellEmitter):
             lines.append(f"\n# --- {group_name} ---")
             for name, var in env_vars.items():
                 if var.condition:
-                    lines.append(f'if {var.condition} >/dev/null 2>&1; then')
+                    lines.append(f"if {var.condition} >/dev/null 2>&1; then")
                     lines.append(f'    export {name}="{var.value}"')
                     lines.append("fi")
                 else:
@@ -162,8 +162,13 @@ class ZshEmitter(ShellEmitter):
         @return Generated zinit load commands, grouped by loading strategy
         """
         load_order = [
-            "immediate", "turbo_0a", "turbo_0b", "turbo_0c",
-            "turbo_1a", "turbo_1b", "turbo_2a",
+            "immediate",
+            "turbo_0a",
+            "turbo_0b",
+            "turbo_0c",
+            "turbo_1a",
+            "turbo_1b",
+            "turbo_2a",
         ]
         wait_map = {
             "immediate": None,
@@ -181,30 +186,33 @@ class ZshEmitter(ShellEmitter):
                 grouped[plugin.load].append((name, plugin))
 
         lines: list[str] = []
-        lines.append('\n# Zinit initialization')
-        lines.append('declare -A ZINIT')
+        lines.append("\n# Zinit initialization")
+        lines.append("declare -A ZINIT")
         lines.append('ZINIT[HOME_DIR]="${XDG_DATA_HOME}/zinit"')
         lines.append('ZINIT[BIN_DIR]="${ZINIT[HOME_DIR]}/zinit.git"')
         lines.append('ZINIT[PLUGINS_DIR]="${ZINIT[HOME_DIR]}/plugins"')
         lines.append('ZINIT[SNIPPETS_DIR]="${ZINIT[HOME_DIR]}/snippets"')
         lines.append('ZINIT[COMPLETIONS_DIR]="${ZINIT[HOME_DIR]}/completions"')
-        lines.append('')
-        lines.append('# Auto-install zinit if missing')
+        lines.append("")
+        lines.append("# Auto-install zinit if missing")
         lines.append('if [[ ! -f "${ZINIT[BIN_DIR]}/zinit.zsh" ]]; then')
         lines.append('    command mkdir -p "${ZINIT[HOME_DIR]}"')
-        lines.append('    command git clone https://github.com/zdharma-continuum/zinit.git "${ZINIT[BIN_DIR]}"')  # noqa: E501
-        lines.append('fi')
-        lines.append('')
-        lines.append('ZINIT[MUTE_WARNINGS]=1')
+        lines.append(
+            "    command git clone https://github.com/zdharma-continuum/zinit.git"
+            ' "${ZINIT[BIN_DIR]}"'
+        )
+        lines.append("fi")
+        lines.append("")
+        lines.append("ZINIT[MUTE_WARNINGS]=1")
         lines.append('source "${ZINIT[BIN_DIR]}/zinit.zsh"')
-        lines.append('autoload -Uz _zinit')
-        lines.append('(( ${+_comps} )) && _comps[zinit]=_zinit')
-        lines.append('')
-        lines.append('# Patch scheduler to suppress subscript range error on first run')
-        lines.append('if (( ${+functions[@zinit-scheduler]} )); then')
+        lines.append("autoload -Uz _zinit")
+        lines.append("(( ${+_comps} )) && _comps[zinit]=_zinit")
+        lines.append("")
+        lines.append("# Patch scheduler to suppress subscript range error on first run")
+        lines.append("if (( ${+functions[@zinit-scheduler]} )); then")
         lines.append('    functions[-zinit-scheduler-orig]="${functions[@zinit-scheduler]}"')
         lines.append('    @zinit-scheduler() { @zinit-scheduler-orig "$@" 2>/dev/null; }')
-        lines.append('fi')
+        lines.append("fi")
 
         for load_strategy in load_order:
             plugins_in_group = grouped[load_strategy]
@@ -269,10 +277,10 @@ class ZshEmitter(ShellEmitter):
             f"if (( $+commands[{verify_cmd}] )); then",
             f"    {func_name}() {{ unfunction {unset_list} {func_name} 2>/dev/null; {init_cmd}; }}",
             f"    for _t in {trigger_list_quoted}; do",
-            f"        (( $+aliases[$_t] )) && unalias \"$_t\"",
-            f"        eval \"$_t() {{ {func_name}; $_t \\\"\\$@\\\"; }}\"",
-            f"    done",
-            f"    unset _t",
+            '        (( $+aliases[$_t] )) && unalias "$_t"',
+            '        eval "$_t() {{ {func_name}; $_t \\\\\\"\\\\$@\\\\\\"; }}"',
+            "    done",
+            "    unset _t",
         ]
         lines.append("fi")
         return "\n".join(lines)

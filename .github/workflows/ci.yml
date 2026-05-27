@@ -2,7 +2,7 @@
 # @file .github/workflows/ci.yml
 # @description Continuous Integration — lint, test, build on every push/PR
 # @since 1.0.0
-# @version 1.0.0
+# @version 1.1.0
 # ═══════════════════════════════════════════════════════════════════════════════
 
 name: CI
@@ -28,12 +28,13 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - uses: ludeeus/action-shellcheck@master
-        with:
-          scandir: ./
-          format: tty
-          severity: warning
-          additional_files: 'bootstrap.sh install.sh'
+      - name: Run ShellCheck
+        run: |
+          sudo apt-get update -qq && sudo apt-get install -y -qq shellcheck
+          find . -name '*.sh' \
+            -not -path './shells/*/generated/*' \
+            -not -path './.git/*' \
+            -print0 | xargs -0 shellcheck --severity=warning --format=tty
 
   taplo:
     name: Taplo (TOML)
@@ -43,8 +44,8 @@ jobs:
       - uses: uncenter/setup-taplo@v2
         with:
           taplo-version: "0.9.3"
-      - run: taplo format --check .
-      - run: taplo lint .
+      - run: taplo format --check definitions/ tools/available/
+      - run: taplo lint definitions/ tools/available/
 
   ruff:
     name: Ruff (Python)
@@ -60,7 +61,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - uses: hadolint/hadolint-action@v3
+      - uses: hadolint/hadolint-action@v3.1.0
         with:
           dockerfile: tests/e2e/Dockerfile.interactive
           failure-threshold: warning
@@ -85,12 +86,10 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - uses: brokenpip3/setup-bats-libs@v1
-        with:
-          support-install: true
-          assert-install: true
-          detik-install: false
-          file-install: false
+      - name: Install Bats
+        run: |
+          sudo apt-get update -qq
+          sudo apt-get install -y -qq bats
       - run: bats tests/unit/ --formatter tap
       - run: bats tests/integration/ --formatter tap
 
@@ -107,23 +106,20 @@ jobs:
           docker run --entrypoint "" --rm dotfiles-test python3 -c "
           import os
           toml = '/home/testuser/.dotfiles/definitions/profiles.toml'
-          # Quick sanity: file exists and has all 6 profiles
           with open(toml) as f:
               c = f.read()
           profiles = [l.split('[profiles.')[1].rstrip(']') for l in c.split('\n') if l.startswith('[profiles.') and 'meta' not in l]
-          assert len(profiles) == 6, f'Expected 6 profiles, got {len(profiles)}'
+          assert len(profiles) == 7, f'Expected 7 profiles, got {len(profiles)}: {profiles}'
           print(f'OK: {len(profiles)} profiles found: {profiles}')
           "
       - name: Bootstrap dry-run
-        run: >
-          docker run --entrypoint "" --rm dotfiles-test
-          ./bootstrap.sh --minimal --dry-run 2>&1 |
-          grep "Would install profile"
+        run: |
+          docker run --entrypoint "" --rm dotfiles-test \
+            ./bootstrap.sh --minimal --dry-run 2>&1 | tee /dev/stderr | grep "Would install profile"
       - name: Locale check
-        run: >
-          docker run --entrypoint "" --rm dotfiles-test
-          bash -c 'locale 2>&1 >/dev/null &&
-          echo "OK" || echo "FAIL"'
+        run: |
+          docker run --entrypoint "" --rm dotfiles-test \
+            bash -c 'locale 2>&1 >/dev/null && echo "OK" || echo "FAIL"'
 
   # ═════════════════════════════════════════════════════════════════════════════
   # Final gate

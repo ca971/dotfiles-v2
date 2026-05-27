@@ -110,7 +110,9 @@ class InitEntry(BaseModel):
     priority: int = Field(description="Loading order (lower = first)")
     verify: str = Field(description="Command to check availability")
     lazy: bool = Field(default=False, description="Defer init until first usage")
-    lazy_triggers: list[str] = Field(default_factory=list, description="Commands that trigger lazy load")
+    lazy_triggers: list[str] = Field(
+        default_factory=list, description="Commands that trigger lazy load"
+    )
     bash: str = Field(default="", description="Bash init command")
     zsh: str = Field(default="", description="Zsh init command")
     fish: str = Field(default="", description="Fish init command")

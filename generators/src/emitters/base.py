@@ -139,7 +139,7 @@ class ShellEmitter(ABC):
         @param init_cmd Init command to execute if available
         @return Wrapped init code
         """
-        return f'if command -v {verify_cmd} >/dev/null 2>&1; then\n    {init_cmd}\nfi'
+        return f"if command -v {verify_cmd} >/dev/null 2>&1; then\n    {init_cmd}\nfi"
 
     def _wrap_lazy_init(
         self, verify_cmd: str, init_cmd: str, name: str, triggers: list[str]
@@ -156,11 +156,14 @@ class ShellEmitter(ABC):
         unset_list = " ".join(triggers)
         lines = [
             f"if command -v {verify_cmd} >/dev/null 2>&1; then",
-            f"    {func_name}() {{ unset -f {unset_list} {func_name} 2>/dev/null; unalias {unset_list} 2>/dev/null; {init_cmd}; }}",
+            f"    {func_name}() {{"
+            f" unset -f {unset_list} {func_name} 2>/dev/null;"
+            f" unalias {unset_list} 2>/dev/null;"
+            f" {init_cmd}; }}",
         ]
         for trigger in triggers:
             lines.append(
-                f"    unalias {trigger} 2>/dev/null; {trigger}() {{ {func_name}; {trigger} \"$@\"; }}"
+                f'    unalias {trigger} 2>/dev/null; {trigger}() {{ {func_name}; {trigger} "$@"; }}'
             )
         lines.append("fi")
         return "\n".join(lines)

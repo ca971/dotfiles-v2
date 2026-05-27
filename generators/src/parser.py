@@ -67,9 +67,7 @@ class DefinitionParser:
 
         aliases: dict[str, dict[str, Alias]] = {}
         for group_name, group_entries in raw_aliases.items():
-            aliases[group_name] = {
-                name: Alias(**entry) for name, entry in group_entries.items()
-            }
+            aliases[group_name] = {name: Alias(**entry) for name, entry in group_entries.items()}
 
         return AliasDefinitions(aliases=aliases)
 
@@ -97,9 +95,7 @@ class DefinitionParser:
 
         env: dict[str, dict[str, EnvVar]] = {}
         for group_name, group_entries in raw_env.items():
-            env[group_name] = {
-                name: EnvVar(**entry) for name, entry in group_entries.items()
-            }
+            env[group_name] = {name: EnvVar(**entry) for name, entry in group_entries.items()}
 
         return EnvDefinitions(env=env)
 

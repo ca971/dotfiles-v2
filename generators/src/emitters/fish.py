@@ -59,10 +59,10 @@ class FishEmitter(ShellEmitter):
                 value = var.value.replace("$HOME", "$HOME").replace("$", "$")
                 if var.condition:
                     lines.append(f"if command -sq {var.condition.split()[-1]}")
-                    lines.append(f"    set -gx {name} \"{value}\"")
+                    lines.append(f'    set -gx {name} "{value}"')
                     lines.append("end")
                 else:
-                    lines.append(f"set -gx {name} \"{value}\"")
+                    lines.append(f'set -gx {name} "{value}"')
         return "\n".join(lines) + "\n"
 
     def emit_path(self, definitions: PathDefinitions) -> str:
@@ -70,17 +70,17 @@ class FishEmitter(ShellEmitter):
         for entry in definitions.path:
             path_val = entry.path
             if entry.condition:
-                lines.append(f"if test -d \"{entry.condition}\"")
+                lines.append(f'if test -d "{entry.condition}"')
                 if entry.prepend:
-                    lines.append(f"    fish_add_path --prepend \"{path_val}\"")
+                    lines.append(f'    fish_add_path --prepend "{path_val}"')
                 else:
-                    lines.append(f"    fish_add_path --append \"{path_val}\"")
+                    lines.append(f'    fish_add_path --append "{path_val}"')
                 lines.append("end")
             else:
                 if entry.prepend:
-                    lines.append(f"fish_add_path --prepend \"{path_val}\"")
+                    lines.append(f'fish_add_path --prepend "{path_val}"')
                 else:
-                    lines.append(f"fish_add_path --append \"{path_val}\"")
+                    lines.append(f'fish_add_path --append "{path_val}"')
         return "\n".join(lines) + "\n"
 
     def emit_keybindings(self, definitions: KeybindingDefinitions) -> str:
@@ -125,42 +125,46 @@ class FishEmitter(ShellEmitter):
         result = body
 
         # Variable substitutions
-        result = re.sub(r'\$\{1:-([^}]*)\}', r'(set -q argv[1]; and echo $argv[1]; or echo \1)', result)
+        result = re.sub(
+            r"\$\{1:-([^}]*)\}",
+            r"(set -q argv[1]; and echo $argv[1]; or echo \1)",
+            result,
+        )
         result = result.replace("$@", "$argv")
         result = result.replace("$2", "$argv[2]")
         result = result.replace("$1", "$argv[1]")
-        result = re.sub(r'\bexport\s+', 'set -gx ', result)
-        result = re.sub(r'\blocal\b', 'set -l', result)
+        result = re.sub(r"\bexport\s+", "set -gx ", result)
+        result = re.sub(r"\blocal\b", "set -l", result)
 
         # Conditionals: [[ ... ]] → test ...
-        result = re.sub(r'\[\[\s*(.+?)\s*\]\]\s*;\s*then', r'if test \1', result)
-        result = re.sub(r'\[\[\s*(.+?)\s*\]\]\s*&&\s*then', r'if test \1', result)
+        result = re.sub(r"\[\[\s*(.+?)\s*\]\]\s*;\s*then", r"if test \1", result)
+        result = re.sub(r"\[\[\s*(.+?)\s*\]\]\s*&&\s*then", r"if test \1", result)
         result = re.sub(
-            r'\[\[\s*!\s+-\s*(.+?)\s+(\S+)\s*\]\]',
-            r'not test -\1 \2',
+            r"\[\[\s*!\s+-\s*(.+?)\s+(\S+)\s*\]\]",
+            r"not test -\1 \2",
             result,
         )
         result = re.sub(
-            r'\[\[\s*-\s*(.+?)\s+(\S+)\s*\]\]',
-            r'test -\1 \2',
+            r"\[\[\s*-\s*(.+?)\s+(\S+)\s*\]\]",
+            r"test -\1 \2",
             result,
         )
 
         # Keywords (order matters: protect elif before replacing fi)
-        result = re.sub(r'\belif\b', '__ELIF_PROTECT__', result)
-        result = re.sub(r'\bfi\b', 'end', result)
-        result = re.sub(r'__ELIF_PROTECT__', 'else if', result)
-        result = re.sub(r'\bdone\b', 'end', result)
-        result = re.sub(r'\besac\b', 'end', result)
+        result = re.sub(r"\belif\b", "__ELIF_PROTECT__", result)
+        result = re.sub(r"\bfi\b", "end", result)
+        result = re.sub(r"__ELIF_PROTECT__", "else if", result)
+        result = re.sub(r"\bdone\b", "end", result)
+        result = re.sub(r"\besac\b", "end", result)
 
         # case → switch
-        result = re.sub(r'\bcase\s+(\S+)\s+in\b', r'switch \1', result)
-        result = re.sub(r'^(\s*)(\S+)\)\s*$', r'\1case \2', result, flags=re.MULTILINE)
-        result = re.sub(r'^(\s*)\*\)\s*$', r'\1case \'*\'', result, flags=re.MULTILINE)
+        result = re.sub(r"\bcase\s+(\S+)\s+in\b", r"switch \1", result)
+        result = re.sub(r"^(\s*)(\S+)\)\s*$", r"\1case \2", result, flags=re.MULTILINE)
+        result = re.sub(r"^(\s*)\*\)\s*$", r"\1case \'*\'", result, flags=re.MULTILINE)
 
         # for loops
-        result = re.sub(r'\bfor\s+(\S+)\s+in\b', r'for \1 in', result)
-        result = re.sub(r'\bdo\b', '', result)
+        result = re.sub(r"\bfor\s+(\S+)\s+in\b", r"for \1 in", result)
+        result = re.sub(r"\bdo\b", "", result)
 
         # subshell $() stays the same in fish (already compatible)
         # backtick substitution stays the same
