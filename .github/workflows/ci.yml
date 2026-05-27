@@ -64,7 +64,7 @@ jobs:
       - uses: hadolint/hadolint-action@v3.1.0
         with:
           dockerfile: tests/e2e/Dockerfile.interactive
-          failure-threshold: warning
+          failure-threshold: error
 
   # ═════════════════════════════════════════════════════════════════════════════
   # Test — requires build / runtime
@@ -78,7 +78,7 @@ jobs:
       - uses: astral-sh/setup-uv@v5
         with:
           version: "latest"
-      - run: cd generators && uv sync
+      - run: cd generators && uv sync --group dev
       - run: cd generators && uv run pytest tests/ -v
 
   bats:
@@ -90,6 +90,10 @@ jobs:
         run: |
           sudo apt-get update -qq
           sudo apt-get install -y -qq bats
+      - name: Setup test fixtures
+        run: |
+          mkdir -p local
+          echo '{"version":1,"tools":{},"nix_envs":{},"theme":"minimal"}'> local/state.json
       - run: bats tests/unit/ --formatter tap
       - run: bats tests/integration/ --formatter tap
 
