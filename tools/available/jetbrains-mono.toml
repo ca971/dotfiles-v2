@@ -1,0 +1,39 @@
+# ═══════════════════════════════════════════════════════════════════════════════
+# @file tools/available/jetbrains-mono.toml
+# @description Tool descriptor for JetBrainsMono Nerd Font (patched for icons)
+# @since 1.0.0
+# @version 1.0.0
+# ═══════════════════════════════════════════════════════════════════════════════
+
+[meta]
+name = "jetbrains-mono"
+description = "JetBrains Mono Nerd Font — monospace font with icons for starship, neovim, etc."
+homepage = "https://www.nerdfonts.com"
+category = "fonts"
+version = "3.3.0"
+verify = "fc-list | grep -i 'JetBrainsMono.*Nerd'"
+
+[[install]]
+method = "brew"
+platforms = ["darwin"]
+package = "font-jetbrains-mono-nerd-font"
+
+[[install]]
+method = "curl"
+platforms = ["linux", "wsl", "bsd"]
+command = """
+mkdir -p ~/.local/share/fonts && \
+curl -fsSL https://github.com/ryanoasis/nerd-fonts/releases/download/v3.3.0/JetBrainsMono.zip -o /tmp/JetBrainsMono.zip && \
+unzip -o /tmp/JetBrainsMono.zip -d ~/.local/share/fonts/ '*.ttf' && \
+rm /tmp/JetBrainsMono.zip && \
+fc-cache -fv ~/.local/share/fonts/
+"""
+
+[[install]]
+method = "system"
+platforms = ["linux.arch"]
+package = "ttf-jetbrains-mono-nerd"
+
+[config]
+symlinks = []
+dependencies = ["unzip"]
