@@ -27,6 +27,9 @@ Doctor::run() {
     Doctor::check_symlinks || (( issues += $? ))
     Doctor::check_state || (( issues += $? ))
     Doctor::check_shell_config || (( issues += $? ))
+    Doctor::check_starship || (( issues += $? ))
+    Doctor::check_tools || (( issues += $? ))
+    Doctor::check_default_shell || (( issues += $? ))
 
     echo ""
     if [[ "${issues}" -eq 0 ]]; then
@@ -210,5 +213,88 @@ Doctor::check_shell_config() {
     fi
 
     echo "[OK] DOTFILES_DIR=${DOTFILES_DIR}"
+    return 0
+}
+
+# ═══════════════════════════════════════════════════════════════════════════════
+# @description Check starship prompt is configured and functional
+# @return 0 if OK, 1 if issues found
+# ═══════════════════════════════════════════════════════════════════════════════
+Doctor::check_starship() {
+    printf "  %-30s" "Starship prompt"
+
+    if ! command -v starship >/dev/null 2>&1; then
+        echo "[WARN] not installed (install via: just install starship)"
+        return 0  # warn but not an error
+    fi
+
+    local config="${STARSHIP_CONFIG:-${XDG_CONFIG_HOME:-${HOME}/.config}/starship/base.toml}"
+    if [[ ! -f "${config}" ]]; then
+        echo "[FAIL] config not found: ${config}"
+        return 1
+    fi
+
+    local version
+    version="$(starship --version 2>/dev/null | head -1)"
+    echo "[OK] ${version:-installed}"
+    return 0
+}
+
+# ═══════════════════════════════════════════════════════════════════════════════
+# @description Check tool installation status (quick count, not full audit)
+# @return 0 if all profile tools installed, N for missing count
+# ═══════════════════════════════════════════════════════════════════════════════
+Doctor::check_tools() {
+    printf "  %-30s" "Profile tools"
+
+    local state_file="${DOTFILES_DIR}/local/state.json"
+    if [[ ! -f "${state_file}" ]]; then
+        echo "[WARN] no state file yet (run bootstrap first)"
+        return 0
+    fi
+
+    local total installed
+    total="$(jq '.tools | length' "${state_file}" 2>/dev/null || echo 0)"
+    installed="$(jq '[.tools[] | select(.installed == true)] | length' "${state_file}" 2>/dev/null || echo 0)"
+
+    if [[ "${total}" -eq 0 ]]; then
+        echo "[WARN] no tools tracked yet"
+        return 0
+    fi
+
+    local missing=$((total - installed))
+    if [[ "${missing}" -eq 0 ]]; then
+        echo "[OK] ${installed}/${total} tools installed"
+    else
+        echo "[WARN] ${installed}/${total} installed (${missing} missing)"
+    fi
+
+    return 0  # informational only
+}
+
+# ═══════════════════════════════════════════════════════════════════════════════
+# @description Check that the default shell is a configured one
+# @return 0 if OK, 1 if default shell is not configured
+# ═══════════════════════════════════════════════════════════════════════════════
+Doctor::check_default_shell() {
+    printf "  %-30s" "Default shell"
+
+    local current_shell
+    current_shell="${SHELL:-/bin/sh}"
+
+    # Check if current shell has generated configs
+    local shell_name
+    shell_name="$(basename "${current_shell}")"
+    local gen_dir="${DOTFILES_DIR}/shells/${shell_name}/generated"
+
+    if [[ -d "${gen_dir}" ]] && [[ -n "$(ls -A "${gen_dir}" 2>/dev/null)" ]]; then
+        echo "[OK] ${shell_name} (configured)"
+    elif [[ "${shell_name}" == "bash" ]] || [[ "${shell_name}" == "zsh" ]] \
+      || [[ "${shell_name}" == "fish" ]] || [[ "${shell_name}" == "nu" ]]; then
+        echo "[WARN] ${shell_name} (configs not generated — run dotfiles-gen)"
+    else
+        echo "[INFO] ${shell_name} (not a dotfiles-managed shell)"
+    fi
+
     return 0
 }
