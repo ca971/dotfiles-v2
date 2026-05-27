@@ -134,10 +134,75 @@ ToolInstaller::install() {
 
     if [[ "${rc}" -eq 0 ]]; then
         StateManager::mark_installed "${tool}" "${method}" "${version}"
+        ToolInstaller::setup_config "${tool}"
         Logger::success "Installed ${tool} via ${method}"
     else
         Logger::error "Failed to install ${tool} via ${method}"
     fi
 
     return "${rc}"
+}
+
+# ═══════════════════════════════════════════════════════════════════════════════
+# @description Create config symlinks for an installed tool
+# @param $1 {string} Tool name
+# @return 0 on success, 1 on failure
+# ═══════════════════════════════════════════════════════════════════════════════
+ToolInstaller::setup_config() {
+    local tool="${1:?Tool name required}"
+    local toml_file="${DOTFILES_DIR}/tools/available/${tool}.toml"
+
+    if [[ ! -f "${toml_file}" ]]; then
+        return 0  # no descriptor, nothing to configure
+    fi
+
+    local json
+    json="$(ToolInstaller::parse_descriptor "${toml_file}" 2>/dev/null)" || return 0
+
+    # Count symlinks
+    local symlink_count
+    symlink_count="$(echo "${json}" | jq '.config.symlinks | length' 2>/dev/null || echo 0)"
+
+    if [[ "${symlink_count}" -eq 0 ]]; then
+        return 0  # no symlinks to create
+    fi
+
+    Logger::debug "ToolInstaller: setting up ${symlink_count} config symlinks for ${tool}"
+
+    local i src dst expanded_dst
+    for (( i=0; i<symlink_count; i++ )); do
+        src="$(echo "${json}" | jq -r ".config.symlinks[${i}].src")"
+        dst="$(echo "${json}" | jq -r ".config.symlinks[${i}].dst")"
+
+        [[ -z "${src}" || -z "${dst}" || "${src}" == "null" || "${dst}" == "null" ]] && continue
+
+        # Expand ~ to HOME
+        expanded_dst="${dst/\~/${HOME}}"
+
+        # Resolve src relative to DOTFILES_DIR
+        local full_src="${DOTFILES_DIR}/${src}"
+
+        if [[ ! -e "${full_src}" ]]; then
+            Logger::warn "ToolInstaller: config source not found: ${full_src}"
+            continue
+        fi
+
+        # Create parent directory
+        local dst_dir
+        dst_dir="$(dirname "${expanded_dst}")"
+        if [[ ! -d "${dst_dir}" ]]; then
+            mkdir -p "${dst_dir}"
+        fi
+
+        # Remove existing symlink or directory
+        if [[ -L "${expanded_dst}" ]] || [[ -d "${expanded_dst}" ]]; then
+            rm -rf "${expanded_dst}"
+        fi
+
+        # Create symlink
+        ln -sf "${full_src}" "${expanded_dst}"
+        Logger::debug "ToolInstaller: ${expanded_dst} → ${full_src}"
+    done
+
+    return 0
 }
