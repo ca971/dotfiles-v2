@@ -6,7 +6,8 @@
 # @version 1.0.0
 # @see https://macos-defaults.com
 #
-# Run once during bootstrap. Requires logout/restart for some settings.
+# Run on demand via: dotfiles defaults
+# Requires logout/restart for some settings to take effect.
 # ═══════════════════════════════════════════════════════════════════════════════
 
 set -euo pipefail

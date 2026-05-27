@@ -265,7 +265,7 @@ setup_platform() {
 
     if Platform::is "darwin"; then
         scripts+=("${DOTFILES_DIR}/platform/darwin/brew.sh")
-        scripts+=("${DOTFILES_DIR}/platform/darwin/defaults.sh")
+        # macOS defaults are now on-demand only — run via: dotfiles defaults
     elif Platform::is "linux"; then
         scripts+=("${DOTFILES_DIR}/platform/linux/common.sh")
 

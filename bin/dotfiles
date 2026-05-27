@@ -111,6 +111,15 @@ cmd_snapshot() {
     esac
 }
 
+cmd_defaults() {
+    if ! Platform::is "darwin"; then
+        Logger::error "macOS defaults are only available on Darwin (macOS)"
+        return 1
+    fi
+    Logger::info "Applying macOS defaults on demand..."
+    bash "${DOTFILES_DIR}/platform/darwin/defaults.sh"
+}
+
 cmd_config() {
     Logger::info "Reapplying config symlinks for all installed tools..."
     local tools_dir="${DOTFILES_DIR}/tools/available"
@@ -384,9 +393,10 @@ show_help() {
 
 	System:
 	  \t  sync [flags]         Full idempotent sync (pull, generate, install, verify, doctor)
-	  \t  update               Pull latest + regenerate configs
-	  \t  upgrade              Update + upgrade all tools + health check
-	  \t  generate             Regenerate shell configs from SSOT
+	  update               Pull latest + regenerate configs
+	  upgrade              Update + upgrade all tools + health check
+	  generate             Regenerate shell configs from SSOT
+	  defaults             Apply macOS system defaults (on demand)
 	  doctor               Run system health check
 	  bench                Benchmark shell startup time
 
@@ -430,6 +440,7 @@ main() {
         vault-decrypt)   cmd_vault_decrypt "${2:-}" ;;
         snapshot)        shift; cmd_snapshot "$@" ;;
         config)          cmd_config ;;
+        defaults)        cmd_defaults ;;
         --version|-v)    echo "dotfiles 1.0.0" ;;
         --help|-h|"")    show_help ;;
         *)               Logger::error "Unknown command: ${1}"; show_help; exit 1 ;;
