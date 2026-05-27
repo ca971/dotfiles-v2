@@ -65,6 +65,37 @@ cmd_update() {
     Logger::success "Dotfiles updated"
 }
 
+cmd_upgrade() {
+    Logger::info "Upgrading dotfiles and tools..."
+    echo ""
+
+    # Step 1: pull latest dotfiles
+    Logger::step 1 4 "Pulling dotfiles..."
+    git -C "${DOTFILES_DIR}" pull --rebase --quiet
+    Logger::success "Dotfiles up to date"
+
+    # Step 2: regenerate shell configs
+    Logger::step 2 4 "Regenerating shell configs..."
+    cmd_generate
+
+    # Step 3: upgrade all mise-managed tools
+    Logger::step 3 4 "Upgrading tools via mise..."
+    if command -v mise >/dev/null 2>&1; then
+        mise upgrade --yes 2>&1 | tail -3
+        Logger::success "Tools upgraded"
+    else
+        Logger::warn "mise not found — skipping tool upgrades"
+    fi
+
+    # Step 4: health check
+    Logger::step 4 4 "Running health check..."
+    cmd_doctor
+
+    echo ""
+    Logger::success "Upgrade complete!"
+    Logger::info "Run 'exec \$SHELL -l' or 'reload' to apply shell config changes"
+}
+
 cmd_verify() {
     source "${DOTFILES_DIR}/lib/hotload/engine.sh"
     HotLoadEngine::verify
@@ -309,9 +340,10 @@ show_help() {
 	  setup                Interactive first-time setup wizard
 
 	System:
-	  sync [flags]         Full idempotent sync (pull, generate, install, verify, doctor)
-	  update               Pull latest + regenerate configs
-	  generate             Regenerate shell configs from SSOT
+	  \t  sync [flags]         Full idempotent sync (pull, generate, install, verify, doctor)
+	  \t  update               Pull latest + regenerate configs
+	  \t  upgrade              Update + upgrade all tools + health check
+	  \t  generate             Regenerate shell configs from SSOT
 	  doctor               Run system health check
 	  bench                Benchmark shell startup time
 
@@ -340,6 +372,7 @@ main() {
         doctor)          cmd_doctor ;;
         generate|gen)    cmd_generate ;;
         update)          cmd_update ;;
+        upgrade)         cmd_upgrade ;;
         verify)          cmd_verify ;;
         sync)            shift; cmd_sync "$@" ;;
         bench)           cmd_bench ;;
