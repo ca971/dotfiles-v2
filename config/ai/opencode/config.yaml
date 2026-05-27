@@ -1,0 +1,10 @@
+# OpenCode Configuration Template
+
+# Rules from SSOT
+rules_path: ~/.dotfiles/config/ai/shared/CLAUDE.md
+
+# Skills directory
+skills_path: ~/.dotfiles/skills/generated/opencode/
+
+# Model settings
+model: anthropic/claude-sonnet-4

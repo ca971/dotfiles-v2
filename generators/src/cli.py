@@ -193,6 +193,14 @@ def main() -> None:
 
     subparsers.add_parser("validate", help="Validate definitions without generating")
 
+    skills_parser = subparsers.add_parser("skills", help="Generate AI agent skills")
+    skills_parser.add_argument("--all", action="store_true", help="Generate for all agents")
+    skills_parser.add_argument(
+        "--agent",
+        choices=["hermes", "claude", "codex", "opencode"],
+        help="Generate for specific agent",
+    )
+
     args = arg_parser.parse_args()
     project_root = get_project_root()
 
@@ -209,6 +217,20 @@ def main() -> None:
 
     elif args.command == "validate":
         sys.exit(validate(project_root))
+
+    elif args.command == "skills":
+        import subprocess
+
+        script = project_root / "skills" / "generate.py"
+        cmd = [sys.executable, str(script)]
+        if args.all:
+            cmd.append("--all")
+        elif args.agent:
+            cmd.extend(["--agent", args.agent])
+        else:
+            arg_parser.error("Either --all or --agent required")
+            return
+        sys.exit(subprocess.call(cmd))
 
 
 if __name__ == "__main__":

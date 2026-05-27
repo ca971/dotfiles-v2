@@ -1,0 +1,41 @@
+# ═══════════════════════════════════════════════════════════════════════════════
+# @file skills/available/test-driven-development.toml
+# @description SSOT skill: TDD red-green-refactor cycle
+# @since 1.0.0
+# ═══════════════════════════════════════════════════════════════════════════════
+
+[meta]
+name = "test-driven-development"
+description = "Test-driven development: RED → GREEN → REFACTOR cycle"
+category = "software-development"
+triggers = ["test", "tdd", "testing", "pytest", "bats", "shellcheck"]
+
+[content]
+prompt = """
+# Test-Driven Development — RED → GREEN → REFACTOR
+
+## For Python (generators/)
+- Run: `cd generators && uv run pytest tests/ -v`
+- Write test first, see it FAIL (RED)
+- Write minimum code to pass (GREEN)
+- Clean up both test and code (REFACTOR)
+- Never commit without running tests
+
+## For Shell scripts (lib/, bin/)
+- Run: `bats tests/unit/ && bats tests/integration/`
+- ShellCheck all scripts: `find lib/ bin/ -name '*.sh' -exec shellcheck -x {} +`
+- Test fixtures in `tests/fixtures/`
+- Use `DOTFILES_BENCH=1` for performance tests
+
+## Quality gates before commit
+- `ruff check && ruff format` (Python)
+- `shellcheck *.sh` (Shell)
+- `taplo format --check .` (TOML)
+- `hadolint tests/e2e/Dockerfile.interactive` (Docker)
+- All tests pass: `just test`
+
+## Docker E2E testing
+- Build: `docker build -f tests/e2e/Dockerfile.interactive -t dotfiles-test .`
+- Test: `docker run --rm dotfiles-test ./bootstrap.sh --minimal --dry-run`
+- Always test bootstrap behavior changes in Docker before committing
+"""

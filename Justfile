@@ -49,6 +49,10 @@ generate-shell shell:
 validate-defs:
     cd generators && uv run python -m src.cli validate
 
+# Generate AI agent skills from SSOT
+generate-skills:
+    python3 skills/generate.py --all
+
 # ═══════════════════════════════════════════════════════════════════════════════
 # Tools (Hot-Loading)
 # ═══════════════════════════════════════════════════════════════════════════════

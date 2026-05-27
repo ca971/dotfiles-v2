@@ -1,0 +1,43 @@
+# ═══════════════════════════════════════════════════════════════════════════════
+# @file skills/available/systematic-debugging.toml
+# @description SSOT skill: 4-phase root cause debugging
+# @since 1.0.0
+# ═══════════════════════════════════════════════════════════════════════════════
+
+[meta]
+name = "systematic-debugging"
+description = "4-phase systematic debugging: reproduce, isolate, fix, verify"
+category = "software-development"
+triggers = ["debug", "traceback", "error", "bug", "broken", "crash"]
+
+[content]
+prompt = """
+# Systematic Debugging — 4-Phase Root Cause Analysis
+
+## Phase 1: Reproduce
+- Run the failing command with full output
+- Capture the exact error message and stack trace
+- Identify the minimal reproduction case
+
+## Phase 2: Isolate
+- Binary-search the codebase to find the failure boundary
+- Add debug logging / print statements at critical points
+- Check recent git changes that could be related
+- Verify assumptions: environment variables, file paths, dependencies
+
+## Phase 3: Fix
+- Form a hypothesis before touching code
+- Make the minimal change that addresses the root cause
+- Avoid "fixing the symptom" — fix what caused it
+
+## Phase 4: Verify
+- Confirm the original error no longer occurs
+- Run the full test suite to check for regressions
+- Check edge cases related to the fix
+- Add a regression test if applicable
+
+## Anti-patterns to avoid
+- Guessing the fix without understanding the cause
+- Changing multiple things at once ("shotgun debugging")
+- Skipping the reproduce step ("works on my machine")
+"""

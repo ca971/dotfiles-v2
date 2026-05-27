@@ -1,0 +1,43 @@
+# ═══════════════════════════════════════════════════════════════════════════════
+# @file skills/available/docker-colima.toml
+# @description SSOT skill: Docker workflow on macOS with Colima
+# @since 1.0.0
+# ═══════════════════════════════════════════════════════════════════════════════
+
+[meta]
+name = "docker-colima"
+description = "Docker development workflow on macOS using Colima (not Docker Desktop)"
+category = "devops"
+triggers = ["docker", "colima", "container", "build", "compose"]
+
+[content]
+prompt = """
+# Docker Workflow with Colima (macOS)
+
+## Start/Stop
+- Start: `colima start`
+- Status: `colima status`
+- Stop: `colima stop`
+- Docker socket: `~/.config/colima/default/docker.sock`
+
+## Build images
+- Always use `DOCKER_BUILDKIT=0` (BuildKit buildx missing in Colima)
+- `DOCKER_BUILDKIT=0 docker build -f tests/e2e/Dockerfile.interactive -t dotfiles-test .`
+- Use `--no-cache` for clean rebuilds in CI
+
+## Test in container
+- Interactive: `docker run -it --rm --entrypoint "" dotfiles-test /bin/bash`
+- Dry-run: `docker run --rm dotfiles-test ./bootstrap.sh --minimal --dry-run`
+- Full test: `docker run --rm dotfiles-test bats tests/unit/ tests/integration/`
+
+## Cleanup
+- `docker system prune -f` — remove dangling images/containers
+- `docker images dotfiles-test` — check for stale test images
+- `docker rmi $(docker images -q dotfiles-test)` — remove all test images
+
+## Common pitfalls
+- Colima must be running before any docker command
+- Apple Silicon (arm64) images vs x86 — use `--platform linux/arm64` if needed
+- Disk space: Colima VM default is 100GB, check with `colima list`
+- Rate limiting: GitHub API in Docker builds (use GITHUB_TOKEN or direct downloads)
+"""

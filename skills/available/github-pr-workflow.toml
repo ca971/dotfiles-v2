@@ -1,0 +1,50 @@
+# ═══════════════════════════════════════════════════════════════════════════════
+# @file skills/available/github-pr-workflow.toml
+# @description SSOT skill: GitHub PR lifecycle
+# @since 1.0.0
+# ═══════════════════════════════════════════════════════════════════════════════
+
+[meta]
+name = "github-pr-workflow"
+description = "Complete GitHub PR workflow: branch, commit, push, create PR, review, merge"
+category = "github"
+triggers = ["pr", "pull request", "merge", "branch", "commit", "review"]
+
+[content]
+prompt = """
+# GitHub Pull Request Workflow
+
+## 1. Start a feature
+- `git switch main && git pull --rebase`
+- `git switch -c feat/descriptive-name`
+- Scope: one feature/fix per branch
+
+## 2. Develop
+- Commit early and often with conventional commits
+- Format: `type(scope): description` (feat, fix, refactor, test, docs, ci)
+- Keep commits atomic — each commit should pass tests
+
+## 3. Push and open PR
+- `git push -u origin feat/descriptive-name`
+- `gh pr create --fill` or manual with description
+- Link related issues with `Closes #123`
+
+## 4. Review feedback
+- Address each comment — reply "Done" or explain why not
+- Prefer `git commit --fixup` + `git rebase -i --autosquash` for clean history
+- Re-request review after changes pushed
+
+## 5. Merge
+- Squash merge for feature branches
+- Delete the remote branch after merge
+- `git switch main && git pull --rebase && git branch -d feat/name`
+
+## 6. Code Review Guidelines
+When reviewing PRs for this project:
+- Check conventional commit format
+- Verify tests pass and new code has tests
+- Ensure shell scripts pass shellcheck
+- Validate TOML files with taplo
+- Look for DRY violations and hardcoded paths
+- Check documentation updates
+"""

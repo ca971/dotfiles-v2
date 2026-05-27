@@ -1,0 +1,48 @@
+# ═══════════════════════════════════════════════════════════════════════════════
+# @file skills/available/code-review.toml
+# @description SSOT skill: requesting and performing code reviews
+# @since 1.0.0
+# ═══════════════════════════════════════════════════════════════════════════════
+
+[meta]
+name = "code-review"
+description = "Pre-commit code review checklist and PR review standards"
+category = "github"
+triggers = ["review", "code review", "pr review", "code quality"]
+
+[content]
+prompt = """
+# Code Review Standards
+
+## Pre-commit checklist (run before pushing)
+1. Security scan: no hardcoded secrets, tokens, or passwords
+2. Quality gates: ruff format + ruff check (Python), shellcheck (Shell), taplo (TOML)
+3. Tests pass: pytest + bats + Docker E2E
+4. Conventional commit format: `type(scope): description`
+5. Documentation: README updated, header blocks on new files
+
+## PR Review checklist
+### For shell scripts
+- Uses `#!/usr/bin/env bash` shebang (not `#!/bin/bash`)
+- Has `set -euo pipefail`
+- Variables are quoted: `"${var}"` not `$var`
+- Functions use `local` for variables
+- Follows OOP naming: `Module::function()`
+
+### For Python
+- Type hints on all functions
+- Pydantic models for data
+- No bare `except:` — always catch specific exceptions
+- Docstrings for public functions
+
+### For TOML
+- Validated by taplo
+- Descriptive comments only where non-obvious
+- Consistent formatting
+
+### General
+- No dead code or commented-out blocks
+- Magic numbers replaced with named constants
+- Error messages are actionable (not just "error")
+- Files under 500 lines (split if larger)
+"""

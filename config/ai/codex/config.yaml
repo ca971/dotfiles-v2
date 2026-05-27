@@ -1,0 +1,12 @@
+# OpenAI Codex Configuration Template
+# https://github.com/openai/codex
+
+# Instructions from SSOT
+instructions: ~/.dotfiles/config/ai/shared/CLAUDE.md
+
+# Skills directory
+skills_path: ~/.dotfiles/skills/generated/codex/
+
+# Model settings
+model: gpt-5
+approval_mode: default

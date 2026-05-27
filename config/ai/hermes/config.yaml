@@ -1,0 +1,27 @@
+# Hermes Agent Configuration Template
+# Copy to ~/.hermes/config.yaml and fill in your values.
+# This template is versioned; your personal config lives in local/ai/hermes/
+
+model:
+  provider: anthropic
+  model: claude-sonnet-4
+
+tools:
+  terminal: true
+  file: true
+  web: true
+  browser: true
+  delegation: true
+
+skills:
+  # Generated skills from SSOT — symlinked by bootstrap
+  path: ~/.dotfiles/skills/generated/hermes/
+
+memory:
+  path: ~/.hermes/memory/
+  max_entries: 100
+
+# Custom providers (copy to local/ai/hermes/config.yaml)
+# providers:
+#   custom:
+#     api_key: your-key-here

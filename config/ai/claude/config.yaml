@@ -1,0 +1,12 @@
+# Claude Code Configuration Template
+# Copy relevant settings to your Claude Code config
+
+# Skills directory (symlinked to SSOT-generated skills)
+skills_path: ~/.dotfiles/skills/generated/claude/
+
+# Project rules (symlinked to shared CLAUDE.md)
+claude_md_path: ~/.dotfiles/config/ai/shared/CLAUDE.md
+
+# Git integration
+auto_commit: true
+conventional_commits: true
