@@ -2,8 +2,9 @@
 
 # ═══════════════════════════════════════════════════════════════════════════════
 # @file shells/zsh/completions/_dotfiles
-# @description Zsh completion for dotfiles CLI
+# @description Zsh completion for dotfiles CLI — with profile-aware tool listing
 # @since 1.0.0
+# @version 1.1.0
 # ═══════════════════════════════════════════════════════════════════════════════
 
 _dotfiles_commands() {
@@ -18,13 +19,13 @@ _dotfiles_commands() {
         'update:Pull latest + regenerate configs'
         'upgrade:Update + upgrade all tools + health check'
         'generate:Regenerate shell configs from SSOT'
-        'doctor:Run system health check'
+        'doctor:Run system health check (9 checks)'
         'bench:Benchmark shell startup time'
+        'snapshot:Save/restore dotfiles state'
         'vault-init:Initialize local vault with permissions'
         'vault-keygen:Generate age encryption key pair'
         'vault-encrypt:Encrypt a file with age'
         'vault-decrypt:Decrypt a file with age'
-        'snapshot:Save/restore dotfiles state'
     )
     _describe -t commands 'dotfiles command' commands
 }
@@ -32,11 +33,60 @@ _dotfiles_commands() {
 _dotfiles_snapshot_subcmd() {
     local -a subcmds
     subcmds=(
-        'create:Create a new snapshot'
-        'list:List all snapshots'
-        'rollback:Rollback to a previous snapshot'
+        'create:Create a new snapshot (optional label)'
+        'list:List all snapshots with dates'
+        'rollback:Restore a previous snapshot'
     )
     _describe -t subcommands 'snapshot subcommand' subcmds
+}
+
+_dotfiles_tools_with_profiles() {
+    # List all tools with their profile(s) — format: "tool:profile1,profile2"
+    local profiles_file="${DOTFILES_DIR:-${HOME}/.dotfiles}/definitions/profiles.toml"
+    local tools_dir="${DOTFILES_DIR:-${HOME}/.dotfiles}/tools/available"
+
+    if [[ ! -f "$profiles_file" ]]; then
+        # Fallback: just list tools
+        for f in "$tools_dir"/*.toml(N); do
+            echo "$(basename "$f" .toml):"
+        done
+        return
+    fi
+
+    # Parse profiles.toml with jq if available
+    if command -v jq >/dev/null 2>&1 && command -v taplo >/dev/null 2>&1; then
+        local json
+        json="$(taplo get -f "$profiles_file" -o json 2>/dev/null)"
+        if [[ -n "$json" ]]; then
+            # Build a map: tool -> profile list
+            local -A tool_profiles
+            local profile
+            for profile in $(echo "$json" | jq -r '.profiles | keys[]'); do
+                local tools
+                tools="$(echo "$json" | jq -r ".profiles.\"$profile\".tools[]? // empty" 2>/dev/null)"
+                local t
+                for t in ${(f)tools}; do
+                    [[ -z "$t" ]] && continue
+                    if [[ -n "${tool_profiles[$t]}" ]]; then
+                        tool_profiles[$t]="${tool_profiles[$t]},$profile"
+                    else
+                        tool_profiles[$t]="$profile"
+                    fi
+                done
+            done
+            # Output: tool:profile1,profile2
+            local t
+            for t in ${(k)tool_profiles}; do
+                echo "$t:${tool_profiles[$t]}"
+            done
+            return
+        fi
+    fi
+
+    # Fallback: list without profiles
+    for f in "$tools_dir"/*.toml(N); do
+        echo "$(basename "$f" .toml):"
+    done
 }
 
 _dotfiles() {
@@ -53,10 +103,19 @@ _dotfiles() {
         args)
             case "$words[1]" in
                 install|uninstall)
-                    # Complete with available tools
-                    local -a tools
-                    tools=(${(f)"$(_dotfiles_list_tools)"})
-                    _describe -t tools 'tool' tools
+                    local -a tools_with_desc
+                    local entry
+                    while IFS= read -r entry; do
+                        local tool="${entry%%:*}"
+                        local profiles="${entry#*:}"
+                        [[ -z "$tool" ]] && continue
+                        if [[ -n "$profiles" ]]; then
+                            tools_with_desc+=("$tool:$profiles")
+                        else
+                            tools_with_desc+=("$tool")
+                        fi
+                    done < <(_dotfiles_tools_with_profiles)
+                    _describe -t tools 'tool (profile)' tools_with_desc
                     ;;
                 snapshot)
                     _dotfiles_snapshot_subcmd
@@ -69,15 +128,6 @@ _dotfiles() {
             esac
             ;;
     esac
-}
-
-_dotfiles_list_tools() {
-    local tools_dir="${DOTFILES_DIR:-${HOME}/.dotfiles}/tools/available"
-    if [[ -d "$tools_dir" ]]; then
-        for f in "$tools_dir"/*.toml(N); do
-            basename "$f" .toml
-        done
-    fi
 }
 
 _dotfiles "$@"

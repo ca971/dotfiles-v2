@@ -1,0 +1,52 @@
+#compdef dotfiles-nix
+
+# ═══════════════════════════════════════════════════════════════════════════════
+# @file shells/zsh/completions/_dotfiles-nix
+# @description Zsh completion for dotfiles-nix
+# ═══════════════════════════════════════════════════════════════════════════════
+
+_dotfiles_nix_envs() {
+    local envs_dir="${DOTFILES_DIR:-${HOME}/.dotfiles}/tools/nix/envs"
+    local -a envs
+    if [[ -d "$envs_dir" ]]; then
+        for d in "$envs_dir"/*(/N); do
+            local name="$(basename "$d")"
+            [[ "$name" == "_template" ]] && continue
+            envs+=("$name")
+        done
+    fi
+    # Fallback
+    [[ ${#envs} -eq 0 ]] && envs=(default devops go node python rust data security elixir zig ruby)
+    _describe -t envs 'environment' envs
+}
+
+_dotfiles_nix() {
+    local -a commands
+    commands=(
+        'list:List all environments and status'
+        'enter:Enter a Nix dev shell'
+        'enable:Enable an environment'
+        'disable:Disable an environment'
+        'create:Create new environment from template'
+        'update:Update flake.lock'
+    )
+
+    _arguments -C \
+        '1: :_describe -t commands command commands' \
+        '*::arg:->args'
+
+    case "$state" in
+        args)
+            case "$words[1]" in
+                enter|enable|disable|update)
+                    _dotfiles_nix_envs
+                    ;;
+                create)
+                    _message 'new environment name'
+                    ;;
+            esac
+            ;;
+    esac
+}
+
+_dotfiles_nix "$@"

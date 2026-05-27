@@ -1,0 +1,39 @@
+#compdef dotfiles-ai
+
+# ═══════════════════════════════════════════════════════════════════════════════
+# @file shells/zsh/completions/_dotfiles-ai
+# @description Zsh completion for dotfiles-ai
+# ═══════════════════════════════════════════════════════════════════════════════
+
+_dotfiles_ai() {
+    local -a commands
+    commands=(
+        'link:Symlink shared context files and skills to agent dirs'
+        'unlink:Remove symlinks from agent dirs'
+        'status:Show which agents have active symlinks'
+    )
+
+    local -a agents
+    agents=(
+        'hermes:Hermes Agent (Nous Research)'
+        'claude:Claude Code (Anthropic)'
+        'codex:OpenAI Codex CLI'
+        'opencode:OpenCode CLI'
+    )
+
+    _arguments -C \
+        '1: :_describe -t commands command commands' \
+        '*::arg:->args'
+
+    case "$state" in
+        args)
+            case "$words[1]" in
+                link|unlink)
+                    _describe -t agents agent agents
+                    ;;
+            esac
+            ;;
+    esac
+}
+
+_dotfiles_ai "$@"

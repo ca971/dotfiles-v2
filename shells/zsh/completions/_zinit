@@ -1,0 +1,69 @@
+#compdef zinit
+
+# ═══════════════════════════════════════════════════════════════════════════════
+# @file shells/zsh/completions/_zinit
+# @description Zsh completion for zinit — lists available plugins from dotfiles
+# @since 1.0.0
+# ═══════════════════════════════════════════════════════════════════════════════
+
+_zinit_plugins() {
+    local plugins_file="${DOTFILES_DIR:-${HOME}/.dotfiles}/definitions/plugins.toml"
+    local -a plugins
+
+    if [[ -f "$plugins_file" ]] && command -v taplo >/dev/null 2>&1 && command -v jq >/dev/null 2>&1; then
+        local json
+        json="$(taplo get -f "$plugins_file" -o json 2>/dev/null)"
+        if [[ -n "$json" ]]; then
+            local plugin
+            for plugin in $(echo "$json" | jq -r '.plugins | keys[]' 2>/dev/null); do
+                local desc
+                desc="$(echo "$json" | jq -r ".plugins.\"$plugin\".description // \"\"" 2>/dev/null)"
+                plugins+=("${plugin}:${desc}")
+            done
+        fi
+    fi
+
+    # Fallback: known plugins from dotfiles
+    if [[ ${#plugins} -eq 0 ]]; then
+        plugins=(
+            'fast-syntax-highlighting:Syntax highlighting'
+            'zsh-autosuggestions:Fish-like autosuggestions'
+            'zsh-completions:Additional completion definitions'
+            'zsh-history-substring-search:History substring search'
+            'fzf-tab:Fuzzy tab completion'
+            'zsh-vi-mode:Vi mode for Zsh'
+            'zsh-you-should-use:Reminds aliases'
+        )
+    fi
+    _describe -t plugins 'zinit plugin' plugins
+}
+
+_zinit() {
+    local -a commands
+    commands=(
+        'load:Load a plugin'
+        'light:Load a plugin (light mode)'
+        'snippet:Load a snippet'
+        'ice:Add ice modifiers'
+        'update:Update plugins'
+        'status:Show plugin status'
+        'delete:Remove a plugin'
+        'cd:Go to plugin directory'
+    )
+
+    _arguments -C \
+        '1: :_describe -t commands command commands' \
+        '*::arg:->args'
+
+    case "$state" in
+        args)
+            case "$words[1]" in
+                load|light)
+                    _zinit_plugins
+                    ;;
+            esac
+            ;;
+    esac
+}
+
+_zinit "$@"
