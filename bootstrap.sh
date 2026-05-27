@@ -58,6 +58,8 @@ declare OPT_VERBOSE=0
 declare OPT_PROFILE="dev"
 # shellcheck disable=SC2034
 declare OPT_PROFILE_EXPLICIT=0
+# shellcheck disable=SC2034
+declare OPT_INTERACTIVE=0
 
 # ═══════════════════════════════════════════════════════════════════════════════
 # @description Parse command-line arguments
@@ -72,6 +74,7 @@ parse_args() {
             --dry-run)   OPT_DRY_RUN=1 ;;
             --verbose)   OPT_VERBOSE=1; Logger::set_level "debug" ;;
             --profile)   OPT_PROFILE="${2:?Profile name required after --profile}"; OPT_PROFILE_EXPLICIT=1; shift ;;
+            --interactive) OPT_INTERACTIVE=1 ;;
             --help|-h)   show_help; exit 0 ;;
             *)           Logger::warn "Unknown option: ${1}" ;;
         esac
@@ -92,6 +95,7 @@ show_help() {
 	    --dry-run    Show what would be done without executing
 	    --verbose    Enable debug logging
 	    --profile    Tool profile to install: minimal, dev, server, devops, data, full (default: dev)
+	    --interactive  Interactive mode: choose shell, profile, and confirm
 	    --help, -h   Show this help message
 
 	Environment:
@@ -421,10 +425,85 @@ finalize() {
 }
 
 # ═══════════════════════════════════════════════════════════════════════════════
+# @description Interactive mode — let user choose shell, profile, and options
+# ═══════════════════════════════════════════════════════════════════════════════
+run_interactive() {
+    echo ""
+    echo "  ╔══════════════════════════════════════════╗"
+    echo "  ║     DOTFILES INTERACTIVE SETUP           ║"
+    echo "  ╚══════════════════════════════════════════╝"
+    echo ""
+
+    # ── Step 1: Choose profile ──
+    echo "  Choose a profile:"
+    echo ""
+    PS3="  Profile [1-6]: "
+    select _profile_choice in "minimal (24 tools — essential CLI)" \
+                       "dev (102 tools — developer workstation)" \
+                       "server (43 tools — headless machine)" \
+                       "devops (132 tools — cloud & k8s)" \
+                       "data (118 tools — data engineering)" \
+                       "full (181 tools — everything)"; do
+        case "${REPLY}" in
+            1) OPT_PROFILE="minimal"; break ;;
+            2) OPT_PROFILE="dev"; break ;;
+            3) OPT_PROFILE="server"; break ;;
+            4) OPT_PROFILE="devops"; break ;;
+            5) OPT_PROFILE="data"; break ;;
+            6) OPT_PROFILE="full"; break ;;
+            *) echo "  Please pick 1-6" ;;
+        esac
+    done
+    OPT_PROFILE_EXPLICIT=1
+    echo ""
+
+    # ── Step 2: Choose default shell ──
+    echo "  Which shell should be the default?"
+    echo ""
+    PS3="  Shell [1-4]: "
+    select _shell_choice in "zsh (recommended)" "bash" "fish" "nushell"; do
+        case "${REPLY}" in
+            1) OPT_SHELL="zsh"; break ;;
+            2) OPT_SHELL="bash"; break ;;
+            3) OPT_SHELL="fish"; break ;;
+            4) OPT_SHELL="nushell"; break ;;
+            *) echo "  Please pick 1-4" ;;
+        esac
+    done
+    echo ""
+
+    # ── Step 3: Confirm ──
+    echo "  ══════════════════════════════════════════"
+    echo "  Summary:"
+    echo "    Profile : ${OPT_PROFILE}"
+    echo "    Shell   : ${OPT_SHELL}"
+    echo "    Platform: ${PLATFORM_OS}/${PLATFORM_DISTRO} (${PLATFORM_ARCH})"
+    echo "  ══════════════════════════════════════════"
+    echo ""
+
+    if [[ "${OPT_DRY_RUN}" -eq 0 ]]; then
+        read -r -p "  Proceed with installation? [Y/n] " confirm
+        if [[ "${confirm}" =~ ^[Nn] ]]; then
+            echo ""
+            Logger::info "Installation cancelled."
+            exit 0
+        fi
+    fi
+
+    echo ""
+    Logger::info "Starting installation with profile: ${OPT_PROFILE}"
+    echo ""
+}
+
+# ═══════════════════════════════════════════════════════════════════════════════
 # @description Main bootstrap orchestrator
 # ═══════════════════════════════════════════════════════════════════════════════
 main() {
     parse_args "$@"
+
+    if [[ "${OPT_INTERACTIVE}" -eq 1 ]]; then
+        run_interactive
+    fi
 
     echo ""
     Logger::info "Starting dotfiles bootstrap..."
