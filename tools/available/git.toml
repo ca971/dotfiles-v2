@@ -41,10 +41,10 @@ package = "git"
 
 [config]
 symlinks = [
-  { src = "config/git/.gitconfig", dst = "~/.gitconfig" },
-  { src = "config/git/.gitattributes_global", dst = "~/.gitattributes_global" },
-  { src = "config/git/.gitignore_global", dst = "~/.gitignore_global" },
-  { src = "config/git/.gitmessage", dst = "~/.gitmessage" },
+  { src = "config/git/gitconfig", dst = "~/.gitconfig" },
+  { src = "config/git/gitattributes_global", dst = "~/.gitattributes_global" },
+  { src = "config/git/gitignore_global", dst = "~/.gitignore_global" },
+  { src = "config/git/gitmessage", dst = "~/.gitmessage" },
   { src = "config/git/git-templates", dst = "~/.git-templates" },
 ]
 dependencies = []
