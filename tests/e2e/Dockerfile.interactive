@@ -77,7 +77,7 @@ RUN cd generators && uv sync --quiet
 RUN cd generators && uv run python -m src.cli generate --all
 
 # Initialize state
-RUN mkdir -p local && \
+RUN mkdir -p local local/secrets local/ssh local/ssh/keys && \
     echo '{"version":1,"tools":{},"nix_envs":{},"theme":"minimal"}' > local/state.json && \
     chmod 700 local/secrets local/ssh local/ssh/keys
 
