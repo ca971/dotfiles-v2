@@ -60,7 +60,11 @@ class NushellEmitter(ShellEmitter):
                     for token in cmd.split()
                 )
                 if has_flags:
-                    line = f"def --wrapped {name} [...rest] {{ {cmd} ...$rest }}"
+                    # try/catch blocks can't accept spread args
+                    if "try" in cmd:
+                        line = f"def --wrapped {name} [...rest] {{ {cmd} }}"
+                    else:
+                        line = f"def --wrapped {name} [...rest] {{ {cmd} ...$rest }}"
                 else:
                     line = f"alias {name} = {cmd}"
                 if alias.requires:
