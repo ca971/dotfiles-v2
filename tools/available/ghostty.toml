@@ -13,8 +13,6 @@ category = "terminal"
 version = "latest"
 verify = "ghostty --version"
 
-# ── Binary install methods ──
-
 [[install]]
 method = "mise"
 platforms = ["darwin", "linux"]
@@ -31,14 +29,8 @@ method = "system"
 platforms = ["linux.arch"]
 package = "ghostty"
 
-# ── Config: cloned from dedicated repo at bootstrap ──
-
-[[install]]
-method = "git"
-repo = "https://github.com/ca971/ghostty-config.git"
-target = "~/.config/ghostty"
-ref = "main"
-platforms = ["darwin", "linux", "wsl", "bsd"]
-
 [config]
+git_repos = [
+  { repo = "https://github.com/ca971/ghostty-config.git", target = "~/.config/ghostty", ref = "main" },
+]
 dependencies = []

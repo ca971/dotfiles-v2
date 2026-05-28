@@ -13,8 +13,6 @@ category = "editor"
 version = "latest"
 verify = "nvim --version"
 
-# ── Binary install methods ──
-
 [[install]]
 method = "mise"
 platforms = ["darwin", "linux", "wsl", "bsd"]
@@ -41,14 +39,8 @@ method = "system"
 platforms = ["linux.fedora"]
 package = "neovim"
 
-# ── Config: cloned from dedicated repo at bootstrap ──
-
-[[install]]
-method = "git"
-repo = "https://github.com/ca971/nvim-enterprise.git"
-target = "~/.config/nvim"
-ref = "main"
-platforms = ["darwin", "linux", "wsl", "bsd"]
-
 [config]
+git_repos = [
+  { repo = "https://github.com/ca971/nvim-enterprise.git", target = "~/.config/nvim", ref = "main" },
+]
 dependencies = []

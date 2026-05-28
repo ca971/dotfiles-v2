@@ -4,7 +4,7 @@
 # @description Tool installation dispatcher — resolves best adapter per platform
 # @class ToolInstaller
 # @since 1.0.0
-# @version 1.0.0
+# @version 1.1.0
 # @see lib/hotload/engine.sh
 # ═══════════════════════════════════════════════════════════════════════════════
 
@@ -85,20 +85,13 @@ ToolInstaller::resolve_method() {
             cargo)  CargoAdapter::is_available && adapter_available=1 ;;
             brew)   BrewAdapter::is_available && adapter_available=1 ;;
             system) SystemAdapter::is_available && adapter_available=1 ;;
-            git)    GitAdapter::is_available && adapter_available=1 ;; 
         esac
 
         if [[ "${adapter_available}" -eq 1 ]]; then
             local pkg version cmd
-            if [[ "${method}" == "git" ]]; then
-                pkg="$(echo "${json}" | jq -r ".install[${i}].repo // empty")"
-                version="$(echo "${json}" | jq -r ".install[${i}].ref // \"main\"")"
-                cmd="$(echo "${json}" | jq -r ".install[${i}].target // \"~/.config/${tool}\"")"
-            else
-                pkg="$(echo "${json}" | jq -r ".install[${i}].package // .install[${i}].plugin // .install[${i}].crate // \"${tool}\"")"
-                version="$(echo "${json}" | jq -r ".install[${i}].version // \"latest\"")"
-                cmd="$(echo "${json}" | jq -r ".install[${i}].command // empty")"
-            fi
+            pkg="$(echo "${json}" | jq -r ".install[${i}].package // .install[${i}].plugin // .install[${i}].crate // \"${tool}\"")"
+            version="$(echo "${json}" | jq -r ".install[${i}].version // \"latest\"")"
+            cmd="$(echo "${json}" | jq -r ".install[${i}].command // empty")"
             echo "${method}|${pkg}|${version}|${cmd}"
             return 0
         fi
@@ -136,16 +129,12 @@ ToolInstaller::install() {
         cargo)  CargoAdapter::install "${pkg}" "${version}" || rc=1 ;;
         brew)   BrewAdapter::install "${pkg}" "${version}" || rc=1 ;;
         system) SystemAdapter::install "${pkg}" "${version}" || rc=1 ;;
-        git)    GitAdapter::install "${pkg}" "${version}" "${cmd}" || rc=1 ;;
         *)      Logger::error "ToolInstaller: unknown method: ${method}"; return 1 ;;
     esac
 
     if [[ "${rc}" -eq 0 ]]; then
         StateManager::mark_installed "${tool}" "${method}" "${version}"
-        # Skip setup_config for git-installed tools (config is the install itself)
-        if [[ "${method}" != "git" ]]; then
-            ToolInstaller::setup_config "${tool}"
-        fi
+        ToolInstaller::setup_config "${tool}"
         Logger::success "Installed ${tool} via ${method}"
     else
         Logger::error "Failed to install ${tool} via ${method}"
@@ -155,65 +144,74 @@ ToolInstaller::install() {
 }
 
 # ═══════════════════════════════════════════════════════════════════════════════
-# @description Create config symlinks for an installed tool
+# @description Create config (symlinks + git repos) for an installed tool
 # @param $1 {string} Tool name
-# @return 0 on success, 1 on failure
+# @return 0 on success
 # ═══════════════════════════════════════════════════════════════════════════════
 ToolInstaller::setup_config() {
     local tool="${1:?Tool name required}"
     local toml_file="${DOTFILES_DIR}/tools/available/${tool}.toml"
 
     if [[ ! -f "${toml_file}" ]]; then
-        return 0  # no descriptor, nothing to configure
+        return 0
     fi
 
     local json
     json="$(ToolInstaller::parse_descriptor "${toml_file}" 2>/dev/null)" || return 0
 
-    # Count symlinks
+    # ── Symlinks ──
     local symlink_count
     symlink_count="$(echo "${json}" | jq '.config.symlinks | length' 2>/dev/null || echo 0)"
 
-    if [[ "${symlink_count}" -eq 0 ]]; then
-        return 0  # no symlinks to create
+    if [[ "${symlink_count}" -gt 0 ]]; then
+        Logger::debug "ToolInstaller: setting up ${symlink_count} symlinks for ${tool}"
+
+        local i src dst expanded_dst
+        for (( i=0; i<symlink_count; i++ )); do
+            src="$(echo "${json}" | jq -r ".config.symlinks[${i}].src")"
+            dst="$(echo "${json}" | jq -r ".config.symlinks[${i}].dst")"
+
+            [[ -z "${src}" || -z "${dst}" || "${src}" == "null" || "${dst}" == "null" ]] && continue
+
+            expanded_dst="${dst/\~/${HOME}}"
+            local full_src="${DOTFILES_DIR}/${src}"
+
+            if [[ ! -e "${full_src}" ]]; then
+                Logger::warn "ToolInstaller: config source not found: ${full_src}"
+                continue
+            fi
+
+            local dst_dir
+            dst_dir="$(dirname "${expanded_dst}")"
+            [[ -d "${dst_dir}" ]] || mkdir -p "${dst_dir}"
+
+            [[ -L "${expanded_dst}" ]] || [[ -d "${expanded_dst}" ]] && rm -rf "${expanded_dst}"
+
+            ln -sf "${full_src}" "${expanded_dst}"
+            Logger::debug "ToolInstaller: ${expanded_dst} → ${full_src}"
+        done
     fi
 
-    Logger::debug "ToolInstaller: setting up ${symlink_count} config symlinks for ${tool}"
+    # ── Git repos (configs stored in external repos, cloned at bootstrap) ──
+    local git_count
+    git_count="$(echo "${json}" | jq '.config.git_repos | length' 2>/dev/null || echo 0)"
 
-    local i src dst expanded_dst
-    for (( i=0; i<symlink_count; i++ )); do
-        src="$(echo "${json}" | jq -r ".config.symlinks[${i}].src")"
-        dst="$(echo "${json}" | jq -r ".config.symlinks[${i}].dst")"
+    if [[ "${git_count}" -gt 0 ]]; then
+        Logger::debug "ToolInstaller: cloning ${git_count} git config repos for ${tool}"
 
-        [[ -z "${src}" || -z "${dst}" || "${src}" == "null" || "${dst}" == "null" ]] && continue
+        local j repo target ref
+        for (( j=0; j<git_count; j++ )); do
+            repo="$(echo "${json}" | jq -r ".config.git_repos[${j}].repo // empty")"
+            target="$(echo "${json}" | jq -r ".config.git_repos[${j}].target // empty")"
+            ref="$(echo "${json}" | jq -r ".config.git_repos[${j}].ref // \"main\"")"
 
-        # Expand ~ to HOME
-        expanded_dst="${dst/\~/${HOME}}"
+            [[ -z "${repo}" || -z "${target}" || "${repo}" == "null" || "${target}" == "null" ]] && continue
 
-        # Resolve src relative to DOTFILES_DIR
-        local full_src="${DOTFILES_DIR}/${src}"
-
-        if [[ ! -e "${full_src}" ]]; then
-            Logger::warn "ToolInstaller: config source not found: ${full_src}"
-            continue
-        fi
-
-        # Create parent directory
-        local dst_dir
-        dst_dir="$(dirname "${expanded_dst}")"
-        if [[ ! -d "${dst_dir}" ]]; then
-            mkdir -p "${dst_dir}"
-        fi
-
-        # Remove existing symlink or directory
-        if [[ -L "${expanded_dst}" ]] || [[ -d "${expanded_dst}" ]]; then
-            rm -rf "${expanded_dst}"
-        fi
-
-        # Create symlink
-        ln -sf "${full_src}" "${expanded_dst}"
-        Logger::debug "ToolInstaller: ${expanded_dst} → ${full_src}"
-    done
+            if ! GitAdapter::install "${repo}" "${ref}" "${target}"; then
+                Logger::warn "ToolInstaller: failed to clone git config: ${repo}"
+            fi
+        done
+    fi
 
     return 0
 }
