@@ -45,5 +45,8 @@ platforms = ["darwin"]
 package = "bash"
 
 [config]
-symlinks = []
+symlinks = [
+  { src = "shells/bash/bashrc", dst = "~/.bashrc" },
+  { src = "shells/bash/bash_profile", dst = "~/.bash_profile" },
+]
 dependencies = []

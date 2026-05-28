@@ -40,5 +40,7 @@ platforms = ["darwin"]
 package = "fish"
 
 [config]
-symlinks = []
+symlinks = [
+  { src = "shells/fish/config.fish", dst = "~/.config/fish/config.fish" },
+]
 dependencies = []

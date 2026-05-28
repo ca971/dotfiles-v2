@@ -30,5 +30,8 @@ platforms = ["darwin", "linux", "wsl", "bsd"]
 crate = "nu"
 
 [config]
-symlinks = []
+symlinks = [
+  { src = "shells/nushell/config.nu", dst = "~/.config/nushell/config.nu" },
+  { src = "shells/nushell/env.nu", dst = "~/.config/nushell/env.nu" },
+]
 dependencies = []
