@@ -1,10 +1,10 @@
-"""
+""" "
 @file generators/src/emitters/fish.py
 @description Fish-specific code emitter
 @class FishEmitter
 @extends ShellEmitter
 @since 1.0.0
-@version 1.0.0
+@version 1.1.0
 """
 
 from __future__ import annotations
@@ -143,7 +143,7 @@ class FishEmitter(ShellEmitter):
     @staticmethod
     def _posix_to_fish(body: str) -> str:
         """
-        @description POSIX → Fish syntax conversion with word-boundary awareness
+        @description POSIX → Fish syntax conversion
         @param body POSIX shell function body
         @return Fish-compatible function body
         """
@@ -151,19 +151,22 @@ class FishEmitter(ShellEmitter):
 
         result = body
 
-        # Variable substitutions
+        # Variable substitutions: ${N:-default} → fish default
         result = re.sub(
-            r"\$\{1:-([^}]*)\}",
-            r"(set -q argv[1]; and echo $argv[1]; or echo \1)",
+            r"\$\{(\d+):-([^}]*)\}",
+            r"(set -q argv[\1]; and echo $argv[\1]; or echo \2)",
             result,
         )
         result = result.replace("$@", "$argv")
         result = result.replace("$2", "$argv[2]")
         result = result.replace("$1", "$argv[1]")
+        # Bash-style ${var} → fish $var (but not ${N:-...} already handled)
+        result = re.sub(r"\$\{(\w+)\}", r"$\1", result)
         result = re.sub(r"\bexport\s+", "set -gx ", result)
         result = re.sub(r"\blocal\b", "set -l", result)
 
-        # Conditionals: [[ ... ]] → test ...
+        # Conditionals: [[ ... ]]; then → if test ...
+        # Handle both standalone [[ and if [[ patterns
         result = re.sub(r"\[\[\s*(.+?)\s*\]\]\s*;\s*then", r"if test \1", result)
         result = re.sub(r"\[\[\s*(.+?)\s*\]\]\s*&&\s*then", r"if test \1", result)
         result = re.sub(
@@ -176,21 +179,34 @@ class FishEmitter(ShellEmitter):
             r"test -\1 \2",
             result,
         )
+        # Fix double if: 'if if test' → 'if test'
+        result = result.replace("if if test", "if test")
 
-        # Keywords (order matters: protect elif before replacing fi)
+        # Keywords (order matters)
         result = re.sub(r"\belif\b", "__ELIF_PROTECT__", result)
         result = re.sub(r"\bfi\b", "end", result)
         result = re.sub(r"__ELIF_PROTECT__", "else if", result)
         result = re.sub(r"\bdone\b", "end", result)
         result = re.sub(r"\besac\b", "end", result)
 
-        # case → switch
+        # case → switch (handles lines like "  pattern) command ;;")
         result = re.sub(r"\bcase\s+(\S+)\s+in\b", r"switch \1", result)
-        result = re.sub(r"^(\s*)(\S+)\)\s*$", r"\1case \2", result, flags=re.MULTILINE)
-        result = re.sub(r"^(\s*)\*\)\s*$", r"\1case \'*\'", result, flags=re.MULTILINE)
+        result = re.sub(
+            r"^(\s+)(\S+)\)\s+(.+);;$",
+            r"\1case \2\n\1    \3",
+            result,
+            flags=re.MULTILINE,
+        )
+        result = re.sub(
+            r"^(\s+)\*\)\s+(.+);;$",
+            r"\1case '*'\n\1    \2",
+            result,
+            flags=re.MULTILINE,
+        )
+        # Remove stray ;; if any remain
+        result = re.sub(r";;$", "", result, flags=re.MULTILINE)
 
         # for loops
-        # C-style: for ((i=0; i<n; i++)) → fish equivalent
         result = re.sub(
             r"for\s+\(\(\s*(\w+)\s*=\s*(\d+)\s*;\s*\1\s*<\s*(\w+)\s*;\s*\1\+\+\s*\)\)",
             r"for \1 in (seq \2 (math \3 - 1))",
@@ -198,9 +214,6 @@ class FishEmitter(ShellEmitter):
         )
         result = re.sub(r"\bfor\s+(\S+)\s+in\b", r"for \1 in", result)
         result = re.sub(r"\bdo\b", "", result)
-
-        # subshell $() stays the same in fish (already compatible)
-        # backtick substitution stays the same
 
         # Final cleanup: bare variable assignments → set var value
         # Runs AFTER do removal so we catch assignments after ; or newline

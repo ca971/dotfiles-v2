@@ -145,17 +145,15 @@ body = 'cp "$1" "${1}.bak.$(date +%Y%m%d_%H%M%S)"'
 [functions.path_append]
 description = "Append a directory to PATH if not already present"
 body = '''
-case ":$PATH:" in
-  *:"$1":*) ;;
-  *) export PATH="$PATH:$1" ;;
-esac
+if [[ ":$PATH:" != *:"$1":* ]]; then
+    export PATH="$PATH:$1"
+fi
 '''
 
 [functions.path_prepend]
 description = "Prepend a directory to PATH if not already present"
 body = '''
-case ":$PATH:" in
-  *:"$1":*) ;;
-  *) export PATH="$1:$PATH" ;;
-esac
+if [[ ":$PATH:" != *:"$1":* ]]; then
+    export PATH="$1:$PATH"
+fi
 '''
