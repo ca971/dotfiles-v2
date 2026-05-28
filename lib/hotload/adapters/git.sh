@@ -99,13 +99,9 @@ GitAdapter::is_installed() {
 
     target="${target/#\~/${HOME}}"
 
-    # Check that target exists and is a git repo with matching remote
+    # Check that target exists and is a git repo
     if [[ -d "${target}/.git" ]]; then
-        local remote_url
-        remote_url="$(git -C "${target}" remote get-url origin 2>/dev/null || echo "")"
-        if [[ "${remote_url}" == "${repo}" ]] || [[ "${remote_url}" == "${repo}.git" ]]; then
-            return 0
-        fi
+        return 0
     fi
     return 1
 }
