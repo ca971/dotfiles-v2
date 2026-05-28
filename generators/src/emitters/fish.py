@@ -92,21 +92,21 @@ class FishEmitter(ShellEmitter):
 
     def emit_keybindings(self, definitions: KeybindingDefinitions) -> str:
         key_map = {
-            "ctrl-a": r"\ca",
-            "ctrl-e": r"\ce",
-            "ctrl-f": r"\cf",
-            "ctrl-g": r"\cg",
-            "ctrl-k": r"\ck",
-            "ctrl-n": r"\cn",
-            "ctrl-r": r"\cr",
-            "ctrl-t": r"\ct",
-            "ctrl-u": r"\cu",
-            "ctrl-w": r"\cw",
-            "ctrl-space": r"\c@",
-            "alt-b": r"\eb",
-            "alt-c": r"\ec",
-            "alt-d": r"\ed",
-            "alt-f": r"\ef",
+            "ctrl-a": "ctrl-a",
+            "ctrl-e": "ctrl-e",
+            "ctrl-f": "ctrl-f",
+            "ctrl-g": "ctrl-g",
+            "ctrl-k": "ctrl-k",
+            "ctrl-n": "ctrl-n",
+            "ctrl-r": "ctrl-r",
+            "ctrl-t": "ctrl-t",
+            "ctrl-u": "ctrl-u",
+            "ctrl-w": "ctrl-w",
+            "ctrl-space": "ctrl-space",
+            "alt-b": "alt-b",
+            "alt-c": "alt-c",
+            "alt-d": "alt-d",
+            "alt-f": "alt-f",
         }
 
         lines: list[str] = ["\n# --- Keybindings ---"]
@@ -119,6 +119,26 @@ class FishEmitter(ShellEmitter):
     def _wrap_init_check(self, verify_cmd: str, init_cmd: str) -> str:
         """@description Fish-specific availability check wrapper."""
         return f"if command -sq {verify_cmd}\n    {init_cmd}\nend"
+
+    def _wrap_lazy_init(
+        self, verify_cmd: str, init_cmd: str, name: str, triggers: list[str]
+    ) -> str:
+        """@description Fish-specific lazy-loading wrapper."""
+        func_name = f"_dotfiles_lazy_{name}"
+        trigger_list = " ".join(triggers)
+        lines = [
+            f"if command -sq {verify_cmd}",
+            f"    function {func_name}",
+            f"        functions -e {trigger_list} {func_name} 2>/dev/null",
+            f"        {init_cmd}",
+            "    end",
+        ]
+        for trigger in triggers:
+            lines.append(f"    function {trigger} --wraps {trigger}")
+            lines.append(f"        {func_name}; {trigger} $argv")
+            lines.append("    end")
+        lines.append("end")
+        return "\n".join(lines)
 
     @staticmethod
     def _posix_to_fish(body: str) -> str:
@@ -170,10 +190,24 @@ class FishEmitter(ShellEmitter):
         result = re.sub(r"^(\s*)\*\)\s*$", r"\1case \'*\'", result, flags=re.MULTILINE)
 
         # for loops
+        # C-style: for ((i=0; i<n; i++)) → fish equivalent
+        result = re.sub(
+            r"for\s+\(\(\s*(\w+)\s*=\s*(\d+)\s*;\s*\1\s*<\s*(\w+)\s*;\s*\1\+\+\s*\)\)",
+            r"for \1 in (seq \2 (math \3 - 1))",
+            result,
+        )
         result = re.sub(r"\bfor\s+(\S+)\s+in\b", r"for \1 in", result)
         result = re.sub(r"\bdo\b", "", result)
 
         # subshell $() stays the same in fish (already compatible)
         # backtick substitution stays the same
+
+        # Final cleanup: bare variable assignments → set var value
+        # Runs AFTER do removal so we catch assignments after ; or newline
+        result = re.sub(
+            r"(;|\n)\s*(\w+)=(\"[^\"]*\"|'[^']*'|\S+)",
+            r"\1set \2 \3",
+            result,
+        )
 
         return result
