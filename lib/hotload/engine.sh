@@ -50,6 +50,8 @@ source "${_HOTLOAD_DIR}/adapters/curl.sh"
 source "${_HOTLOAD_DIR}/adapters/cargo.sh"
 # shellcheck source=lib/hotload/adapters/brew.sh
 source "${_HOTLOAD_DIR}/adapters/brew.sh"
+# shellcheck source=lib/hotload/adapters/git.sh
+source "${_HOTLOAD_DIR}/adapters/git.sh"
 # shellcheck source=lib/hotload/adapters/system.sh
 source "${_HOTLOAD_DIR}/adapters/system.sh"
 

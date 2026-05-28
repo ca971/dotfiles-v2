@@ -6,6 +6,8 @@ category = "terminal"
 version = "latest"
 verify = "wezterm --version"
 
+# ── Binary install methods ──
+
 [[install]]
 method = "mise"
 platforms = ["darwin", "linux", "wsl", "bsd"]
@@ -32,6 +34,14 @@ method = "system"
 platforms = ["linux.fedora"]
 package = "wezterm"
 
+# ── Config: cloned from dedicated repo at bootstrap ──
+
+[[install]]
+method = "git"
+repo = "https://github.com/ca971/wezterm-enterprise.git"
+target = "~/.config/wezterm"
+ref = "main"
+platforms = ["darwin", "linux", "wsl", "bsd"]
+
 [config]
-symlinks = [{ src = "config/wezterm", dst = "~/.config/wezterm" }]
 dependencies = []

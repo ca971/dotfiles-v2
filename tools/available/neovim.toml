@@ -2,7 +2,7 @@
 # @file tools/available/neovim.toml
 # @description Tool descriptor for neovim (Hyperextensible Vim-based text editor)
 # @since 1.0.0
-# @version 1.0.0
+# @version 1.1.0
 # ═══════════════════════════════════════════════════════════════════════════════
 
 [meta]
@@ -12,6 +12,8 @@ homepage = "https://neovim.io"
 category = "editor"
 version = "latest"
 verify = "nvim --version"
+
+# ── Binary install methods ──
 
 [[install]]
 method = "mise"
@@ -39,11 +41,14 @@ method = "system"
 platforms = ["linux.fedora"]
 package = "neovim"
 
+# ── Config: cloned from dedicated repo at bootstrap ──
+
 [[install]]
-method = "brew"
-platforms = ["darwin"]
-package = "neovim"
+method = "git"
+repo = "https://github.com/ca971/nvim-enterprise.git"
+target = "~/.config/nvim"
+ref = "main"
+platforms = ["darwin", "linux", "wsl", "bsd"]
 
 [config]
-symlinks = [{ src = "config/nvim", dst = "~/.config/nvim" }]
 dependencies = []

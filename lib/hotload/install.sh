@@ -85,13 +85,20 @@ ToolInstaller::resolve_method() {
             cargo)  CargoAdapter::is_available && adapter_available=1 ;;
             brew)   BrewAdapter::is_available && adapter_available=1 ;;
             system) SystemAdapter::is_available && adapter_available=1 ;;
+            git)    GitAdapter::is_available && adapter_available=1 ;; 
         esac
 
         if [[ "${adapter_available}" -eq 1 ]]; then
             local pkg version cmd
-            pkg="$(echo "${json}" | jq -r ".install[${i}].package // .install[${i}].plugin // .install[${i}].crate // \"${tool}\"")"
-            version="$(echo "${json}" | jq -r ".install[${i}].version // \"latest\"")"
-            cmd="$(echo "${json}" | jq -r ".install[${i}].command // empty")"
+            if [[ "${method}" == "git" ]]; then
+                pkg="$(echo "${json}" | jq -r ".install[${i}].repo // empty")"
+                version="$(echo "${json}" | jq -r ".install[${i}].ref // \"main\"")"
+                cmd="$(echo "${json}" | jq -r ".install[${i}].target // \"~/.config/${tool}\"")"
+            else
+                pkg="$(echo "${json}" | jq -r ".install[${i}].package // .install[${i}].plugin // .install[${i}].crate // \"${tool}\"")"
+                version="$(echo "${json}" | jq -r ".install[${i}].version // \"latest\"")"
+                cmd="$(echo "${json}" | jq -r ".install[${i}].command // empty")"
+            fi
             echo "${method}|${pkg}|${version}|${cmd}"
             return 0
         fi
@@ -129,12 +136,16 @@ ToolInstaller::install() {
         cargo)  CargoAdapter::install "${pkg}" "${version}" || rc=1 ;;
         brew)   BrewAdapter::install "${pkg}" "${version}" || rc=1 ;;
         system) SystemAdapter::install "${pkg}" "${version}" || rc=1 ;;
+        git)    GitAdapter::install "${pkg}" "${version}" "${cmd}" || rc=1 ;;
         *)      Logger::error "ToolInstaller: unknown method: ${method}"; return 1 ;;
     esac
 
     if [[ "${rc}" -eq 0 ]]; then
         StateManager::mark_installed "${tool}" "${method}" "${version}"
-        ToolInstaller::setup_config "${tool}"
+        # Skip setup_config for git-installed tools (config is the install itself)
+        if [[ "${method}" != "git" ]]; then
+            ToolInstaller::setup_config "${tool}"
+        fi
         Logger::success "Installed ${tool} via ${method}"
     else
         Logger::error "Failed to install ${tool} via ${method}"
