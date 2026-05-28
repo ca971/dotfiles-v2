@@ -1,0 +1,100 @@
+# ═══════════════════════════════════════════════════════════════════════════════
+# @file config/yazi/theme.toml
+# @description Yazi theme — Catppuccin Mocha inspired
+# @since 1.0.0
+# ═══════════════════════════════════════════════════════════════════════════════
+
+[flavor]
+dark = "catppuccin-mocha"
+light = "catppuccin-latte"
+
+[manager]
+# Cursor and selection colors
+cwd = { fg = "#89b4fa" }                        # Blue — current working directory
+hovered = { fg = "#1e1e2e", bg = "#89b4fa" }    # Blue bg — highlighted file
+preview_hovered = { underline = true }
+find_keyword = { fg = "#f9e2af", bold = true }  # Yellow — search matches
+find_position = { fg = "#f38ba8", bold = true } # Red — position indicator
+
+# Syntect (code preview) theme
+syntect_theme = "Catppuccin Mocha"
+
+[status]
+# Status bar colors
+separator_open = "│"
+separator_close = "│"
+
+[mode]
+# Mode indicator (normal, select, unset)
+normal_main = { fg = "#1e1e2e", bg = "#a6e3a1", bold = true } # Green
+normal_alt = { fg = "#a6e3a1", bg = "#313244" }               # Surface 0
+select_main = { fg = "#1e1e2e", bg = "#fab387", bold = true } # Peach
+select_alt = { fg = "#fab387", bg = "#45475a" }               # Surface 1
+unset_main = { fg = "#1e1e2e", bg = "#f38ba8", bold = true }  # Red
+unset_alt = { fg = "#f38ba8", bg = "#45475a" }                # Surface 1
+
+[input]
+# Input area
+border = { fg = "#89b4fa" }    # Blue border
+title = {}
+value = {}
+selected = { reversed = true }
+
+[select]
+border = { fg = "#89b4fa" } # Blue border
+active = { fg = "#f9e2af" } # Yellow
+inactive = {}
+
+[tasks]
+border = { fg = "#cba6f7" }    # Mauve border
+title = {}
+hovered = { underline = true }
+
+[which]
+# Which-key style help
+mask = { bg = "#1e1e2e" }            # Base
+cand = { fg = "#cba6f7" }            # Mauve
+rest = { fg = "#6c7086" }            # Overlay 0
+desc = { fg = "#a6e3a1" }            # Green
+separator = "    "
+separator_style = { fg = "#585b70" } # Surface 2
+
+[help]
+# Help page
+on = { fg = "#f9e2af" }                   # Yellow
+exec = { fg = "#cba6f7" }                 # Mauve
+desc = { fg = "#a6adc8" }                 # Subtext 0
+hovered = { bg = "#313244", bold = true } # Surface 0
+footer = { fg = "#585b70" }               # Surface 2
+
+[filetypes]
+# Filetype-specific colors
+rules = [
+  # Directories
+  { name = "*", fg = "#89b4fa" },  # Blue
+  { name = "*/", fg = "#89b4fa" }, # Blue
+  # Archives
+  { name = "*.zip", fg = "#f9e2af" },  # Yellow
+  { name = "*.tar*", fg = "#f9e2af" }, # Yellow
+  { name = "*.gz", fg = "#f9e2af" },   # Yellow
+  # Media
+  { name = "*.{png,jpg,jpeg,gif,webp,svg,ico}", fg = "#f5c2e7" }, # Pink — images
+  { name = "*.{mp4,mkv,webm,avi,mov}", fg = "#f5c2e7" },          # Pink — videos
+  { name = "*.{mp3,flac,wav,ogg,m4a}", fg = "#f5c2e7" },          # Pink — audio
+  # Code
+  { name = "*.{lua}", fg = "#74c7ec" },                # Sapphire
+  { name = "*.{py,pyi}", fg = "#a6e3a1" },             # Green
+  { name = "*.{rs}", fg = "#fab387" },                 # Peach
+  { name = "*.{go}", fg = "#74c7ec" },                 # Sapphire
+  { name = "*.{js,jsx,ts,tsx}", fg = "#f9e2af" },      # Yellow
+  { name = "*.{sh,bash,zsh}", fg = "#a6e3a1" },        # Green
+  { name = "*.{toml,json,yaml,yml}", fg = "#f9e2af" }, # Yellow
+  { name = "*.{md,mdx}", fg = "#89b4fa" },             # Blue
+  # Config
+  { name = "*rc", fg = "#6c7086" },          # Overlay 0
+  { name = "*ignore", fg = "#6c7086" },      # Overlay 0
+  { name = "*.{lock,sum}", fg = "#6c7086" }, # Overlay 0
+  { name = "Makefile", fg = "#fab387" },     # Peach
+  { name = "Dockerfile", fg = "#74c7ec" },   # Sapphire
+  { name = "LICENSE", fg = "#f38ba8" },      # Red
+]

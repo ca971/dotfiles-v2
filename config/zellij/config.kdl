@@ -1,0 +1,107 @@
+// ═══════════════════════════════════════════════════════════════════════════════
+// @file config/zellij/config.kdl
+// @description Zellij — terminal workspace with batteries included
+// @since 1.0.0
+// ═══════════════════════════════════════════════════════════════════════════════
+
+// ── Theme ──
+theme "catppuccin-mocha"
+
+// ── UI ──
+pane_frames false          // hide pane frames for clean look
+default_shell "zsh"        // use zsh by default
+scrollback_editor "/usr/bin/nvim"  // use nvim for scrollback
+
+// ── Layout ──
+default_layout "compact"   // minimal chrome
+
+// ── Mouse ──
+mouse_mode true
+
+// ── Floating panes ──
+pane {
+    border "rounded"
+}
+
+// ── Keybindings ──
+keybinds clear-defaults=true {
+    // Session management
+    shared_except "locked" {
+        bind "Ctrl q" { Detach; }
+        bind "Ctrl d" { NewPane "down"; }
+        bind "Ctrl r" { NewPane "right"; }
+        bind "Ctrl x" { CloseFocus; }
+    }
+
+    // Pane navigation (vim-like)
+    shared_except "locked" {
+        bind "Ctrl h" { MoveFocusOrTab "left"; }
+        bind "Ctrl l" { MoveFocusOrTab "right"; }
+        bind "Ctrl j" { MoveFocusOrTab "down"; }
+        bind "Ctrl k" { MoveFocusOrTab "up"; }
+    }
+
+    // Resize panes
+    shared_except "locked" {
+        bind "Alt h" { Resize "increase left"; }
+        bind "Alt l" { Resize "increase right"; }
+        bind "Alt j" { Resize "increase down"; }
+        bind "Alt k" { Resize "increase up"; }
+    }
+
+    // Tab navigation
+    shared_except "locked" {
+        bind "Ctrl n" { NewTab; }
+        bind "Ctrl Tab" { GoToNextTab; }
+        bind "Ctrl Shift Tab" { GoToPreviousTab; }
+        bind "Alt 1" { GoToTab 1; }
+        bind "Alt 2" { GoToTab 2; }
+        bind "Alt 3" { GoToTab 3; }
+        bind "Alt 4" { GoToTab 4; }
+        bind "Alt 5" { GoToTab 5; }
+    }
+
+    // Toggle pane fullscreen
+    shared_except "locked" {
+        bind "Ctrl f" { ToggleFocusFullscreen; }
+    }
+
+    // Lock / unlock
+    shared_except "locked" {
+        bind "Ctrl g" { SwitchToMode "locked"; }
+    }
+    locked {
+        bind "Ctrl g" { SwitchToMode "normal"; }
+    }
+
+    // Scroll mode (vim-like)
+    shared_except "locked" {
+        bind "Ctrl s" { SwitchToMode "scroll"; }
+    }
+    scroll {
+        bind "h" { SwitchToMode "normal"; }
+        bind "j" { ScrollDown; }
+        bind "k" { ScrollUp; }
+        bind "Ctrl u" { HalfPageScrollUp; }
+        bind "Ctrl d" { HalfPageScrollDown; }
+        bind "g" { ScrollToTop; }
+        bind "G" { ScrollToBottom; }
+        bind "Esc" { SwitchToMode "normal"; }
+    }
+
+    // Rename
+    shared_except "locked" {
+        bind "Ctrl ," { SwitchToMode "renametab"; }
+    }
+    renametab {
+        bind "Esc" { SwitchToMode "normal"; }
+    }
+
+    // Session manager
+    shared_except "locked" {
+        bind "Ctrl o" { SwitchToMode "session"; }
+    }
+    session {
+        bind "Esc" { SwitchToMode "normal"; }
+    }
+}

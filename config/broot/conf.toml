@@ -1,0 +1,63 @@
+# ═══════════════════════════════════════════════════════════════════════════════
+# @file config/broot/conf.toml
+# @description Broot — modern tree explorer with vim-inspired navigation
+# @since 1.0.0
+# ═══════════════════════════════════════════════════════════════════════════════
+
+# ── Modal navigation (vim-like) ──
+modal = true
+
+# ── Default flags for `br` ──
+default_flags = "-ghp" # git-ignore, hidden, permissions
+
+# ── Theme ──
+# Uses terminal's native colors
+syntax_theme = "Native"
+
+# ── Special paths ──
+[special-paths]
+# Show ~ bin content inline
+"/bin" = "no-enter"
+"/sbin" = "no-enter"
+"/usr/bin" = "no-enter"
+"/usr/sbin" = "no-enter"
+
+# Hide noise in home
+"~/Library" = "no-enter"
+"~/Applications" = "no-enter"
+
+# ── Verbs (custom commands) ──
+[[verbs]]
+invocation = "edit"
+key = "F2"
+shortcut = "e"
+execution = "$EDITOR {file}"
+leave_broot = false
+apply_to = "file"
+
+[[verbs]]
+invocation = "create {subpath}"
+key = "ctrl-n"
+execution = "$EDITOR {directory}/{subpath}"
+leave_broot = false
+
+[[verbs]]
+invocation = "mkdir {subpath}"
+key = "ctrl-m"
+execution = "mkdir -p {directory}/{subpath}"
+leave_broot = false
+
+[[verbs]]
+invocation = "git_status"
+key = "ctrl-g"
+shortcut = "gs"
+execution = "lazygit"
+leave_broot = false
+apply_to = "directory"
+
+[[verbs]]
+invocation = "open_system"
+key = "enter"
+execution = "open {file}"
+leave_broot = false
+apply_to = "file"

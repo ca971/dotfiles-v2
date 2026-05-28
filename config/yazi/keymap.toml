@@ -1,0 +1,142 @@
+# ═══════════════════════════════════════════════════════════════════════════════
+# @file config/yazi/keymap.toml
+# @description Yazi key bindings — vim-inspired navigation
+# @since 1.0.0
+# ═══════════════════════════════════════════════════════════════════════════════
+
+[manager]
+keymap = [
+  # ── Navigation ──
+  { on = [
+    "k",
+  ], exec = "arrow -1", desc = "Move cursor up" },
+  { on = [
+    "j",
+  ], exec = "arrow 1", desc = "Move cursor down" },
+  { on = [
+    "h",
+  ], exec = "leave", desc = "Go back to parent" },
+  { on = [
+    "l",
+  ], exec = "enter", desc = "Enter directory / open file" },
+  { on = [
+    "g",
+    "g",
+  ], exec = "arrow -999999", desc = "Go to top" },
+  { on = [
+    "G",
+  ], exec = "arrow 999999", desc = "Go to bottom" },
+
+  # ── Selection ──
+  { on = [
+    "v",
+  ], exec = "select --state=none", desc = "Toggle visual mode" },
+  { on = [
+    "V",
+  ], exec = "select --state=all", desc = "Select all" },
+  { on = [
+    "ctrl-a",
+  ], exec = "select_all --state=true", desc = "Select all files" },
+
+  # ── File operations ──
+  { on = [
+    "y",
+  ], exec = "yank", desc = "Yank (copy)" },
+  { on = [
+    "x",
+  ], exec = "yank --cut", desc = "Yank (cut)" },
+  { on = [
+    "p",
+  ], exec = "paste", desc = "Paste" },
+  { on = [
+    "d",
+  ], exec = "remove", desc = "Move to trash" },
+  { on = [
+    "D",
+  ], exec = "remove --permanently", desc = "Delete permanently" },
+
+  # ── Create ──
+  { on = [
+    "a",
+  ], exec = "create", desc = "Create file" },
+  { on = [
+    "A",
+  ], exec = "create --dir", desc = "Create directory" },
+
+  # ── Rename ──
+  { on = [
+    "r",
+  ], exec = "rename", desc = "Rename file" },
+
+  # ── Search ──
+  { on = [
+    "/",
+  ], exec = "filter", desc = "Filter files" },
+  { on = [
+    "f",
+  ], exec = "find", desc = "Find files (fd)" },
+  { on = [
+    "s",
+  ], exec = "search rg", desc = "Search content (ripgrep)" },
+
+  # ── Tabs ──
+  { on = [
+    "t",
+  ], exec = "tab_create", desc = "New tab" },
+  { on = [
+    "1",
+  ], exec = "tab_switch 0", desc = "Switch to tab 1" },
+  { on = [
+    "2",
+  ], exec = "tab_switch 1", desc = "Switch to tab 2" },
+  { on = [
+    "3",
+  ], exec = "tab_switch 2", desc = "Switch to tab 3" },
+  { on = [
+    "4",
+  ], exec = "tab_switch 3", desc = "Switch to tab 4" },
+  { on = [
+    "5",
+  ], exec = "tab_switch 4", desc = "Switch to tab 5" },
+  { on = [
+    "q",
+  ], exec = "tab_close", desc = "Close tab" },
+
+  # ── Shell ──
+  { on = [
+    "!",
+  ], exec = "shell", desc = "Run shell command" },
+  { on = [
+    ";",
+  ], exec = "shell --block", desc = "Run shell command (blocking)" },
+  { on = [
+    "S",
+  ], exec = "shell '$SHELL' --block", desc = "Open subshell" },
+
+  # ── Misc ──
+  { on = [
+    ".",
+  ], exec = "hidden toggle", desc = "Toggle hidden files" },
+  { on = [
+    "z",
+  ], exec = "zoxide", desc = "Jump with zoxide" },
+  { on = [
+    "Z",
+  ], exec = "zoxide --interactive", desc = "Interactive zoxide" },
+  { on = [
+    "~",
+  ], exec = "cd ~", desc = "Go home" },
+  { on = [
+    "-",
+  ], exec = "cd -", desc = "Go back" },
+]
+
+[select]
+keymap = [
+  { on = [
+    "v",
+  ], exec = "escape", desc = "Exit visual mode" },
+  { on = [
+    "V",
+  ], exec = "select --state=none", desc = "Deselect all" },
+]

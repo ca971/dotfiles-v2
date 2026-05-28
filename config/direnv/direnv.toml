@@ -1,0 +1,23 @@
+# ═══════════════════════════════════════════════════════════════════════════════
+# @file config/direnv/direnv.toml
+# @description direnv — unclutter your .profile, per-directory env vars
+# @since 1.0.0
+# ═══════════════════════════════════════════════════════════════════════════════
+
+[global]
+# Auto-load .env files (like dotenv, but faster)
+load_dotenv = true
+
+# Be strict about env changes — warn on unexpected diffs
+strict_env = true
+
+# Hide the "direnv: loading ..." message
+hide_env_diff = true
+
+[whitelist]
+# Allow .envrc in these paths (no need to `direnv allow` every time)
+prefix = ["~/dev", "~/projects", "~/work", "/tmp"]
+
+[watch]
+# In addition to .envrc, watch these files for changes
+extra_files = [".env", ".env.local", ".envrc.local", "mise.toml", ".mise.toml"]
