@@ -76,7 +76,7 @@ du = { command = "dust", description = "Disk usage with dust", requires = "dust"
 df = { command = "duf", description = "Disk free with duf", requires = "duf" }
 cp = { command = "cp -iv", description = "Copy interactive verbose" }
 mv = { command = "mv -iv", description = "Move interactive verbose" }
-rm = { command = "trash-put", description = "Move to trash instead of delete", requires = "trash-cli" }
+rm = { command = "trash-put", description = "Move to trash instead of delete", requires = "trash-put" }
 mkdir = { command = "mkdir -pv", description = "Make directory with parents" }
 
 # ───────────────────────────────────────────────────────────────────────────────

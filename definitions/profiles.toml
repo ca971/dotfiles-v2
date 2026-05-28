@@ -79,6 +79,7 @@ tools = [
   "onefetch",
   "dust",
   "procs",
+  "trash-cli",
   "navi",
   "tealdeer",
   "lsd",

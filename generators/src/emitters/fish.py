@@ -36,7 +36,14 @@ class FishEmitter(ShellEmitter):
         for group_name, aliases in definitions.aliases.items():
             lines.append(f"\n# --- {group_name} ---")
             for name, alias in aliases.items():
-                lines.append(f"abbr -a {name} '{alias.command}'")
+                if alias.requires:
+                    lines.append(f"if command -q {alias.requires}")
+                    indent = "    "
+                else:
+                    indent = ""
+                lines.append(f"{indent}abbr -a {name} '{alias.command}'")
+                if alias.requires:
+                    lines.append("end")
         return "\n".join(lines) + "\n"
 
     def emit_functions(self, definitions: FunctionDefinitions) -> str:

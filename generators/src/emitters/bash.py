@@ -36,9 +36,16 @@ class BashEmitter(ShellEmitter):
         for group_name, aliases in definitions.aliases.items():
             lines.append(f"\n# --- {group_name} ---")
             for name, alias in aliases.items():
+                if alias.requires:
+                    lines.append(f"if command -v {alias.requires} >/dev/null 2>&1; then")
+                    indent = "    "
+                else:
+                    indent = ""
                 escaped_cmd = alias.command.replace("'", "'\\''")
                 prefix = "alias -- " if name.startswith("-") else "alias "
-                lines.append(f"{prefix}{name}='{escaped_cmd}'")
+                lines.append(f"{indent}{prefix}{name}='{escaped_cmd}'")
+                if alias.requires:
+                    lines.append("fi")
         return "\n".join(lines) + "\n"
 
     def emit_functions(self, definitions: FunctionDefinitions) -> str:

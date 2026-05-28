@@ -56,10 +56,15 @@ class NushellEmitter(ShellEmitter):
                     for token in cmd.split()
                 )
                 if has_flags:
-                    # Use def with rest args to capture additional arguments
-                    lines.append(f"def --wrapped {name} [...rest] {{ {cmd} ...$rest }}")
+                    line = f"def --wrapped {name} [...rest] {{ {cmd} ...$rest }}"
                 else:
-                    lines.append(f"alias {name} = {cmd}")
+                    line = f"alias {name} = {cmd}"
+                if alias.requires:
+                    lines.append(f"if (which {alias.requires} | is-not-empty) {{")
+                    lines.append(f"    {line}")
+                    lines.append("}")
+                else:
+                    lines.append(line)
         return "\n".join(lines) + "\n"
 
     def emit_functions(self, definitions: FunctionDefinitions) -> str:
