@@ -1,0 +1,20 @@
+# ═══════════════════════════════════════════════════════════════════════════════
+# @file config/ssh/config
+# @description SSH client configuration — auto-managed by dotfiles v2
+# @since 1.0.0
+#
+# Symlinked to ~/.ssh/config
+# All host-specific configs live in config.d/*.conf
+# Keys, known_hosts, and sockets are local (NEVER versioned)
+# ═══════════════════════════════════════════════════════════════════════════════
+
+# ── Versioned configs (config.d/ is symlinked from dotfiles) ──
+Include config.d/*.conf
+
+# ── Colima / OrbStack (auto-generated, optional on non-macOS) ──
+# Using glob so missing files are silently ignored
+Include ~/.colima/ssh_config*
+Include ~/.config/colima/ssh_config*
+
+# ── Local overrides (per-machine, may not exist) ──
+Include local.d/*.conf

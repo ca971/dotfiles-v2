@@ -2,7 +2,7 @@
 # @file tools/available/openssh.toml
 # @description Tool descriptor for openssh (Secure Shell connectivity tools)
 # @since 1.0.0
-# @version 1.0.0
+# @version 1.1.0
 # ═══════════════════════════════════════════════════════════════════════════════
 
 [meta]
@@ -13,6 +13,7 @@ category = "net"
 version = "latest"
 verify = "ssh -V"
 
+# ── Binary (macOS has its own, Linux needs the package) ──
 
 [[install]]
 method = "system"
@@ -29,16 +30,23 @@ method = "system"
 platforms = ["linux.fedora"]
 package = "openssh-clients"
 
-
 [[install]]
 method = "system"
 platforms = ["bsd"]
 package = "openssh-portable"
+
 [[install]]
 method = "brew"
 platforms = ["darwin"]
 package = "openssh"
 
+# ── Config — individual file symlinks (NEVER symlink whole ~/.ssh/) ──
+# Keys, known_hosts, sockets, and agent stay local
+
 [config]
-symlinks = []
+symlinks = [
+  { src = "config/ssh/config", dst = "~/.ssh/config" },
+  { src = "config/ssh/config.d", dst = "~/.ssh/config.d" },
+  { src = "config/ssh/allowed_signers", dst = "~/.ssh/allowed_signers" },
+]
 dependencies = []

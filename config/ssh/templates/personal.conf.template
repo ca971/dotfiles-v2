@@ -1,0 +1,14 @@
+# ═══════════════════════════════════════════════════════════════════════════════
+# SSH Personal Servers — TEMPLATE
+# Copy to ~/dotfiles/local/ssh_config_personal.conf
+# ═══════════════════════════════════════════════════════════════════════════════
+
+# Host proxmox
+#     HostName pve.local
+#     User root
+#     IdentityFile ~/.ssh/id_personal_ed25519
+#
+# Host opnsense
+#     HostName 192.168.1.1
+#     User root
+#     IdentityFile ~/.ssh/id_router_ed25519

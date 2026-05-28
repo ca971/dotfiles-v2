@@ -1,0 +1,17 @@
+# ═══════════════════════════════════════════════════════════════════════════════
+# SSH Work Servers — TEMPLATE
+# Copy to ~/dotfiles/local/ssh_config_work.conf
+# ═══════════════════════════════════════════════════════════════════════════════
+
+# Host bastion
+#     HostName bastion.company.com
+#     User deploy
+#     IdentityFile ~/.ssh/id_work_ed25519
+#     ForwardAgent no
+#     StrictHostKeyChecking yes
+#
+# Host *.internal.company.com
+#     User deploy
+#     IdentityFile ~/.ssh/id_work_ed25519
+#     ProxyJump bastion
+#     ForwardAgent no
