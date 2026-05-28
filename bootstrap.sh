@@ -442,13 +442,6 @@ finalize() {
     Logger::success "Bootstrap complete!"
     echo ""
 
-    # Suppress macOS "Last login" message on new terminal windows
-    if [[ "${OPT_DRY_RUN}" -eq 0 ]]; then
-        touch "${HOME}/.hushlogin"
-    else
-        Logger::info "[dry-run] Would create ~/.hushlogin"
-    fi
-
     # For one-liner installs, auto-reload the shell so the user lands
     # in a fully configured environment immediately
     if [[ -n "${DOTFILES_ONE_LINER:-}" ]] && [[ "${OPT_DRY_RUN}" -eq 0 ]]; then

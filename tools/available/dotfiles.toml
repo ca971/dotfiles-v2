@@ -1,0 +1,23 @@
+# ═══════════════════════════════════════════════════════════════════════════════
+# @file tools/available/dotfiles.toml
+# @description Meta-descriptor for dotfiles system-level configs
+# @since 1.0.0
+# @version 1.0.0
+# ═══════════════════════════════════════════════════════════════════════════════
+
+[meta]
+name = "dotfiles"
+description = "System-level dotfiles configurations (hushlogin, etc.)"
+homepage = "https://github.com/ca971/dotfiles-v2"
+category = "system"
+version = "latest"
+verify = "test -f ${HOME}/.hushlogin"
+
+[[install]]
+method = "system"
+platforms = ["darwin", "linux", "wsl", "bsd"]
+package = "coreutils"
+
+[config]
+symlinks = [{ src = "config/system/hushlogin", dst = "~/.hushlogin" }]
+dependencies = []
