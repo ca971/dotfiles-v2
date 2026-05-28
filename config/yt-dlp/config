@@ -1,0 +1,25 @@
+# --- Authentication & Security ---
+--cookies-from-browser brave
+--remote-components ejs:github
+
+# --- Video Quality & Formats ---
+# Prefer 1080p MP4 for compatibility, or best overall if not available
+#-f "bestvideo[height<=1080][ext=mp4]+(bestaudio[language*=fr][ext=m4a]/bestaudio[ext=m4a]/bestaudio)+bestaudio?/best[height<=1080]/best"
+-f "bestvideo[height<=1080][ext=mp4]+(bestaudio[language*=fr]/bestaudio[ext=m4a]/bestaudio)/best[height<=1080]/best"
+--merge-output-format mp4
+
+# --- Metadata & Assets ---
+--add-metadata
+--embed-thumbnail
+--embed-subs
+--all-subs
+--convert-subs srt
+
+# --- Output & Path ---
+# Saves as "Title [ID].ext" in your current folder
+-o "%(title)s [%(id)s].%(ext)s"
+
+# --- Performance & Retries ---
+--concurrent-fragments 5
+--retries 10
+--no-mtime

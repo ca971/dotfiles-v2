@@ -1,18 +1,28 @@
 # ═══════════════════════════════════════════════════════════════════════════════
 # @file tools/available/gnupg.toml
-# @description Tool descriptor for gnupg (GNU Privacy Guard encryption suite)
+# @description Tool descriptor for gnupg (GNU Privacy Guard)
 # @since 1.0.0
 # @version 1.0.0
 # ═══════════════════════════════════════════════════════════════════════════════
 
 [meta]
 name = "gnupg"
-description = "GNU Privacy Guard encryption suite"
+description = "GNU Privacy Guard — complete implementation of the OpenPGP standard"
 homepage = "https://gnupg.org"
 category = "security"
 version = "latest"
 verify = "gpg --version"
 
+[[install]]
+method = "mise"
+platforms = ["darwin", "linux", "wsl", "bsd"]
+plugin = "gnupg"
+version = "latest"
+
+[[install]]
+method = "brew"
+platforms = ["darwin"]
+package = "gnupg"
 
 [[install]]
 method = "system"
@@ -24,21 +34,10 @@ method = "system"
 platforms = ["linux.arch"]
 package = "gnupg"
 
-[[install]]
-method = "system"
-platforms = ["linux.fedora"]
-package = "gnupg2"
-
-
-[[install]]
-method = "system"
-platforms = ["bsd"]
-package = "gnupg"
-[[install]]
-method = "brew"
-platforms = ["darwin"]
-package = "gnupg"
-
+# GNUPGHOME is set to ~/.local/share/gnupg (see definitions/env.toml)
 [config]
-symlinks = []
+symlinks = [
+  { src = "config/gpg/gpg.conf", dst = "~/.local/share/gnupg/gpg.conf" },
+  { src = "config/gpg/gpg-agent.conf", dst = "~/.local/share/gnupg/gpg-agent.conf" },
+]
 dependencies = []

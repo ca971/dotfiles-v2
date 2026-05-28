@@ -1,13 +1,13 @@
 # ═══════════════════════════════════════════════════════════════════════════════
 # @file tools/available/ruby.toml
-# @description Tool descriptor for ruby (Dynamic programming language for productivity)
+# @description Tool descriptor for ruby (dynamic, open source programming language)
 # @since 1.0.0
 # @version 1.0.0
 # ═══════════════════════════════════════════════════════════════════════════════
 
 [meta]
 name = "ruby"
-description = "Dynamic programming language for productivity"
+description = "Dynamic, open source programming language with a focus on simplicity"
 homepage = "https://www.ruby-lang.org"
 category = "lang"
 version = "latest"
@@ -34,16 +34,10 @@ method = "system"
 platforms = ["linux.arch"]
 package = "ruby"
 
-[[install]]
-method = "system"
-platforms = ["linux.fedora"]
-package = "ruby"
-
-[[install]]
-method = "brew"
-platforms = ["darwin"]
-package = "ruby"
-
 [config]
-symlinks = []
+symlinks = [
+  { src = "config/ruby/gemrc", dst = "~/.gemrc" },
+  { src = "config/ruby/default-gems", dst = "~/.default-gems" },
+  { src = "config/ruby/bundle", dst = "~/.bundle" },
+]
 dependencies = []

@@ -1,0 +1,37 @@
+# NOTE:
+# Why keep both mise.toml and .default-gems?
+# Redundancy: mise.toml ensures these gems are managed as global tools with their own shims.
+# Automation: .default-gems acts as a safety net.
+# If you ever use a different tool (like asdf or vfox via mise) to compile Ruby,
+# it will see this file and inject these gems directly into the Ruby installation's site-library.
+
+# --- Essentials ---
+# Standard tool to manage gem dependencies for Ruby projects
+bundler
+
+# --- Neovim Integration ---
+# Ruby client for Neovim, required for Ruby-based plugins and providers
+neovim
+
+# --- Language Server & Tools ---
+# Provides IntelliSense, IDE features, and code completion via LSP
+solargraph
+
+# Sends macOS system notifications from the terminal (useful for test results)
+terminal-notifier
+
+# A readline-compatible library implemented in pure Ruby for better CLI input
+reline
+
+# Modern, integrated debugger for Ruby 3.x and 4.x
+debug
+
+# --- Quality of Life / Formatting ---
+# Static code analyzer and formatter for community style guide enforcement
+rubocop
+
+# Extension for RuboCop focused on code performance optimization
+rubocop-performance
+
+# Rails-specific linting rules and best practices for RuboCop
+rubocop-rails

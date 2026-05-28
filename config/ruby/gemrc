@@ -1,0 +1,8 @@
+# ~/.gemrc
+# Disable documentation to speed up gem installation
+gem: --no-document --verbose
+# Ensure we use the official source
+:sources:
+- https://rubygems.org/
+# Clean up old versions automatically
+:update_sources: true

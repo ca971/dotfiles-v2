@@ -25,5 +25,5 @@ platforms = ["darwin"]
 package = "colima"
 
 [config]
-symlinks = []
+symlinks = [{ src = "config/colima", dst = "~/.config/colima" }]
 dependencies = []

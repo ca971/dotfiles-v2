@@ -25,5 +25,5 @@ platforms = ["darwin"]
 package = "yt-dlp"
 
 [config]
-symlinks = []
+symlinks = [{ src = "config/yt-dlp", dst = "~/.config/yt-dlp" }]
 dependencies = []
