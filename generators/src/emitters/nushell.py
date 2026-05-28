@@ -50,6 +50,10 @@ class NushellEmitter(ShellEmitter):
                 if name.startswith(".") or name == "-" or name == "~":
                     continue
                 cmd = alias.command
+                # Convert shell || to nushell try/catch
+                import re
+
+                cmd = re.sub(r"(.+?) \|\| (.+)", r"try { \1 } catch { \2 }", cmd)
                 # Aliases containing flags/options need `def` for proper parsing
                 has_flags = any(
                     token.startswith("-") or token.startswith("--") or "|" in cmd or ";" in cmd
