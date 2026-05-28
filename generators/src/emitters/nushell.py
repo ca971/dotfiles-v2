@@ -56,6 +56,19 @@ class NushellEmitter(ShellEmitter):
                 cmd = re.sub(r"(.+?) \|\| (.+)", r"try { \1 } catch { \2 }", cmd)
                 # Convert $PATH to $env.PATH (nushell syntax)
                 cmd = re.sub(r"\$PATH\b", "$env.PATH", cmd)
+                # Convert common env vars: $SHELL, $HOME, $USER, $EDITOR → $env.XXX
+                for var in [
+                    "SHELL",
+                    "HOME",
+                    "USER",
+                    "EDITOR",
+                    "PAGER",
+                    "VISUAL",
+                    "TERM",
+                    "LANG",
+                    "PWD",
+                ]:
+                    cmd = re.sub(rf"\${var}\b", f"$env.{var}", cmd)
                 # Aliases containing flags/options need `def` for proper parsing
                 has_flags = any(
                     token.startswith("-") or token.startswith("--") or "|" in cmd or ";" in cmd
