@@ -1,0 +1,47 @@
+# ╔══════════════════════════════════════════════════════════════════╗
+# ║  StyLua Configuration — WezTerm Enterprise                       ║
+# ║  https://github.com/JohnnyMorganz/StyLua                         ║
+# ║                                                                  ║
+# ║  Run:  stylua .                                                  ║
+# ║  Check: stylua --check .                                         ║
+# ╚══════════════════════════════════════════════════════════════════╝
+
+# ── General ─────────────────────────────────────────────────────────
+
+# Column width before line wrapping.
+# 100 is a good balance between readability and screen usage.
+column_width = 100
+
+# Line ending style.
+# Options: "Unix" | "Windows" | "AutoDetect"
+line_endings = "Unix"
+
+# Indentation type.
+# Options: "Tabs" | "Spaces"
+indent_type = "Spaces"
+
+# Number of spaces per indent level (when indent_type = "Spaces").
+indent_width = 2
+
+# Quote style for strings.
+# Options: "AutoPreferDouble" | "AutoPreferSingle" | "ForceDouble" | "ForceSingle"
+quote_style = "AutoPreferDouble"
+
+# How to handle function call parentheses.
+# Options:
+#   "Always"       — Always use parentheses: foo("bar")
+#   "NoSingleString" — Omit for single string arg: foo "bar"
+#   "NoSingleTable"  — Omit for single table arg: foo { bar }
+#   "None"         — Omit when possible
+#   "Input"        — Keep as-is from source
+call_parentheses = "Always"
+
+# Collapse simple statements onto one line.
+# Options: "Never" | "FunctionOnly" | "ConditionalOnly" | "Always"
+collapse_simple_statement = "Never"
+
+# ── Sort Requires ───────────────────────────────────────────────────
+
+# Automatically sort `require` statements alphabetically.
+[sort_requires]
+enabled = true

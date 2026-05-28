@@ -1,0 +1,21 @@
+-- ============================================================================
+-- @module       theme.active
+-- @description  Active palette selector. Change this ONE line to switch the
+--               color theme across Ghostty AND Neovim simultaneously.
+--
+--               After changing, run:
+--                 nvim -l scripts/sync-theme.lua
+--               to regenerate conf.d/20-colors.conf, then reload Ghostty
+--               (Ctrl+Shift+,) and restart Neovim.
+--
+-- @since        1.0.0
+-- @return       string  Palette slug (must match a filename in palettes/)
+--
+-- @example      return "catppuccin-mocha"
+-- @example      return "catppuccin-latte"
+-- @example      return "tokyonight-night"
+-- @example      return "tokyonight-storm"
+-- ============================================================================
+
+-- return "catppuccin-mocha"
+return "tokyonight-night"
