@@ -54,6 +54,8 @@ class NushellEmitter(ShellEmitter):
                 import re
 
                 cmd = re.sub(r"(.+?) \|\| (.+)", r"try { \1 } catch { \2 }", cmd)
+                # Convert $PATH to $env.PATH (nushell syntax)
+                cmd = re.sub(r"\$PATH\b", "$env.PATH", cmd)
                 # Aliases containing flags/options need `def` for proper parsing
                 has_flags = any(
                     token.startswith("-") or token.startswith("--") or "|" in cmd or ";" in cmd
