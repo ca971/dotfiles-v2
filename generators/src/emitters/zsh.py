@@ -278,7 +278,7 @@ class ZshEmitter(ShellEmitter):
             f"    {func_name}() {{ unfunction {unset_list} {func_name} 2>/dev/null; {init_cmd}; }}",
             f"    for _t in {trigger_list_quoted}; do",
             '        (( $+aliases[$_t] )) && unalias "$_t"',
-            '        eval "$_t() {{ {func_name}; $_t \\\\\\"\\\\$@\\\\\\"; }}"',
+            f'        eval "$_t() {{ {func_name}; $_t \\"\\$@\\"; }}"',
             "    done",
             "    unset _t",
         ]
