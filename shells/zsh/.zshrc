@@ -89,18 +89,18 @@ export SAVEHIST=100000
 
 # ───────────────────────────────────────────────────────────────────────────────
 # Source generated configs (SSOT → zsh)
-# ORDER MATTERS: env/path first, then plugins (zinit), then init (tool hooks)
+# ORDER MATTERS: env/path first, then init (tool hooks PATH), then aliases
 # ───────────────────────────────────────────────────────────────────────────────
 _zsh_source_if_exists() { [[ -f "$1" ]] && source "$1"; }
 # Note: zsh natively loads .zwc if present and newer — no extra logic needed
 
 _zsh_source_if_exists "${ZSH_GEN_DIR}/env.gen.sh"
 _zsh_source_if_exists "${ZSH_GEN_DIR}/path.gen.sh"
+_zsh_source_if_exists "${ZSH_GEN_DIR}/init.gen.sh"
 _zsh_source_if_exists "${ZSH_GEN_DIR}/aliases.gen.sh"
 _zsh_source_if_exists "${ZSH_GEN_DIR}/functions.gen.sh"
 _zsh_source_if_exists "${ZSH_GEN_DIR}/keybindings.gen.sh"
 _zsh_source_if_exists "${ZSH_GEN_DIR}/plugins.gen.sh"
-_zsh_source_if_exists "${ZSH_GEN_DIR}/init.gen.sh"
 
 # ───────────────────────────────────────────────────────────────────────────────
 # Completion system

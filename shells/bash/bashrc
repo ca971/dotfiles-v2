@@ -54,10 +54,10 @@ _source_if_exists() { [[ -f "$1" ]] && source "$1"; }
 
 _source_if_exists "${BASH_GEN_DIR}/env.gen.sh"
 _source_if_exists "${BASH_GEN_DIR}/path.gen.sh"
+_source_if_exists "${BASH_GEN_DIR}/init.gen.sh"
 _source_if_exists "${BASH_GEN_DIR}/aliases.gen.sh"
 _source_if_exists "${BASH_GEN_DIR}/functions.gen.sh"
 _source_if_exists "${BASH_GEN_DIR}/keybindings.gen.sh"
-_source_if_exists "${BASH_GEN_DIR}/init.gen.sh"
 
 # ───────────────────────────────────────────────────────────────────────────────
 # Completions

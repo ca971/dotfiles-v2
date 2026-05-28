@@ -39,10 +39,10 @@ end
 
 _fish_source_if_exists "$FISH_GEN_DIR/env.gen.fish"
 _fish_source_if_exists "$FISH_GEN_DIR/path.gen.fish"
+_fish_source_if_exists "$FISH_GEN_DIR/init.gen.fish"
 _fish_source_if_exists "$FISH_GEN_DIR/aliases.gen.fish"
 _fish_source_if_exists "$FISH_GEN_DIR/functions.gen.fish"
 _fish_source_if_exists "$FISH_GEN_DIR/keybindings.gen.fish"
-_fish_source_if_exists "$FISH_GEN_DIR/init.gen.fish"
 functions -e _fish_source_if_exists
 
 # ───────────────────────────────────────────────────────────────────────────────
