@@ -153,26 +153,23 @@ class NushellEmitter(ShellEmitter):
         result = re.sub(r"\bfi\b", "}", result)
         result = re.sub(r"__ELIF_PROTECT__", "} else if", result)
 
-        # case -> match
-        result = re.sub(r'\bcase\s+"\$\(.+?\)\"\s+in\b', r"match ($args | first) {", result)
-        result = re.sub(
-            r"^(\s*)\*:([^:]*):\*\)\s*;;",
-            r"\1$_\' => { null }",
-            result,
-            flags=re.MULTILINE,
-        )
+        # case/esac → match (handles all forms: "$1", "$var", "$(cmd)")
+        result = re.sub(r'\bcase\s+"([^"]+)"\s+in\b', r"match \1 {", result)
+        # pattern) cmd ;; → pattern => { cmd },
         result = re.sub(
             r"^(\s*)(\S+)\)\s*(.*?)\s*;;",
             r"\1\2 => { \3 },",
             result,
             flags=re.MULTILINE,
         )
+        # *) cmd ;; → _ => { cmd },
         result = re.sub(
             r"^(\s*)\*\)\s*(.*?)\s*;;",
             r"\1_ => { \2 },",
             result,
             flags=re.MULTILINE,
         )
+        # esac → }
         result = re.sub(r"\besac\b", "}", result)
 
         # $() command substitution -> ( | str trim)
