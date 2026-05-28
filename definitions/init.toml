@@ -187,7 +187,7 @@ nushell = ""
 description = "LS_COLORS generator"
 priority = 90
 verify = "vivid"
-lazy = true
+lazy = false
 lazy_triggers = ["ls", "eza", "lsd", "tree"]
 bash = 'export LS_COLORS="$(vivid generate catppuccin-mocha)"'
 zsh = 'export LS_COLORS="$(vivid generate catppuccin-mocha)"'
