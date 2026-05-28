@@ -16,16 +16,14 @@
 # ───────────────────────────────────────────────────────────────────────────────
 # Source generated configs (SSOT → nushell)
 # ───────────────────────────────────────────────────────────────────────────────
+# Source generated configs (SSOT → nushell)
+# nushell 0.113+ requires source paths to be literals (not let variables)
+# ───────────────────────────────────────────────────────────────────────────────
 let gen_dir = ($env.DOTFILES_DIR | path join "shells" "nushell" "generated")
 
-let gen_aliases = ($gen_dir | path join "aliases.gen.nu")
-if ($gen_aliases | path exists) { source $gen_aliases }
-
-let gen_functions = ($gen_dir | path join "functions.gen.nu")
-if ($gen_functions | path exists) { source $gen_functions }
-
-let gen_init = ($gen_dir | path join "init.gen.nu")
-if ($gen_init | path exists) { source $gen_init }
+try { source ($env.DOTFILES_DIR | path join "shells" "nushell" "generated" "aliases.gen.nu") }
+try { source ($env.DOTFILES_DIR | path join "shells" "nushell" "generated" "functions.gen.nu") }
+try { source ($env.DOTFILES_DIR | path join "shells" "nushell" "generated" "init.gen.nu") }
 
 # ───────────────────────────────────────────────────────────────────────────────
 # Shell settings
@@ -133,5 +131,4 @@ let modules_dir = ($env.DOTFILES_DIR | path join "shells" "nushell" "modules")
 # ───────────────────────────────────────────────────────────────────────────────
 # Local overrides (machine-specific, gitignored)
 # ───────────────────────────────────────────────────────────────────────────────
-let local_config = ($env.DOTFILES_DIR | path join "local" "shell" "nushell.local")
-if ($local_config | path exists) { source $local_config }
+try { source ($env.DOTFILES_DIR | path join "local" "shell" "nushell.local") }

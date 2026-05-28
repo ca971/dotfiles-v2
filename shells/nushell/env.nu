@@ -2,7 +2,7 @@
 # @file shells/nushell/env.nu
 # @description Nushell environment configuration (loaded before config.nu)
 # @since 1.0.0
-# @version 1.0.0
+# @version 1.1.0
 # @see shells/nushell/config.nu
 # ═══════════════════════════════════════════════════════════════════════════════
 
@@ -46,12 +46,10 @@ if ($brew_path | path exists) { $env.PATH = ($env.PATH | prepend $brew_path) }
 
 # ───────────────────────────────────────────────────────────────────────────────
 # Source generated configs (SSOT → nushell)
+# nushell 0.113+ requires source paths to be literals (not let variables)
 # ───────────────────────────────────────────────────────────────────────────────
-let gen_env = ($gen_dir | path join "env.gen.nu")
-if ($gen_env | path exists) { source $gen_env }
-
-let gen_path = ($gen_dir | path join "path.gen.nu")
-if ($gen_path | path exists) { source $gen_path }
+try { source ($env.DOTFILES_DIR | path join "shells" "nushell" "generated" "env.gen.nu") }
+try { source ($env.DOTFILES_DIR | path join "shells" "nushell" "generated" "path.gen.nu") }
 
 # ───────────────────────────────────────────────────────────────────────────────
 # Tool integrations (env phase)
