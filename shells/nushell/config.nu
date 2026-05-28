@@ -17,13 +17,11 @@
 # Source generated configs (SSOT → nushell)
 # ───────────────────────────────────────────────────────────────────────────────
 # Source generated configs (SSOT → nushell)
-# nushell 0.113+ requires source paths to be literals (not let variables)
+# nushell 0.113+ requires source paths to be literals — use ~ expansion
 # ───────────────────────────────────────────────────────────────────────────────
-let gen_dir = ($env.DOTFILES_DIR | path join "shells" "nushell" "generated")
-
-try { source ($env.DOTFILES_DIR | path join "shells" "nushell" "generated" "aliases.gen.nu") }
-try { source ($env.DOTFILES_DIR | path join "shells" "nushell" "generated" "functions.gen.nu") }
-try { source ($env.DOTFILES_DIR | path join "shells" "nushell" "generated" "init.gen.nu") }
+try { source ~/.dotfiles/shells/nushell/generated/aliases.gen.nu }
+try { source ~/.dotfiles/shells/nushell/generated/functions.gen.nu }
+try { source ~/.dotfiles/shells/nushell/generated/init.gen.nu }
 
 # ───────────────────────────────────────────────────────────────────────────────
 # Shell settings

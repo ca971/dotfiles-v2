@@ -46,10 +46,10 @@ if ($brew_path | path exists) { $env.PATH = ($env.PATH | prepend $brew_path) }
 
 # ───────────────────────────────────────────────────────────────────────────────
 # Source generated configs (SSOT → nushell)
-# nushell 0.113+ requires source paths to be literals (not let variables)
+# nushell 0.113+ requires source paths to be literals — use ~ expansion
 # ───────────────────────────────────────────────────────────────────────────────
-try { source ($env.DOTFILES_DIR | path join "shells" "nushell" "generated" "env.gen.nu") }
-try { source ($env.DOTFILES_DIR | path join "shells" "nushell" "generated" "path.gen.nu") }
+try { source ~/.dotfiles/shells/nushell/generated/env.gen.nu }
+try { source ~/.dotfiles/shells/nushell/generated/path.gen.nu }
 
 # ───────────────────────────────────────────────────────────────────────────────
 # Tool integrations (env phase)
