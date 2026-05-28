@@ -194,6 +194,9 @@ class NushellEmitter(ShellEmitter):
 
         # Clean up double spaces / trailing semicolons
         result = re.sub(r"  +", " ", result)
+        # Strip mkdir -p → mkdir (nushell creates parents by default)
+        result = result.replace("mkdir -p", "mkdir")
+        result = re.sub(r"  +", " ", result)
         result = re.sub(r";\s*;", ";", result)
 
         return result
